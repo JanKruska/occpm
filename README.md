@@ -29,3 +29,12 @@ To properly configure the databases behind django whenever the `INSTALLED_APPS` 
 python manage.py migrate
 ``` 
 
+## Code style & Hooks
+This project uses [black](https://github.com/psf/black)'s code styling. It is included as a dependency in the provided environment and can be run using:
+```
+black .
+```
+Alternatively if you want to avoid the hassle of remembering to run black all the time a pre-commit configuration is provided as well, which will run *black* before every commit. You can enable this configuration using:
+```
+pre-commit install
+```
