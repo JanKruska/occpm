@@ -32,11 +32,44 @@
                 }
             }
         </script>
+<style>
+div {text-align: center;}
+</style>	
+
 </head>
+
 
 <body onload="setup()">
 
-<div style="background-color:white;color:white;padding:1px;height:20px;margin-left: 3%;margin-right: 3%;">
+<div id="container">
+
+<style>
+    #content {
+        position: relative;
+    }
+    #content img {
+        position: absolute;
+        top: 0px;
+        right: 0px;
+    }
+</style>
+
+<div id="content">
+    <img src="Logo.jpg" align="top"/></div>
+
+
+<div id="header" style="background-color:white;padding:40px;margin-bottom: 1%;">
+<p style="font-family:Arial;font-size:20px;"><b>Object-Centric Comparative Process Mining</b></p></div> 
+
+    
+<!div id="navbar"><!/div>
+<!div id="sidebar"><!/div>
+
+</div>
+
+<div style="background-color:white;color:white;padding:20px;height:20px;margin-left: 3%;margin-right: 3%;">
+	
+   
  <!-- Upload button -->
 	<form id='formid' action="form.php" method="POST" enctype="multipart/form-data"> 
             <input id='fileid' type='file' name='filename' hidden/>
@@ -48,10 +81,10 @@
 <div style="background-color:#F3F3F3;color:white;padding:20px;height: 200px;margin-top: 1%;margin-left: 3%;margin-right: 3%;">
 </div>
 
-<div style="background-color:#F3F3F3;color:white;padding:20px;height: 200px;margin-top: 2%;margin-left: 3%;margin-right: 3%;">
+<div style="background-color:#F3F3F3;color:white;padding:20px;height: 200px;margin-top: 1%;margin-left: 3%;margin-right: 3%;">
 </div>
 
-<div style="background-color:#F3F3F3;color:white;padding:20px;height: 200px;margin-top: 2%;margin-left: 3%;margin-right: 3%;">
+<div style="background-color:#F3F3F3;color:white;padding:20px;height: 200px;margin-top: 1%;margin-left: 3%;margin-right: 3%;">
 </div> 
 
 </body>
