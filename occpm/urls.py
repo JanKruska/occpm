@@ -23,5 +23,5 @@ urlpatterns = [
     # path("", include("apps.index.urls")),
     path("", ImportView.as_view()),
     path("plots", PlotsView.as_view()),
-    path('plots/', include('apps.index.urls'))
+    path("plots/", include("apps.index.urls")),
 ]

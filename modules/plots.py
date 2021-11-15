@@ -2,6 +2,7 @@ import plotly.express as px
 from plotly.subplots import make_subplots
 import plotly.graph_objects as go
 
+
 def histogram(df, column):
     fig = px.histogram(df, x=column)
     fig.update_layout(title_text=f"Distribution of column {column}")
