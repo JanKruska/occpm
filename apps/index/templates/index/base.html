@@ -33,7 +33,53 @@
             }
         </script>
 <style>
+
 div {text-align: center;}
+
+.button {
+  background-color: #908fcc;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 2px;
+}
+.button1:hover {
+  background-color: #4c4ab4;
+  color: white;
+}
+
+
+
+
+
+
+* {
+  box-sizing: border-box;
+}
+
+/* Create two equal columns that floats next to each other */
+.column {
+  float: left;
+  width: 50%;
+  padding: 10px;
+  height: 300px; /* Should be removed. Only for demonstration */
+  margin-top:1%;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+  
+}
+
 </style>	
 
 </head>
@@ -65,27 +111,53 @@ div {text-align: center;}
 <!div id="navbar"><!/div>
 <!div id="sidebar"><!/div>
 
+
+
+
+
+
 </div>
 
-<div style="background-color:white;color:white;padding:20px;height:20px;margin-left: 3%;margin-right: 3%;">
+<div style="background-color:white;color:white;padding:20px;height:50px;margin-left: 3%;margin-right: 3%;">
 	
    
  <!-- Upload button -->
 	<form id='formid' action="form.php" method="POST" enctype="multipart/form-data"> 
             <input id='fileid' type='file' name='filename' hidden/>
-            <input id='buttonid' type='button' value='Import file' /> 
-            <input type='submit' value='Submit' /> 
+            <input id='buttonid' type='button' class="button button1" value='Import file' /> 
+            <input type='submit'class="button button1" value='Submit' /> 
         </form>
 </div> 
 
-<div style="background-color:#F3F3F3;color:white;padding:20px;height: 200px;margin-top: 1%;margin-left: 3%;margin-right: 3%;">
+
+
+
+
+
+
+<div style="background-color:white;color:white;padding:20px;height: 300px;margin-top: 1%;margin-left: 3%;margin-right: 3%;">
+
 </div>
 
-<div style="background-color:#F3F3F3;color:white;padding:20px;height: 200px;margin-top: 1%;margin-left: 3%;margin-right: 3%;">
+<div style="background-color:#F3F3F3;color:white;padding:20px;height: 300px;margin-top: 1%;margin-left: 3%;margin-right: 3%;">
 </div>
 
-<div style="background-color:#F3F3F3;color:white;padding:20px;height: 200px;margin-top: 1%;margin-left: 3%;margin-right: 3%;">
-</div> 
+<!div style="background-color:#F3F3F3;color:white;padding:20px;height: 300px;margin-top: 1%;margin-left: 3%;margin-right: 3%;">
+
+
+<div class="row" style="margin-top: 1%;margin-left: 3%;margin-right: 3%;">
+  <div class="column" style="background-color:lightgray;">
+    <h2>Result(DFG or Petrinet)</h2>
+    <p></p>
+  </div>
+  <div class="column" style="background-color:#F3F3F3;">
+    <h2>Result(DFG or Petrinet)</h2>
+    <p></p>
+  </div>
+</div>
+
+
+<!/div> 
 
 </body>
 </html>
