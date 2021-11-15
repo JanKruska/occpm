@@ -16,10 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from apps.index.views import ImportView
+from apps.index.views import ImportView, PlotsView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     # path("", include("apps.index.urls")),
     path("", ImportView.as_view()),
+    path("plots", PlotsView.as_view()),
+    path('plots/', include('apps.index.urls'))
 ]

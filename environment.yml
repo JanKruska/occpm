@@ -15,5 +15,6 @@ dependencies:
     - python-decouple
     - black
     - pre-commit
+    - plotly
 prefix: /home/jan/anaconda3/envs/occpm
 
