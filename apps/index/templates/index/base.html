@@ -36,6 +36,7 @@
 
 div {text-align: center;}
 
+
 .button {
   background-color: #908fcc;
   border: none;
@@ -48,15 +49,13 @@ div {text-align: center;}
   margin: 4px 2px;
   cursor: pointer;
   border-radius: 2px;
+  width: 150px;
 }
 .button1:hover {
   background-color: #4c4ab4;
   color: white;
+  box-shadow: 0 5px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
 }
-
-
-
-
 
 
 * {
@@ -64,13 +63,46 @@ div {text-align: center;}
 }
 
 /* Create two equal columns that floats next to each other */
-.column {
+
+
+.columnFirstDiv{
+  float: left;
+  width: 30%;
+  padding: 10px;
+  height: 300px; /* Should be removed. Only for demonstration */
+}
+
+.columnButton1 {
+  float: left;
+  width: 10%;
+  padding: 10px;
+  height: 300px; /* Should be removed. Only for demonstration */
+}
+
+.columnSecondDiv {
+  float: left;
+  width: 40%;
+  padding: 10px;
+  height: 300px; /* Should be removed. Only for demonstration */
+}
+.columnButton {
+  float: left;
+  width: 20%;
+  padding: 10px;
+  height: 300px; /* Should be removed. Only for demonstration */
+}
+
+.columnDFG {
   float: left;
   width: 50%;
   padding: 10px;
   height: 300px; /* Should be removed. Only for demonstration */
   margin-top:1%;
 }
+
+
+
+
 
 /* Clear floats after the columns */
 .row:after {
@@ -117,8 +149,12 @@ div {text-align: center;}
 
 
 </div>
+<!-- 
+<div style="background-color:gray;color:white;padding:30px;height:50px;margin-left: 3%;margin-right: 3%;"> -->
 
-<div style="background-color:white;color:white;padding:20px;height:50px;margin-left: 3%;margin-right: 3%;">
+  <div style="">
+
+
 	
    
  <!-- Upload button -->
@@ -133,24 +169,58 @@ div {text-align: center;}
 
 
 
+<!div style="background-color:white;color:white;padding:20px;height: 300px;margin-top: 1%;margin-left: 3%;margin-right: 3%;">
 
-
-<div style="background-color:white;color:white;padding:20px;height: 300px;margin-top: 1%;margin-left: 3%;margin-right: 3%;">
-
+<div class="row" style="margin: 3% 3% 0 3%">
+  <div class="columnFirstDiv" style="background-color:lightgray;">
+    <p>Table 1</p>
+  </div>
+  <div class="columnFirstDiv" style="background-color:#F3F3F3;">
+    <p>table2</p>
+   </div>
+   <div class="columnFirstDiv" style="background-color:lightgray;">
+    <p>table3</p>
+  </div>
+  <div class="columnButton1" style="background-color:#F3F3F3;">
+    <p>buttons</p>
+  </div>
 </div>
 
-<div style="background-color:#F3F3F3;color:white;padding:20px;height: 300px;margin-top: 1%;margin-left: 3%;margin-right: 3%;">
+
+
+
+
+
+
+<!/div>
+
+<!div style="background-color:#F3F3F3;color:white;padding:20px;height: 300px;margin-top: 1%;margin-left: 3%;margin-right: 3%;">
+
+<div class="row" style="margin-top: 1%;margin-left: 3%;margin-right: 3%;">
+  <div class="columnSecondDiv" style="background-color:lightgray;">
+    <p>table 1</p>
+  </div>
+  <div class="columnButton" style="background-color:#F3F3F3;">
+    <p>buttons</p>
+   </div>
+   <div class="columnSecondDiv" style="background-color:lightgray;">
+    <p>table 2</p>
+  </div>
 </div>
+
+
+
+<!/div>
 
 <!div style="background-color:#F3F3F3;color:white;padding:20px;height: 300px;margin-top: 1%;margin-left: 3%;margin-right: 3%;">
 
 
 <div class="row" style="margin-top: 1%;margin-left: 3%;margin-right: 3%;">
-  <div class="column" style="background-color:lightgray;">
+  <div class="columnDFG" style="background-color:lightgray;">
     <h2>Result(DFG or Petrinet)</h2>
     <p></p>
   </div>
-  <div class="column" style="background-color:#F3F3F3;">
+  <div class="columnDFG" style="background-color:#F3F3F3;">
     <h2>Result(DFG or Petrinet)</h2>
     <p></p>
   </div>
