@@ -1,3 +1,5 @@
+{% load static %}
+
 <!doctype html>
 
 <html lang="en">
@@ -5,7 +7,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>A Basic HTML5 Template</title>
+  <title>{% block title %}Object Centric Comparative Process Mining{% endblock %}</title>
   <meta name="description" content="A simple HTML5 Template for new projects.">
   <meta name="author" content="SitePoint">
 
@@ -18,7 +20,6 @@
   <link rel="icon" href="/favicon.ico">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-  {% load static %}
   <link rel="stylesheet" type="text/css" href="{% static 'index/style.css' %}">
   <script>
             function setup() {
@@ -32,79 +33,7 @@
                 }
             }
         </script>
-<style>
-
-div {text-align: center;}
-
-.button {
-  background-color: #908fcc;
-  border: none;
-  color: white;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin: 4px 2px;
-  cursor: pointer;
-  border-radius: 2px;
-  width: 150px;
-}
-.button1:hover {
-  background-color: #4c4ab4;
-  color: white;
-  box-shadow: 0 5px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
-}
-
-* {
-  box-sizing: border-box;
-}
-
-/* Create two equal columns that floats next to each other */
-
-.columnFirstDiv{
-  float: left;
-  width: 30%;
-  padding: 10px;
-  height: 300px; /* Should be removed. Only for demonstration */
-}
-
-.columnButton1 {
-  float: left;
-  width: 10%;
-  padding: 10px;
-  height: 300px; /* Should be removed. Only for demonstration */
-}
-
-.columnSecondDiv {
-  float: left;
-  width: 40%;
-  padding: 10px;
-  height: 300px; /* Should be removed. Only for demonstration */
-}
-	
-.columnButton {
-  float: left;
-  width: 20%;
-  padding: 10px;
-  height: 300px; /* Should be removed. Only for demonstration */
-}
-
-.columnDFG {
-  float: left;
-  width: 50%;
-  padding: 10px;
-  height: 300px; /* Should be removed. Only for demonstration */
-  margin-top:1%;
-}
-
-/* Clear floats after the columns */
-.row:after {
-  content: "";
-  display: table;
-  clear: both;
-}
-</style>	
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>	
 </head>
 
 <body onload="setup()">
@@ -121,80 +50,31 @@ div {text-align: center;}
 </style>
 
 <div id="content">
+{% block header %}
+
     <img src="{% static 'index/Logo.jpg' %}" align="top"/></div>
 
 <div id="header" style="background-color:white;padding:40px;margin-bottom: 1%;">
 <p style="font-family:Arial;font-size:20px;"><b>Object-Centric Comparative Process Mining</b></p></div> 
+{% endblock %}
     
 <!div id="navbar"><!/div>
 <!div id="sidebar"><!/div>
+
+{% block content %}
+
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}
 
 </div>
 <!-- 
 <div style="background-color:gray;color:white;padding:30px;height:50px;margin-left: 3%;margin-right: 3%;"> -->
 
-  <div style="">
- 
- <!-- Upload button -->
-	<form id='formid' action="form.php" method="POST" enctype="multipart/form-data"> 
-            <input id='fileid' type='file' name='filename' hidden/>
-            <input id='buttonid' type='button' class="button button1" value='Import file' /> 
-            <input type='submit'class="button button1" value='Submit' /> 
-        </form>
-</div> 
+{% block script %}
 
-<!div style="background-color:white;color:white;padding:20px;height: 300px;margin-top: 1%;margin-left: 3%;margin-right: 3%;">
-
-<div class="row" style="margin: 3% 3% 0 3%">
-  <div class="columnFirstDiv" style="background-color:lightgray;">
-    <p>Table 1</p>
-  </div>
-  <div class="columnFirstDiv" style="background-color:#F3F3F3;">
-    <p>table2</p>
-   </div>
-   <div class="columnFirstDiv" style="background-color:lightgray;">
-    <p>table3</p>
-  </div>
-  <div class="columnButton1" style="background-color:#F3F3F3;">
-    <p>buttons</p>
-  </div>
-</div>
-
-<!/div>
-
-<!div style="background-color:#F3F3F3;color:white;padding:20px;height: 300px;margin-top: 1%;margin-left: 3%;margin-right: 3%;">
-
-<div class="row" style="margin-top: 1%;margin-left: 3%;margin-right: 3%;">
-  <div class="columnSecondDiv" style="background-color:lightgray;">
-    <p>table 1</p>
-    {% autoescape off %}
-    {{ plot_div }}
-    {% endautoescape %}
-  </div>
-  <div class="columnButton" style="background-color:#F3F3F3;">
-    <p>buttons</p>
-   </div>
-   <div class="columnSecondDiv" style="background-color:lightgray;">
-    <p>table 2</p>
-  </div>
-</div>
-
-<!/div>
-
-<!div style="background-color:#F3F3F3;color:white;padding:20px;height: 300px;margin-top: 1%;margin-left: 3%;margin-right: 3%;">
-
-<div class="row" style="margin-top: 1%;margin-left: 3%;margin-right: 3%;">
-  <div class="columnDFG" style="background-color:lightgray;">
-    <h2>Result(DFG or Petrinet)</h2>
-    <p></p>
-  </div>
-  <div class="columnDFG" style="background-color:#F3F3F3;">
-    <h2>Result(DFG or Petrinet)</h2>
-    <p></p>
-  </div>
-</div>
-	
-<!/div> 
-
+{% endblock %}
 </body>
 </html>
