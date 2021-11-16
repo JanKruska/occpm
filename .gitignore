@@ -133,3 +133,5 @@ dmypy.json
 
 #VSCode settings
 .vscode/settings.json
+
+media/
