@@ -3,78 +3,94 @@
 <!doctype html>
 
 <html lang="en">
+
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>{% block title %}Object Centric Comparative Process Mining{% endblock %}</title>
-  <meta name="description" content="A simple HTML5 Template for new projects.">
-  <meta name="author" content="SitePoint">
+    <title>{% block title %}Object Centric Comparative Process Mining{% endblock %}</title>
+    <meta name="description" content="A simple HTML5 Template for new projects.">
+    <meta name="author" content="SitePoint">
 
-  <meta property="og:title" content="A Basic HTML5 Template">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://www.sitepoint.com/a-basic-html5-template/">
-  <meta property="og:description" content="A simple HTML5 Template for new projects.">
-  <meta property="og:image" content="image.png">
+    <meta property="og:title" content="A Basic HTML5 Template">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.sitepoint.com/a-basic-html5-template/">
+    <meta property="og:description" content="A simple HTML5 Template for new projects.">
+    <meta property="og:image" content="image.png">
 
-  <link rel="icon" href="/favicon.ico">
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-  <link rel="stylesheet" type="text/css" href="{% static 'index/style.css' %}">
-  <script>
-            function setup() {
-                document.getElementById('buttonid').addEventListener('click', openDialog);
-                function openDialog() {
-                    document.getElementById('fileid').click();
-                }
-                document.getElementById('fileid').addEventListener('change', submitForm);
-                function submitForm() {
-                    document.getElementById('formid').submit();
-                }
+    <link rel="icon" href="/favicon.ico">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="stylesheet" type="text/css" href="{% static 'index/style.css' %}">
+    <script>
+        function setup() {
+            document.getElementById('buttonid').addEventListener('click', openDialog);
+
+            function openDialog() {
+                document.getElementById('fileid').click();
             }
-        </script>
-  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>	
+            document.getElementById('fileid').addEventListener('change', submitForm);
+
+            function submitForm() {
+                document.getElementById('formid').submit();
+            }
+        }
+    </script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 
 <body onload="setup()">
-<div id="container">
-<style>
-    #content {
-        position: relative;
-    }
-    #content img {
-        position: absolute;
-        top: 0px;
-        right: 0px;
-    }
-</style>
+    <div id="container">
+        {% comment %} <style>
+            #content {
+                position: relative;
+            }
 
-<div id="content">
-{% block header %}
+            #content img {
+                position: absolute;
+                top: 0px;
+                right: 0px;
+            }
+        </style> {% endcomment %}
 
-    <img src="{% static 'index/Logo.jpg' %}" align="top"/></div>
+        {% block header %}
 
-<div id="header" style="background-color:white;padding:40px;margin-bottom: 1%;">
-<p style="font-family:Arial;font-size:20px;"><b>Object-Centric Comparative Process Mining</b></p></div> 
-{% endblock %}
-    
-<!div id="navbar"><!/div>
-<!div id="sidebar"><!/div>
+        <div class="flex" id="header" style="background-color:white;margin-bottom: 1%;">
+            <div style="width:144px">
+                <img src="{% static 'index/Logo.jpg' %}" align="left" style="padding:10px;" />
+            </div>
+            <div class="flex-vertical" style="flex-grow: 1;align-self: center;">
+                <h1 style="font-family:Arial"><b>Object-Centric Comparative Process Mining</b></h1>
+                {% comment %} ;font-size:20px; {% endcomment %}
+            </div>
+            <div style="width:149px">
+                <a href="https://github.com/JanKruska/occpm"><img loading="lazy" width="149" height="149" align="right"
+                        src="https://github.blog/wp-content/uploads/2008/12/forkme_right_darkblue_121621.png?resize=149%2C149"
+                        class="attachment-full size-full" alt="Fork me on GitHub" data-recalc-dims="1"></a>
+            </div>
+        </div>
 
-{% block content %}
+        {% endblock %}
 
-{% endblock %}
+        <!div id="navbar" />
+        <!div id="sidebar" />
+        <div class="content">
+            {% block content %}
 
-{% block footer %}
+            {% endblock %}
+        </div>
 
-{% endblock %}
+        {% block footer %}
 
-</div>
-<!-- 
+        {% endblock %}
+
+    </div>
+    <!-- 
 <div style="background-color:gray;color:white;padding:30px;height:50px;margin-left: 3%;margin-right: 3%;"> -->
 
-{% block script %}
+    {% block script %}
 
-{% endblock %}
+    {% endblock %}
 </body>
+
 </html>

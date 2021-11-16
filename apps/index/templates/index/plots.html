@@ -3,37 +3,33 @@
 
 <!DOCTYPE html>
 <meta charset="utf-8">
+
 <head></head>
+
 <body>
-{% block content  %}
+  {% block content  %}
 
-<div class="row" style="margin-top: 1%;margin-left: 3%;margin-right: 3%;">
-  <div class="columnSecondDiv" style="background-color:lightgray;">
-    <p>table 1</p>
-    {% comment %} <button type="submit" value={{excel_path}} onclick="location.href='{% url 'iris' %}'" name='mybtn2'>Iris</button> {% endcomment %}
-    <form action="{% url 'iris' %}" method="get">
-{% csrf_token %}
-
-
- <button type="submit" name='btn_iris' value={{excel_path}}>Show Iris dataset</button>
- </form>
-    {% comment %} <button type="submit" value={{excel_path}} onclick="location.href='{% url 'tips' %}'" name='mybtn2'>Tips</button> {% endcomment %}
-    <form action="{% url 'tips' %}" method="get">
-{% csrf_token %}
-
-
- <button type="submit" name='btn_tips' value={{excel_path}}>Show Tips dataset</button>
- </form>
-    {% autoescape off %}
-    {{ plot_div }}
-    {% endautoescape %}
+  <div class="row" style="margin-top: 1%;margin-left: 3%;margin-right: 3%;">
+    <div class="columnSecondDiv" style="background-color:lightgray;">
+      <p>table 1</p>
+      <form action="{% url 'iris' %}" method="get">
+        {% csrf_token %}
+        <button type="submit" name='btn_iris' value={{excel_path}}>Show Iris dataset</button>
+      </form>
+      <form action="{% url 'tips' %}" method="get">
+        {% csrf_token %}
+        <button type="submit" name='btn_tips' value={{excel_path}}>Show Tips dataset</button>
+      </form>
+      {% autoescape off %}
+      {{ plot_div }}
+      {% endautoescape %}
+    </div>
+    <div class="columnButton" style="background-color:#F3F3F3;">
+      <p>buttons</p>
+    </div>
+    <div class="columnSecondDiv" style="background-color:lightgray;">
+      <p>table 2</p>
+    </div>
   </div>
-  <div class="columnButton" style="background-color:#F3F3F3;">
-    <p>buttons</p>
-   </div>
-   <div class="columnSecondDiv" style="background-color:lightgray;">
-    <p>table 2</p>
-  </div>
-</div>
 </body>
 {% endblock %}

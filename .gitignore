@@ -134,4 +134,9 @@ dmypy.json
 #VSCode settings
 .vscode/settings.json
 
+#Webserver storage
 media/
+
+#OCEL logs
+*.jsonocel
+*.xmlocel
