@@ -2,6 +2,7 @@
 from pm4pymdl.objects.mdl.importer import importer as mdl_importer
 from pm4pymdl.objects.ocel.exporter import exporter as ocel_exporter
 from pm4pymdl.objects.ocel.importer import importer as ocel_importer
+from pm4pymdl.algo.mvp.utils import succint_mdl_to_exploded_mdl, exploded_mdl_to_succint_mdl
 import pandas as pd
 import plotly.express as px
 from plotly.subplots import make_subplots
@@ -65,3 +66,4 @@ for column in categorical:
 histogram(obj_df, "object_type")
 
 # %%
+exp=succint_mdl_to_exploded_mdl.apply(df)

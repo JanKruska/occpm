@@ -25,18 +25,27 @@ def uploadfile(request):
         })
     return render(request, 'index/upload.html')
 
+
 class PlotsView(View):
     def get(self, request):
         if "btn_iris" in request.GET:
             df = px.data.iris()
-            plot_div = plot(plots.histogram(df,"sepal_length"),
-                    output_type='div',include_plotlyjs=False, link_text="")
-            return render(request, "index/plots.html", context={'plot_div': plot_div})
+            plot_div = plot(
+                plots.histogram(df, "sepal_length"),
+                output_type="div",
+                include_plotlyjs=False,
+                link_text="",
+            )
+            return render(request, "index/plots.html", context={"plot_div": plot_div})
         else:
             df = px.data.tips()
-            plot_div = plot(plots.histogram(df,"total_bill"),
-                    output_type='div',include_plotlyjs=False, link_text="")
-            return render(request, "index/plots.html", context={'plot_div': plot_div})
+            plot_div = plot(
+                plots.histogram(df, "total_bill"),
+                output_type="div",
+                include_plotlyjs=False,
+                link_text="",
+            )
+            return render(request, "index/plots.html", context={"plot_div": plot_div})
 
     # def post(self, request):
     #     if "btn_iris" in request.GET:
