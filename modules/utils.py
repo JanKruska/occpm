@@ -44,3 +44,32 @@ def get_column_types(df):
         if column not in numerical and column not in object
     ]
     return numerical, categorical, object
+
+def filter_object(exp,filter):
+    """Filters an event log using categorical columns, can be used on exploded event logs to filter object, since they become categorical through the explosion.
+    Note that this filters in CNF, i.e. a logical and on `filter` and logical or on the list contained in each item 
+
+    Args:
+        exp (pd.DataFrame): (exploded) event log
+        filter (dict): a dictionary containing (str,list) pairs where str is a df-column name and list is a list of values
+
+    Returns:
+        exp: A filtered dataframe
+    """
+    for object, values in filter.items():
+        exp = exp[exp[object].isin(values)]
+    return exp
+
+def filter_numerical(df,filter):
+    """Filters an event log on numerical columns
+
+    Args:
+        df (pd.DataFrame): The dataframe to be filtered
+        filter (dict): dict containing (str,Callable) pairs where str is a df-column name and Callable is function that returns a truth value
+
+    Returns:
+        pd.DataFrame: [description]
+    """
+    for object, eval in filter.items():
+        df = df[eval(df[object])]
+    return df
