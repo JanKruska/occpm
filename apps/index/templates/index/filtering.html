@@ -1,0 +1,27 @@
+{% extends 'index/base.html' %}
+
+
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<head></head>
+
+<body>
+  {% block content  %}
+
+  <div class="row" style="margin-top: 1%;margin-left: 3%;margin-right: 3%;">
+    
+    <form method="post">
+        { % for colname in attribute_list % }
+        {% csrf_token %}
+        <label>
+          <span>{{colname}}</span>
+          <input type="checkbox" name="{{colname}}" value="">
+        </label>
+        {% endfor %}
+        <button type="submit">Submit</button>
+    </form>
+       
+  </div>
+</body>
+{% endblock %}
