@@ -2,7 +2,10 @@
 from pm4pymdl.objects.mdl.importer import importer as mdl_importer
 from pm4pymdl.objects.ocel.exporter import exporter as ocel_exporter
 from pm4pymdl.objects.ocel.importer import importer as ocel_importer
-from pm4pymdl.algo.mvp.utils import succint_mdl_to_exploded_mdl, exploded_mdl_to_succint_mdl
+from pm4pymdl.algo.mvp.utils import (
+    succint_mdl_to_exploded_mdl,
+    exploded_mdl_to_succint_mdl,
+)
 import pandas as pd
 import plotly.express as px
 from plotly.subplots import make_subplots
@@ -66,23 +69,55 @@ for column in categorical:
 histogram(obj_df, "object_type")
 
 # %%
-def filter_object(exp,filter):
+def filter_object(exp, filter):
     for object, values in filter.items():
         exp = exp[exp[object].isin(values)]
     return exp
 
+
 filter = {"customers": ["Marco Pegoraro"]}
-exp=succint_mdl_to_exploded_mdl.apply(df)
-filtered_exp = filter_object(exp,filter)
+exp = succint_mdl_to_exploded_mdl.apply(df)
+filtered_exp = filter_object(exp, filter)
 filtered_df = exploded_mdl_to_succint_mdl.apply(filtered_exp)
-histo_boxplot(filtered_df,"event_price")
+histo_boxplot(filtered_df, "event_price")
 # %%
-filter = {"event_price": lambda x: x<1000}
-def filter_numerical(df,filter):
+filter = {"event_price": lambda x: x < 1000}
+
+
+def filter_numerical(df, filter):
     for object, eval in filter.items():
         df = df[eval(df[object])]
     return df
 
-filtered2 = filter_numerical(df,filter)
-histogram(filtered2,"event_activity")
+
+filtered2 = filter_numerical(df, filter)
+histogram(filtered2, "event_activity")
+# %%
+object_list = ["items", "orders", "customers", "packages"]
+
+
+def get_object_attributes(obj_df, object_types):
+    """Determines which attributes are valid for a list of object_types
+
+    Args:
+        obj_df (pd.DataFrame): A pm4py-mdl object dataframe
+        object_types (list): The object types to determine attributes for
+
+    Returns:
+        dict: dict containing a pairs of object_type and a list of associated attributes
+    """
+    attributes = {}
+    for column in object_types:
+        valid = obj_df[obj_df["object_type"] == column].isnull().all()
+        attr = [
+            column
+            for column in obj_df.columns
+            if not valid[column] and column != "object_id" and column != "object_type"
+        ]
+        if attr:
+            attributes[column] = attr
+    return attributes
+
+
+attributes = get_object_attributes(obj_df, object_list)
 # %%
