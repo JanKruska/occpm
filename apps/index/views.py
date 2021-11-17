@@ -20,6 +20,7 @@ def uploadfile(request):
         fs = FileSystemStorage()
         filename = fs.save(myfile.name, myfile)
         uploaded_file_url = fs.url(filename)
+        settings.EVENT_LOG_URL = uploaded_file_url
         return render(request, 'index/upload.html', {
             'uploaded_file_url': uploaded_file_url
         })
