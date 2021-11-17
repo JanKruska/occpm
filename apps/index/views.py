@@ -30,11 +30,10 @@ def uploadfile(request):
             'uploaded_file_url': uploaded_file_url
         })
     return render(request, 'index/upload.html')
-
+    
 
 class PlotsView(View):
     def post(self, request, column=None):
-        # if "btn_iris" in request.GET:
         df, obj_df = ocel_importer.apply(os.path.abspath("media/running-example.jsonocel"))
         numerical, categorical, _ = utils.get_column_types(df)
         if column==None or column not in df.columns:
@@ -55,10 +54,26 @@ class PlotsView(View):
             )
         return render(request, "index/plots.html", context={"plot_div": plot_div, 'list':[*numerical, *categorical]})
 
-    def get(self, request):
+    def get(self, request,column=None):
         df, obj_df = ocel_importer.apply(os.path.abspath("media/running-example.jsonocel"))
         numerical, categorical, _ = utils.get_column_types(df)
-        return render(request, "index/plots.html", context={'list':[*numerical, *categorical]})
+        if column==None:
+            return render(request, "index/plots.html", context={'list':[*numerical, *categorical]})
+        elif column in numerical:
+            plot_div = plot(
+                plots.histogram_boxplot(df, column),
+                output_type="div",
+                include_plotlyjs=False,
+                link_text="",
+            )
+        elif column in categorical:
+            plot_div = plot(
+                plots.histogram(df, column),
+                output_type="div",
+                include_plotlyjs=False,
+                link_text="",
+            )
+        return render(request, "index/raw.html", context={"object": plot_div}) 
 
 class FilterView(View):
 
