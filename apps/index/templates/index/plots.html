@@ -11,15 +11,18 @@
 
   <div class="row" style="margin-top: 1%;margin-left: 3%;margin-right: 3%;">
     <div class="columnSecondDiv" style="background-color:lightgray;">
-      <p>table 1</p>
-      <form action="{% url 'iris' %}" method="get">
+      <div class="flex">
+      {% for object in list %}
+      <form action="{% url 'histogram' object%}" method="post">
         {% csrf_token %}
-        <button type="submit" name='btn_iris' value={{excel_path}}>Show Iris dataset</button>
+        <button type="submit" name='btn_iris'>Show {{ object }}</button>
       </form>
-      <form action="{% url 'tips' %}" method="get">
+      {% endfor %}
+      </div>
+      {% comment %} <form action="{% url 'histogram' 2%}" method="post">
         {% csrf_token %}
         <button type="submit" name='btn_tips' value={{excel_path}}>Show Tips dataset</button>
-      </form>
+      </form> {% endcomment %}
       {% autoescape off %}
       {{ plot_div }}
       {% endautoescape %}

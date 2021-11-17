@@ -1,3 +1,4 @@
+import os
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.views import View
@@ -9,9 +10,12 @@ import plotly.express as px
 import modules.plots as plots
 
 ## file upload code
-from django.shortcuts import render
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
+
+from pm4pymdl.objects.ocel.importer import importer as ocel_importer
+
+import modules.utils as utils
 
 
 def uploadfile(request):
@@ -28,34 +32,30 @@ def uploadfile(request):
 
 
 class PlotsView(View):
-    def get(self, request):
-        if "btn_iris" in request.GET:
-            df = px.data.iris()
+    def post(self, request, column=None):
+        # if "btn_iris" in request.GET:
+        df, obj_df = ocel_importer.apply(os.path.abspath("media/running-example.jsonocel"))
+        numerical, categorical, _ = utils.get_column_types(df)
+        if column==None or column not in df.columns:
+            return self.get(request)
+        elif column in numerical:
             plot_div = plot(
-                plots.histogram(df, "sepal_length"),
+                plots.histogram_boxplot(df, column),
                 output_type="div",
                 include_plotlyjs=False,
                 link_text="",
             )
-            return render(request, "index/plots.html", context={"plot_div": plot_div})
-        else:
-            df = px.data.tips()
+        elif column in categorical:
             plot_div = plot(
-                plots.histogram(df, "total_bill"),
+                plots.histogram(df, column),
                 output_type="div",
                 include_plotlyjs=False,
                 link_text="",
             )
-            return render(request, "index/plots.html", context={"plot_div": plot_div})
+        return render(request, "index/plots.html", context={"plot_div": plot_div, 'list':[*numerical, *categorical]})
 
-    # def post(self, request):
-    #     if "btn_iris" in request.GET:
-    #         df = px.data.iris()
-    #         plot_div = plot(plots.histogram(df,"sepal_length"),
-    #                 output_type='div',include_plotlyjs=False, link_text="")
-    #         return render(request, "index/plots.html", context={'plot_div': plot_div})
-    #     else:
-    #         df = px.data.tips()
-    #         plot_div = plot(plots.histogram(df,"total_bill"),
-    #                 output_type='div',include_plotlyjs=False, link_text="")
-    #         return render(request, "index/plots.html", context={'plot_div': plot_div})
+    def get(self, request):
+        df, obj_df = ocel_importer.apply(os.path.abspath("media/running-example.jsonocel"))
+        numerical, categorical, _ = utils.get_column_types(df)
+        return render(request, "index/plots.html", context={'list':[*numerical, *categorical]})
+        
