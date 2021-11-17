@@ -1,0 +1,13 @@
+{% extends 'index/base.html' %}
+
+
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+{% block content  %}
+<div class="flex" style="justify-content: center;">
+<p>The original log contains {{num_events}} events.</p><br/>
+<p>The filtered log contains {{filtered_events}} events.</p>
+{% comment %} <p>The log contains {{num_objects}} objects</p> {% endcomment %}
+</div>
+{% endblock %}

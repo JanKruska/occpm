@@ -14,6 +14,7 @@ from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 
 from pm4pymdl.objects.ocel.importer import importer as ocel_importer
+from pm4pymdl.algo.mvp.utils import succint_mdl_to_exploded_mdl, exploded_mdl_to_succint_mdl
 
 import modules.utils as utils
 
@@ -58,4 +59,17 @@ class PlotsView(View):
         df, obj_df = ocel_importer.apply(os.path.abspath("media/running-example.jsonocel"))
         numerical, categorical, _ = utils.get_column_types(df)
         return render(request, "index/plots.html", context={'list':[*numerical, *categorical]})
-        
+
+class FilterView(View):
+
+    
+
+    def get(self, request):
+        #! TODO: determine filtering from request
+        filter = {"customers": ["Marco Pegoraro"]}
+
+        df, obj_df = ocel_importer.apply(os.path.abspath("media/running-example.jsonocel"))
+        exp=succint_mdl_to_exploded_mdl.apply(df)
+        filtered_exp = utils.filter_object(exp,filter)
+        filtered_df = exploded_mdl_to_succint_mdl.apply(filtered_exp)
+        return render(request, "index/filter.html", context={"num_events":len(df),"filtered_events":len(filtered_df)})

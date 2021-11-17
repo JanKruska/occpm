@@ -66,4 +66,23 @@ for column in categorical:
 histogram(obj_df, "object_type")
 
 # %%
+def filter_object(exp,filter):
+    for object, values in filter.items():
+        exp = exp[exp[object].isin(values)]
+    return exp
+
+filter = {"customers": ["Marco Pegoraro"]}
 exp=succint_mdl_to_exploded_mdl.apply(df)
+filtered_exp = filter_object(exp,filter)
+filtered_df = exploded_mdl_to_succint_mdl.apply(filtered_exp)
+histo_boxplot(filtered_df,"event_price")
+# %%
+filter = {"event_price": lambda x: x<1000}
+def filter_numerical(df,filter):
+    for object, eval in filter.items():
+        df = df[eval(df[object])]
+    return df
+
+filtered2 = filter_numerical(df,filter)
+histogram(filtered2,"event_activity")
+# %%
