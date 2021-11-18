@@ -37,7 +37,7 @@ def uploadfile(request):
 
 
 def select_filter(request):
-    df, obj_df = ocel_importer.apply(os.path.abspath("media/running-example.jsonocel"))
+    df, obj_df = ocel_importer.apply(project_settings.EVENT_LOG_URL)
     attribute_list = df.columns.tolist()
     ## returns 3 lists, 1st two are written and need to be merged to get event attributes. 3rd list is for object attributes.
     numerical, categorical, object_attribute_list = utils.get_column_types(df)
@@ -75,7 +75,7 @@ def select_filter(request):
 class PlotsView(View):
     def post(self, request, column=None):
         df, obj_df = ocel_importer.apply(
-            os.path.abspath("media/running-example.jsonocel")
+            os.path.abspath(project_settings.EVENT_LOG_URL)
         )
         numerical, categorical, _ = utils.get_column_types(df)
         if column == None or column not in df.columns:
@@ -102,7 +102,7 @@ class PlotsView(View):
 
     def get(self, request, column=None):
         df, obj_df = ocel_importer.apply(
-            os.path.abspath("media/running-example.jsonocel")
+            os.path.abspath(project_settings.EVENT_LOG_URL)
         )
         numerical, categorical, _ = utils.get_column_types(df)
         if column == None:
@@ -153,7 +153,7 @@ class FilterView(View):
         #! TODO: determine filtering from request
         ## copied from above
         df, obj_df = ocel_importer.apply(
-            os.path.abspath("media/running-example.jsonocel")
+            os.path.abspath(project_settings.EVENT_LOG_URL)
         )
         attribute_list = df.columns.tolist()
         numerical, categorical, object_types = utils.get_column_types(df)
@@ -169,7 +169,7 @@ class FilterView(View):
         filter = {"customers": ["Marco Pegoraro"]}
         ########### not required anymore################################
         # df, obj_df = ocel_importer.apply(
-        #    os.path.abspath("media/running-example.jsonocel")
+        #    os.path.abspath(project_settings.EVENT_LOG_URL)
         # )
         # numerical, categorical, _ = utils.get_column_types(df)
 
