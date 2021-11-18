@@ -23,11 +23,11 @@ from apps.index import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    #path("", include("apps.index.urls")),
+    # path("", include("apps.index.urls")),
     path("filter", FilterView.as_view()),
-    path("filtering", views.select_filter),
-    path('plots/', include('apps.index.urls')),
-    path('', views.uploadfile, name='upload'),
+    path("filtering", views.select_filter, name="filtering"),
+    path("plots/", include("apps.index.urls")),
+    path("", views.uploadfile, name="upload"),
 ]
 
 if settings.DEBUG:
