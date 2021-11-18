@@ -1,0 +1,17 @@
+<body>
+<table>
+<tr>
+<th/>
+{% for column_label in column_labels %}
+<th>{{column_label}}</th>
+{% endfor %}
+</tr>
+{% for row_label,items in rows %}
+<tr><th>{{row_label}}</th>
+{% for item in items %}
+<th>{{item}}</th>
+{% endfor %}
+</tr>
+{% endfor %}
+</table>
+</body>

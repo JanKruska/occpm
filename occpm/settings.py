@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "apps.index.apps.IndexConfig",
+    "apps.dataframe_table.apps.DataframeTableConfig",
 ]
 
 MIDDLEWARE = [
