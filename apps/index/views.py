@@ -22,6 +22,8 @@ from pm4pymdl.algo.mvp.utils import (
 
 import modules.utils as utils
 
+EVENT_LOG_URL = "media/running-example.jsonocel"
+
 
 def uploadfile(request):
     if request.method == "POST" and request.FILES["myfile"]:
@@ -37,7 +39,7 @@ def uploadfile(request):
 
 
 def select_filter(request):
-    df, obj_df = ocel_importer.apply(project_settings.EVENT_LOG_URL)
+    df, obj_df = ocel_importer.apply(EVENT_LOG_URL)
     attribute_list = df.columns.tolist()
     ## returns 3 lists, 1st two are written and need to be merged to get event attributes. 3rd list is for object attributes.
     numerical, categorical, object_attribute_list = utils.get_column_types(df)
@@ -67,16 +69,14 @@ def select_filter(request):
             "object_attributes": object_attributes_examples.items(),
             "num_events": len(df),
             "num_objects": len(obj_df),
-            "event_log_url": project_settings.EVENT_LOG_URL,
+            "event_log_url": EVENT_LOG_URL,
         },
     )
 
 
 class PlotsView(View):
     def post(self, request, column=None):
-        df, obj_df = ocel_importer.apply(
-            os.path.abspath(project_settings.EVENT_LOG_URL)
-        )
+        df, obj_df = ocel_importer.apply(os.path.abspath(EVENT_LOG_URL))
         numerical, categorical, _ = utils.get_column_types(df)
         if column == None or column not in df.columns:
             return self.get(request)
@@ -101,9 +101,7 @@ class PlotsView(View):
         )
 
     def get(self, request, column=None):
-        df, obj_df = ocel_importer.apply(
-            os.path.abspath(project_settings.EVENT_LOG_URL)
-        )
+        df, obj_df = ocel_importer.apply(os.path.abspath(EVENT_LOG_URL))
         numerical, categorical, _ = utils.get_column_types(df)
         if column == None:
             return render(
@@ -152,9 +150,7 @@ class FilterView(View):
     def get(self, request):
         #! TODO: determine filtering from request
         ## copied from above
-        df, obj_df = ocel_importer.apply(
-            os.path.abspath(project_settings.EVENT_LOG_URL)
-        )
+        df, obj_df = ocel_importer.apply(os.path.abspath(EVENT_LOG_URL))
         attribute_list = df.columns.tolist()
         numerical, categorical, object_types = utils.get_column_types(df)
         combined_attribute_list = [*numerical, *categorical, *object_types]
