@@ -49,11 +49,10 @@ def select_filter(request):
 
     object_attributes_examples = {}
     for key, values in object_attributes.items():
-        # object_attributes_examples[key] = [" : ".join(x) for x in zip(values,[str(utils.first_valid_entry(obj_df[value])) for value in values])]
         object_attributes_examples[key] = []
         for value in values:
             object_attributes_examples[key].append((value,utils.first_valid_entry(obj_df[value])))
-    print(object_attributes_examples)
+
     column_width=1/(len(object_attributes)+1)*100
     return render(request, "index/filtering.html", context={'event_attributes':event_dict, 'column_width': column_width, 'object_attributes': object_attributes_examples.items()})
 
@@ -97,20 +96,37 @@ class PlotsView(View):
                 "index/plots.html",
                 context={"list": [*numerical, *categorical]},
             )
-        elif column in numerical:
-            plot_div = plot(
-                plots.histogram_boxplot(df, column),
-                output_type="div",
-                include_plotlyjs=False,
-                link_text="",
-            )
-        elif column in categorical:
-            plot_div = plot(
-                plots.histogram(df, column),
-                output_type="div",
-                include_plotlyjs=False,
-                link_text="",
-            )
+        elif column in df.columns:
+            if column in numerical:
+                plot_div = plot(
+                    plots.histogram_boxplot(df, column),
+                    output_type="div",
+                    include_plotlyjs=False,
+                    link_text="",
+                )
+            elif column in categorical:
+                plot_div = plot(
+                    plots.histogram(df, column),
+                    output_type="div",
+                    include_plotlyjs=False,
+                    link_text="",
+                )
+        elif column in obj_df.columns:
+            obj_numerical, obj_categorical, _ = utils.get_column_types(obj_df)
+            if column in obj_numerical:
+                plot_div = plot(
+                    plots.histogram_boxplot(obj_df, column),
+                    output_type="div",
+                    include_plotlyjs=False,
+                    link_text="",
+                )
+            elif column in obj_categorical:
+                plot_div = plot(
+                    plots.histogram(obj_df, column),
+                    output_type="div",
+                    include_plotlyjs=False,
+                    link_text="",
+                )
         return render(request, "index/raw.html", context={"object": plot_div})
 
 

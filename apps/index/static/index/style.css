@@ -100,3 +100,7 @@ body {
 table {
     border-spacing: 5px;
 }
+
+.attr_name {
+    cursor: pointer;
+}
