@@ -96,3 +96,7 @@ body {
     margin: 0px;
     padding: 0px;
 }
+
+table {
+    border-spacing: 5px;
+}

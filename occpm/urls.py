@@ -25,6 +25,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     #path("", include("apps.index.urls")),
     path("filter", FilterView.as_view()),
+    path("filtering", views.select_filter),
     path('plots/', include('apps.index.urls')),
     path('', views.uploadfile, name='upload'),
 ]

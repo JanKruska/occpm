@@ -9,19 +9,53 @@
 <body>
   {% block content  %}
 
-  <div class="row" style="margin-top: 1%;margin-left: 3%;margin-right: 3%;">
-    
     <form method="post">
-        { % for colname in attribute_list % }
+  <div class="flex" style="margin-top: 1%;margin-left: 3%;margin-right: 3%;justify-content: center;">
+        <div class="flex-vertical" style="flex-basis: {{ column_width }}%;">
+        <h2>Event level attributes</h2>
+        <table>
+        <tr>
+          <th/>
+          <th>Attribute</th>
+          <th>Example value</th>
+        </tr>
+        {% for colname, value in event_attributes.items %}
         {% csrf_token %}
+        <tr>
         <label>
-          <span>{{colname}}</span>
-          <input type="checkbox" name="{{colname}}" value="">
+          <th><input type="checkbox" name="{{colname}}" value=""></th>
+          <th>{{colname}}</th>
+          <th>{{value}}</th>
         </label>
+        </tr>
         {% endfor %}
-        <button type="submit">Submit</button>
-    </form>
+        </table>
+        </div>
+        {% for colname, values in object_attributes %}
+        {% csrf_token %}
+        <div class="flex-vertical" style="flex-basis: {{ column_width }}%;">
+          <h2>{{colname}}</h2>
+          <table>
+          <tr>
+          <th/>
+          <th>Attribute</th>
+          <th>Example value</th>
+          </tr>
+          {% for value,example in values %}
+          <tr>
+          <label>
+          <th><input type="checkbox" name="{{value}}" value=""></th>
+          <th>{{value}}</th>
+          <th>{{example}}</th>
+          </label>
+          </tr>
+          {% endfor %}
+          </table>
+          </div>
+        {% endfor %}
+        <button type="submit">Create Cubes</button>
        
   </div>
+    </form>
 </body>
 {% endblock %}

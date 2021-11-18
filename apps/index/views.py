@@ -41,17 +41,21 @@ def select_filter(request):
     numerical, categorical, object_attribute_list = utils.get_column_types(df)
     event_attribute_list = [*numerical,*categorical]
     
-    ## writing code for extracting the object columns sub-attributes 
-    #object_types = obj_df[object_type].unique() # extracts all types of objects from the obj df as a list
-    object_types = object_attribute_list    #extra step because i'm not sure it's correct. 
-    attributes = {}
-    for column in object_types:
-        valid = obj_df[obj_df["object_type"]==column].isnull().all()    # checks that if column has all null values then it is not considered as a valid attribute
-        attr = [column for column in obj_df.columns if not valid[column] and column!="object_id" and column!="object_type"]
-        if attr:
-            attributes[column] = attr
+    #Extract valid attributes associated with each object type
+    object_attributes = utils.get_object_attributes(obj_df,object_attribute_list)
+    event_dict = {}
+    for attribute in event_attribute_list:
+        event_dict[attribute] = utils.first_valid_entry(df[attribute])
 
-    return render(request, "index/filtering.html", context={'event_attributes':event_attribute_list, 'object_types': object_attribute_list, 'object_attributes': attributes})
+    object_attributes_examples = {}
+    for key, values in object_attributes.items():
+        # object_attributes_examples[key] = [" : ".join(x) for x in zip(values,[str(utils.first_valid_entry(obj_df[value])) for value in values])]
+        object_attributes_examples[key] = []
+        for value in values:
+            object_attributes_examples[key].append((value,utils.first_valid_entry(obj_df[value])))
+    print(object_attributes_examples)
+    column_width=1/(len(object_attributes)+1)*100
+    return render(request, "index/filtering.html", context={'event_attributes':event_dict, 'column_width': column_width, 'object_attributes': object_attributes_examples.items()})
 
 
 class PlotsView(View):

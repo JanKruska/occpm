@@ -2,6 +2,12 @@
 Helper modules containing various useful utility functions.
 """
 
+def first_valid_entry(series):
+    idx = series.first_valid_index()
+    if idx == None:
+        return None
+    else:
+        return series.loc[idx]
 
 def series_is_type(series, type):
     """Checks whether the given column is of the provided python type
@@ -34,7 +40,7 @@ def get_column_types(df):
         for column in df.columns
         if column != "event_id" and not df.isnull().all()[column]
     ]
-    numerical = df.select_dtypes("number")
+    numerical = df.select_dtypes("number").columns.to_list()
 
     object = [column for column in valid_columns if series_is_type(df[column], list)]
 
@@ -73,3 +79,21 @@ def filter_numerical(df,filter):
     for object, eval in filter.items():
         df = df[eval(df[object])]
     return df
+
+def get_object_attributes(obj_df,object_types):
+    """Determines which attributes are valid for a list of object_types
+
+    Args:
+        obj_df (pd.DataFrame): A pm4py-mdl object dataframe
+        object_types (list): The object types to determine attributes for
+
+    Returns:
+        dict: dict containing a pairs of object_type and a list of associated attributes
+    """
+    attributes = {}
+    for column in object_types:
+        valid = obj_df[obj_df["object_type"]==column].isnull().all()
+        attr = [column for column in obj_df.columns if not valid[column] and column!="object_id" and column!="object_type"]
+        if attr:
+            attributes[column] = attr
+    return attributes
