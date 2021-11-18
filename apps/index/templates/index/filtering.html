@@ -18,7 +18,11 @@
 <body>
   {% block content  %}
 
-    <form method="post">
+  <div>
+  <span>The event log at {{event_log_url}} contains {{num_events}} events and {{num_objects}} objects</span>
+  </div>
+
+  <form method="post">
   <div class="flex" style="margin-top: 1%;margin-left: 3%;margin-right: 3%;justify-content: center;">
         <div class="flex-vertical" style="flex-basis: {{ column_width }}%;">
         <h2>Event level attributes</h2>
@@ -71,6 +75,6 @@
         <button type="submit">Create Cubes</button>
        
   </div>
-    </form>
+  </form>
 </body>
 {% endblock %}

@@ -8,6 +8,7 @@ from plotly.offline import plot
 import plotly.express as px
 
 import modules.plots as plots
+from occpm import settings as project_settings
 
 ## file upload code
 from django.conf import settings
@@ -28,21 +29,22 @@ def uploadfile(request):
         fs = FileSystemStorage()
         filename = fs.save(myfile.name, myfile)
         uploaded_file_url = fs.url(filename)
-        settings.EVENT_LOG_URL = uploaded_file_url
+        project_settings.EVENT_LOG_URL = uploaded_file_url
         return render(
             request, "index/upload.html", {"uploaded_file_url": uploaded_file_url}
         )
     return render(request, "index/upload.html")
+
 
 def select_filter(request):
     df, obj_df = ocel_importer.apply(os.path.abspath("media/running-example.jsonocel"))
     attribute_list = df.columns.tolist()
     ## returns 3 lists, 1st two are written and need to be merged to get event attributes. 3rd list is for object attributes.
     numerical, categorical, object_attribute_list = utils.get_column_types(df)
-    event_attribute_list = [*numerical,*categorical]
-    
-    #Extract valid attributes associated with each object type
-    object_attributes = utils.get_object_attributes(obj_df,object_attribute_list)
+    event_attribute_list = [*numerical, *categorical]
+
+    # Extract valid attributes associated with each object type
+    object_attributes = utils.get_object_attributes(obj_df, object_attribute_list)
     event_dict = {}
     for attribute in event_attribute_list:
         event_dict[attribute] = utils.first_valid_entry(df[attribute])
@@ -51,10 +53,23 @@ def select_filter(request):
     for key, values in object_attributes.items():
         object_attributes_examples[key] = []
         for value in values:
-            object_attributes_examples[key].append((value,utils.first_valid_entry(obj_df[value])))
+            object_attributes_examples[key].append(
+                (value, utils.first_valid_entry(obj_df[value]))
+            )
 
-    column_width=1/(len(object_attributes)+1)*100
-    return render(request, "index/filtering.html", context={'event_attributes':event_dict, 'column_width': column_width, 'object_attributes': object_attributes_examples.items()})
+    column_width = 1 / (len(object_attributes) + 1) * 100
+    return render(
+        request,
+        "index/filtering.html",
+        context={
+            "event_attributes": event_dict,
+            "column_width": column_width,
+            "object_attributes": object_attributes_examples.items(),
+            "num_events": len(df),
+            "num_objects": len(obj_df),
+            "event_log_url": project_settings.EVENT_LOG_URL,
+        },
+    )
 
 
 class PlotsView(View):
@@ -132,28 +147,31 @@ class PlotsView(View):
 
 #################################################
 
-class FilterView(View):
 
+class FilterView(View):
     def get(self, request):
         #! TODO: determine filtering from request
         ## copied from above
-        df, obj_df = ocel_importer.apply(os.path.abspath("media/running-example.jsonocel"))
+        df, obj_df = ocel_importer.apply(
+            os.path.abspath("media/running-example.jsonocel")
+        )
         attribute_list = df.columns.tolist()
         numerical, categorical, object_types = utils.get_column_types(df)
-        combined_attribute_list = [*numerical,*categorical, *object_types]
+        combined_attribute_list = [*numerical, *categorical, *object_types]
 
         # code to set cookies and obtain info on which checkboxes are checked. Gives list of values of the checkboxes.
         # reference: https://stackoverflow.com/questions/29246625/django-save-checked-checkboxes-on-reload
         # https://stackoverflow.com/questions/52687188/how-to-access-the-checkbox-data-in-django-form
-        #checked = [request.POST.get('object_type') for object_type in object_types]        
-        checked = request.POST #??? 
+        # checked = [request.POST.get('object_type') for object_type in object_types]
+        checked = request.POST  # ???
+        breakpoint()
 
         filter = {"customers": ["Marco Pegoraro"]}
         ########### not required anymore################################
-        #df, obj_df = ocel_importer.apply(
+        # df, obj_df = ocel_importer.apply(
         #    os.path.abspath("media/running-example.jsonocel")
-        #)
-        #numerical, categorical, _ = utils.get_column_types(df)
+        # )
+        # numerical, categorical, _ = utils.get_column_types(df)
 
         exp = succint_mdl_to_exploded_mdl.apply(df)
         filtered_exp = utils.filter_object(exp, filter)
@@ -162,6 +180,6 @@ class FilterView(View):
             "num_events": len(df),
             "filtered_events": len(filtered_df),
             "list": [*numerical, *categorical],
-            "selected_filters":checked
+            "selected_filters": checked,
         }
         return render(request, "index/filter.html", context=context)

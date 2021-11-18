@@ -2,12 +2,14 @@
 Helper modules containing various useful utility functions.
 """
 
+
 def first_valid_entry(series):
     idx = series.first_valid_index()
     if idx == None:
         return None
     else:
         return series.loc[idx]
+
 
 def series_is_type(series, type):
     """Checks whether the given column is of the provided python type
@@ -51,9 +53,10 @@ def get_column_types(df):
     ]
     return numerical, categorical, object
 
-def filter_object(exp,filter):
+
+def filter_object(exp, filter):
     """Filters an event log using categorical columns, can be used on exploded event logs to filter object, since they become categorical through the explosion.
-    Note that this filters in CNF, i.e. a logical and on `filter` and logical or on the list contained in each item 
+    Note that this filters in CNF, i.e. a logical and on `filter` and logical or on the list contained in each item
 
     Args:
         exp (pd.DataFrame): (exploded) event log
@@ -66,7 +69,8 @@ def filter_object(exp,filter):
         exp = exp[exp[object].isin(values)]
     return exp
 
-def filter_numerical(df,filter):
+
+def filter_numerical(df, filter):
     """Filters an event log on numerical columns
 
     Args:
@@ -80,7 +84,8 @@ def filter_numerical(df,filter):
         df = df[eval(df[object])]
     return df
 
-def get_object_attributes(obj_df,object_types):
+
+def get_object_attributes(obj_df, object_types):
     """Determines which attributes are valid for a list of object_types
 
     Args:
@@ -92,8 +97,12 @@ def get_object_attributes(obj_df,object_types):
     """
     attributes = {}
     for column in object_types:
-        valid = obj_df[obj_df["object_type"]==column].isnull().all()
-        attr = [column for column in obj_df.columns if not valid[column] and column!="object_id" and column!="object_type"]
+        valid = obj_df[obj_df["object_type"] == column].isnull().all()
+        attr = [
+            column
+            for column in obj_df.columns
+            if not valid[column] and column != "object_id" and column != "object_type"
+        ]
         if attr:
             attributes[column] = attr
     return attributes
