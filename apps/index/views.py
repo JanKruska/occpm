@@ -147,7 +147,7 @@ class PlotsView(View):
 
 
 class FilterView(View):
-    def get(self, request):
+    def post(self, request):
         #! TODO: determine filtering from request
         ## copied from above
         df, obj_df = ocel_importer.apply(os.path.abspath(EVENT_LOG_URL))
@@ -159,23 +159,27 @@ class FilterView(View):
         # reference: https://stackoverflow.com/questions/29246625/django-save-checked-checkboxes-on-reload
         # https://stackoverflow.com/questions/52687188/how-to-access-the-checkbox-data-in-django-form
         # checked = [request.POST.get('object_type') for object_type in object_types]
-        checked = request.POST  # ???
-        breakpoint()
+        checked = []
+        for key in df.columns:
+            value = request.POST.get(key)
+            if value != None:
+                checked.append(value)
 
-        filter = {"customers": ["Marco Pegoraro"]}
-        ########### not required anymore################################
-        # df, obj_df = ocel_importer.apply(
-        #    os.path.abspath(project_settings.EVENT_LOG_URL)
-        # )
-        # numerical, categorical, _ = utils.get_column_types(df)
-
-        exp = succint_mdl_to_exploded_mdl.apply(df)
-        filtered_exp = utils.filter_object(exp, filter)
-        filtered_df = exploded_mdl_to_succint_mdl.apply(filtered_exp)
+        df = df[[col for col in df.columns if col in checked]]
+        obj_df = obj_df[[col for col in obj_df.columns if col in checked]]
         context = {
             "num_events": len(df),
-            "filtered_events": len(filtered_df),
+            "columns": [*df.columns, *obj_df.columns],
             "list": [*numerical, *categorical],
             "selected_filters": checked,
         }
         return render(request, "index/filter.html", context=context)
+
+    def filter(self, request):
+        filter = {"customers": ["Marco Pegoraro"]}
+        df, obj_df = ocel_importer.apply(os.path.abspath(EVENT_LOG_URL))
+        attribute_list = df.columns.tolist()
+        numerical, categorical, object_types = utils.get_column_types(df)
+        exp = succint_mdl_to_exploded_mdl.apply(df)
+        filtered_exp = utils.filter_object(exp, filter)
+        filtered_df = exploded_mdl_to_succint_mdl.apply(filtered_exp)

@@ -22,7 +22,7 @@
   <span>The event log at {{event_log_url}} contains {{num_events}} events and {{num_objects}} objects</span>
   </div>
 
-  <form method="post">
+  <form method="post" action="{% url 'filter' %}">
   <div class="flex" style="margin-top: 1%;margin-left: 3%;margin-right: 3%;justify-content: center;">
         <div class="flex-vertical" style="flex-basis: {{ column_width }}%;">
         <h2>Event level attributes</h2>
@@ -36,7 +36,7 @@
         {% csrf_token %}
         <tr>
         <label>
-          <th><input type="checkbox" name="{{colname}}" value="{{colname}}"></th>
+          <th><input checked type="checkbox" name="{{colname}}" value="{{colname}}"></th>
           {% comment %} Used to generate colname = value pairs when the form is submitted. 
           Only checked ones will give the value to the server. {% endcomment %}
           <th><span class="attr_name" value="{{colname}}">{{colname}}</span></th>
@@ -59,7 +59,7 @@
           {% for value,example in values %}
           <tr>
           <label>
-          <th><input type="checkbox" name="{{colname}}" value="{{value}}"></th>   
+          <th><input checked type="checkbox" name="{{colname}}" value="{{value}}"></th>   
           {% comment %} Used to generate colname = value pairs when the form is submitted. 
           Only checked ones will give the value to the server. {% endcomment %}
           <th><span class="attr_name" value="{{value}}">{{value}}</span></th>
