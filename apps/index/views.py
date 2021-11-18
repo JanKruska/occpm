@@ -130,15 +130,30 @@ class PlotsView(View):
         return render(request, "index/raw.html", context={"object": plot_div})
 
 
+#################################################
+
 class FilterView(View):
+
     def get(self, request):
         #! TODO: determine filtering from request
-        filter = {"customers": ["Marco Pegoraro"]}
+        ## copied from above
+        df, obj_df = ocel_importer.apply(os.path.abspath("media/running-example.jsonocel"))
+        attribute_list = df.columns.tolist()
+        numerical, categorical, object_types = utils.get_column_types(df)
+        combined_attribute_list = [*numerical,*categorical, *object_types]
 
-        df, obj_df = ocel_importer.apply(
-            os.path.abspath("media/running-example.jsonocel")
-        )
-        numerical, categorical, _ = utils.get_column_types(df)
+        # code to set cookies and obtain info on which checkboxes are checked. Gives list of values of the checkboxes.
+        # reference: https://stackoverflow.com/questions/29246625/django-save-checked-checkboxes-on-reload
+        # https://stackoverflow.com/questions/52687188/how-to-access-the-checkbox-data-in-django-form
+        #checked = [request.POST.get('object_type') for object_type in object_types]        
+        checked = request.POST #??? 
+
+        filter = {"customers": ["Marco Pegoraro"]}
+        ########### not required anymore################################
+        #df, obj_df = ocel_importer.apply(
+        #    os.path.abspath("media/running-example.jsonocel")
+        #)
+        #numerical, categorical, _ = utils.get_column_types(df)
 
         exp = succint_mdl_to_exploded_mdl.apply(df)
         filtered_exp = utils.filter_object(exp, filter)
@@ -147,5 +162,6 @@ class FilterView(View):
             "num_events": len(df),
             "filtered_events": len(filtered_df),
             "list": [*numerical, *categorical],
+            "selected_filters":checked
         }
         return render(request, "index/filter.html", context=context)

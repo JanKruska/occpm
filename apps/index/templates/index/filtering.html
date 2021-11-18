@@ -32,7 +32,9 @@
         {% csrf_token %}
         <tr>
         <label>
-          <th><input type="checkbox" name="{{colname}}" value=""></th>
+          <th><input type="checkbox" name="{{colname}}" value="{{colname}}"></th>
+          {% comment %} Used to generate colname = value pairs when the form is submitted. 
+          Only checked ones will give the value to the server. {% endcomment %}
           <th><span class="attr_name" value="{{colname}}">{{colname}}</span></th>
           <th>{{example}}</th>
         </label>
@@ -53,7 +55,9 @@
           {% for value,example in values %}
           <tr>
           <label>
-          <th><input type="checkbox" name="{{value}}" value=""></th>
+          <th><input type="checkbox" name="{{colname}}" value="{{value}}"></th>   
+          {% comment %} Used to generate colname = value pairs when the form is submitted. 
+          Only checked ones will give the value to the server. {% endcomment %}
           <th><span class="attr_name" value="{{value}}">{{value}}</span></th>
           <th>{{example}}</th>
           </label>

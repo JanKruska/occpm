@@ -18,6 +18,7 @@
 <div class="flex" style="justify-content: center;">
   <p>The original log contains {{num_events}} events.</p><br />
   <p>The filtered log contains {{filtered_events}} events.</p>
+  {% comment %} <p>The filtered log is based on {{checked}} selections.</p> {% endcomment %}
   {% for object in list %}
   <button value="{{object}}">Load histogram for {{object}}</button>
   {% endfor %}
