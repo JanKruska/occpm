@@ -1,4 +1,6 @@
 import os
+from re import A
+from django.http.response import Http404
 from filehash import FileHash
 
 from django.shortcuts import render
@@ -82,71 +84,67 @@ def select_filter(request):
 
 
 class PlotsView(View):
-    def post(self, request, column=None):
-        df, obj_df = ocel_importer.apply(os.path.abspath(EVENT_LOG_URL))
-        numerical, categorical, _ = utils.get_column_types(df)
-        if column == None or column not in df.columns:
-            return self.get(request)
-        elif column in numerical:
-            plot_div = plot(
-                plots.histogram_boxplot(df, column),
-                output_type="div",
-                include_plotlyjs=False,
-                link_text="",
-            )
-        elif column in categorical:
-            plot_div = plot(
-                plots.histogram(df, column),
-                output_type="div",
-                include_plotlyjs=False,
-                link_text="",
-            )
-        return render(
-            request,
-            "index/plots.html",
-            context={"plot_div": plot_div, "list": [*numerical, *categorical]},
-        )
+    # def post(self, request, column=None):
+    #     df, obj_df = ocel_importer.apply(os.path.abspath(EVENT_LOG_URL))
+    #     numerical, categorical, _ = utils.get_column_types(df)
+    #     if column == None or column not in df.columns:
+    #         return self.get(request)
+    #     elif column in numerical:
+    #         plot_div = plot(
+    #             plots.histogram_boxplot(df, column),
+    #             output_type="div",
+    #             include_plotlyjs=False,
+    #             link_text="",
+    #         )
+    #     elif column in categorical:
+    #         plot_div = plot(
+    #             plots.histogram(df, column),
+    #             output_type="div",
+    #             include_plotlyjs=False,
+    #             link_text="",
+    #         )
+    #     return render(
+    #         request,
+    #         "index/plots.html",
+    #         context={"plot_div": plot_div, "list": [*numerical, *categorical]},
+    #     )
 
     def get(self, request, column=None):
-        df, obj_df = ocel_importer.apply(os.path.abspath(EVENT_LOG_URL))
+        log_type = request.GET.get("type")
+        if log_type == "event_log":
+            event_log = models.EventLog.objects.get(id=request.GET.get("id"))
+        elif log_type == "event_cube":
+            event_log = models.EventLog.objects.get(
+                id=request.GET.get("id")
+            )  # Todo plotting for cube
+        else:
+            raise Http404("no such log type supported")
+        df, obj_df = ocel_importer.apply(event_log.file.path)
         numerical, categorical, _ = utils.get_column_types(df)
+        obj_numerical, obj_categorical, _ = utils.get_column_types(obj_df)
+
         if column == None:
             return render(
                 request,
                 "index/plots.html",
                 context={"list": [*numerical, *categorical]},
             )
-        elif column in df.columns:
-            if column in numerical:
-                plot_div = plot(
-                    plots.histogram_boxplot(df, column),
-                    output_type="div",
-                    include_plotlyjs=False,
-                    link_text="",
-                )
-            elif column in categorical:
-                plot_div = plot(
-                    plots.histogram(df, column),
-                    output_type="div",
-                    include_plotlyjs=False,
-                    link_text="",
-                )
+        if column in numerical or column in obj_numerical:
+            plotf = plots.histogram_boxplot
+        elif column in categorical or column in obj_categorical:
+            plotf = plots.histogram
+
+        if column in df.columns:
+            target = df
         elif column in obj_df.columns:
-            obj_numerical, obj_categorical, _ = utils.get_column_types(obj_df)
-            if column in obj_numerical:
-                plot_div = plot(
-                    plots.histogram_boxplot(obj_df, column),
-                    output_type="div",
-                    include_plotlyjs=False,
-                    link_text="",
-                )
-            elif column in obj_categorical:
-                plot_div = plot(
-                    plots.histogram(obj_df, column),
-                    output_type="div",
-                    include_plotlyjs=False,
-                    link_text="",
-                )
+            target = obj_df
+
+        plot_div = plot(
+            plotf(target, column),
+            output_type="div",
+            include_plotlyjs=False,
+            link_text="",
+        )
         return render(request, "index/raw.html", context={"object": plot_div})
 
 
