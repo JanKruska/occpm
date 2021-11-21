@@ -19,7 +19,7 @@
   {% block content  %}
 
   <div>
-  <span>The event log at {{event_log_url}} contains {{num_events}} events and {{num_objects}} objects</span>
+  <span>The event log <b>{{event_log.name}}</b> contains {{num_events}} events and {{num_objects}} objects</span>
   </div>
 
   <form method="post" action="{% url 'filter' %}">
@@ -36,11 +36,11 @@
         {% csrf_token %}
         <tr>
         <label>
-          <th><input checked type="checkbox" name="{{colname}}" value="{{colname}}"></th>
+          <td><input checked type="checkbox" name="{{colname}}" value="{{colname}}"></td>
           {% comment %} Used to generate colname = value pairs when the form is submitted. 
           Only checked ones will give the value to the server. {% endcomment %}
-          <th><span class="attr_name" value="{{colname}}">{{colname}}</span></th>
-          <th>{{example}}</th>
+          <td><span class="attr_name" value="{{colname}}">{{colname}}</span></td>
+          <td>{{example}}</td>
         </label>
         </tr>
         {% endfor %}
@@ -59,11 +59,11 @@
           {% for value,example in values %}
           <tr>
           <label>
-          <th><input checked type="checkbox" name="{{colname}}" value="{{value}}"></th>   
+          <td><input checked type="checkbox" name="{{colname}}" value="{{value}}"></td>   
           {% comment %} Used to generate colname = value pairs when the form is submitted. 
           Only checked ones will give the value to the server. {% endcomment %}
-          <th><span class="attr_name" value="{{value}}">{{value}}</span></th>
-          <th>{{example}}</th>
+          <td><span class="attr_name" value="{{value}}">{{value}}</span></td>
+          <td>{{example}}</td>
           </label>
           </tr>
           {% endfor %}

@@ -98,9 +98,18 @@ body {
 }
 
 table {
-    border-spacing: 5px;
+    border-spacing: 0px;
+}
+
+td{
+    padding: 5px;
 }
 
 .attr_name {
     cursor: pointer;
+}
+
+.selected {
+    background-color: rgb(85, 42, 165);
+    color: #FFF;
 }

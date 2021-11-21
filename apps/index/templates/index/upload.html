@@ -2,6 +2,17 @@
 
 {% load static %}
 
+{% block head %}
+<script>
+$(document).ready(function () {
+   $("#table tr").click(function(){
+   $(this).addClass('selected').siblings().removeClass('selected'); 
+   $("#submit").attr("value",($("#table tr.selected td:first").attr("value")));
+});
+});
+</script>
+{% endblock %}
+
 {% block content %}
 <form method="post" enctype="multipart/form-data">
   {% csrf_token %}
@@ -12,8 +23,21 @@
 {% if uploaded_file_url %}
 <p>File uploaded at: <a href="{{ uploaded_file_url }}">{{ uploaded_file_url }}</a></p>
 {% endif %}
-<form method="get", action="{% url 'filtering' %}">
-    <button type="submit">Continue</button>
-</form>
 
+<div class="flex-vertical">
+<h2>Uploaded Event logs</h2>
+<table id="table">
+{% for event_log in event_logs%}
+<tr>
+<td hidden name="log_id" value="{{event_log.id}}"></td>
+<td>{{event_log.name}}</td>
+<td>{{event_log.file.url}}</td>
+<td>{{event_log.file.size|filesizeformat}}</td>
+</tr>
+{% endfor%}
+</table>
+</div>
+<form method="get", action="{% url 'filtering' %}">
+  <button type="submit" id="submit" name="id" value="OK">Submit</button>
+</form>
 {% endblock %}

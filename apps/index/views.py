@@ -1,18 +1,16 @@
 import os
+from filehash import FileHash
+
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.views import View
+from django.conf import settings
+from django.core.files.storage import FileSystemStorage
 
 import plotly.graph_objects as go
 from plotly.offline import plot
 import plotly.express as px
 
-import modules.plots as plots
-from occpm import settings as project_settings
-
-## file upload code
-from django.conf import settings
-from django.core.files.storage import FileSystemStorage
 
 from pm4pymdl.objects.ocel.importer import importer as ocel_importer
 from pm4pymdl.algo.mvp.utils import (
@@ -20,26 +18,35 @@ from pm4pymdl.algo.mvp.utils import (
     exploded_mdl_to_succint_mdl,
 )
 
+import modules.plots as plots
+from . import models
 import modules.utils as utils
 
 EVENT_LOG_URL = "media/running-example.jsonocel"
 
 
 def uploadfile(request):
+    context = {}
     if request.method == "POST" and request.FILES["myfile"]:
         myfile = request.FILES["myfile"]
-        fs = FileSystemStorage()
-        filename = fs.save(myfile.name, myfile)
-        uploaded_file_url = fs.url(filename)
-        project_settings.EVENT_LOG_URL = uploaded_file_url
-        return render(
-            request, "index/upload.html", {"uploaded_file_url": uploaded_file_url}
-        )
-    return render(request, "index/upload.html")
+        event_log = models.EventLog.objects.create()
+        event_log.name = os.path.splitext(myfile.name)[0]
+        event_log.file = myfile
+        sha512hasher = FileHash("sha512")
+        event_log.save()
+        event_log.hash = sha512hasher.hash_file(event_log.file.path)
+        event_log.save()
+
+        context.update({"uploaded_file_url": event_log.file.url})
+
+    event_logs = models.EventLog.objects.exclude(name__exact="")
+    context.update({"event_logs": event_logs})
+    return render(request, "index/upload.html", context=context)
 
 
 def select_filter(request):
-    df, obj_df = ocel_importer.apply(EVENT_LOG_URL)
+    event_log = models.EventLog.objects.get(id=request.GET.get("id"))
+    df, obj_df = ocel_importer.apply(event_log.file.path)
     attribute_list = df.columns.tolist()
     ## returns 3 lists, 1st two are written and need to be merged to get event attributes. 3rd list is for object attributes.
     numerical, categorical, object_attribute_list = utils.get_column_types(df)
@@ -69,7 +76,7 @@ def select_filter(request):
             "object_attributes": object_attributes_examples.items(),
             "num_events": len(df),
             "num_objects": len(obj_df),
-            "event_log_url": EVENT_LOG_URL,
+            "event_log": event_log,
         },
     )
 
