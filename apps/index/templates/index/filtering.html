@@ -9,7 +9,7 @@
   $(document).ready(function () {
     $(document).on('click',".attr_name",function () {
       event.preventDefault();
-      $("#figure").load("http://127.0.0.1:8000/plots/"+$(this).attr("value"));
+      $("#figure").load("http://127.0.0.1:8000/plots/"+$(this).attr("value")+"?type=event_log&id={{event_log.id}}");
     });
   });
 </script>

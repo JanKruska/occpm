@@ -19,15 +19,23 @@ If the environment created from `environment.yml` does not work you can try usin
 # Running the server
 To run the application execute:
 ```
-$ python manage.py runserver 0.0.0.0:8000 
+$ python manage.py runserver 
 ```
 
 # Development
-## Migrate
-To properly configure the databases behind django whenever the `INSTALLED_APPS` are changed, the following command should be executed
+## Migrations
+To properly configure the databases behind django whenever the `INSTALLED_APPS` or models of apps are changed, the following commands should be executed
 ```
+python manage.py makemigrations
 python manage.py migrate
 ``` 
+
+## Updating the environment
+When one wants to update the environment, either because some packages were added, or just to get the newest versions of packages without recreating the environment execute:
+```
+conda env update --file environment.yml --prune
+```
+
 
 ## Code style & Hooks
 This project uses [black](https://github.com/psf/black)'s code styling. It is included as a dependency in the provided environment and can be run using:
