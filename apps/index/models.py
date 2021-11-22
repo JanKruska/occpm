@@ -15,4 +15,8 @@ class LogFiltering(models.Model):
     #name_of_log = _____ take from EventLog model?
     all_attributes = models.TextField()
     filtered_attributes = models.TextField()
+    
+class FilteredLog(EventLog):
+    parent = ForeignKey(EventLog, on_delete=models.CASCADE, related_name='child')
+    filter = models.TextField(default="")
 

@@ -23,6 +23,7 @@
   </div>
 
   <form method="post" action="{% url 'filter' %}">
+  <input type="hidden" name="id" value="{{event_log.id}}">
   <div class="flex" style="margin-top: 1%;margin-left: 3%;margin-right: 3%;justify-content: center;">
         <div class="flex-vertical" style="flex-basis: {{ column_width }}%;">
         <h2>Event level attributes</h2>
@@ -72,6 +73,8 @@
         {% endfor %}
         <div id="figure" style="flex-basis: 100%;">
         </div>
+        <span>Name for filtered log:</span>
+        <input type="text" name="name" value="{{event_log.name}}-filtered">
         <button type="submit">Create Cubes</button>
        
   </div>

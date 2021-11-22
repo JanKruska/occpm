@@ -1,3 +1,6 @@
+import json
+from pm4pymdl.objects.ocel.exporter.exporter import json_serial, get_python_obj
+
 """
 Helper modules containing various useful utility functions.
 """
@@ -40,7 +43,7 @@ def get_column_types(df):
     valid_columns = [
         column
         for column in df.columns
-        if column != "event_id" and not df.isnull().all()[column]
+        if not df.isnull().all()[column]
     ]
     numerical = df.select_dtypes("number").columns.to_list()
 
@@ -101,8 +104,20 @@ def get_object_attributes(obj_df, object_types):
         attr = [
             column
             for column in obj_df.columns
-            if not valid[column] and column != "object_id" and column != "object_type"
+            if not valid[column] #and column != "object_id" and column != "object_type"
         ]
         if attr:
             attributes[column] = attr
     return attributes
+
+def apply_json(df, obj_df=None, parameters=None):
+    """Should not be here, string printing is just missing form pm4pymdl
+
+    Args:
+        df ([type]): [description]
+        file_path ([type]): [description]
+        obj_df ([type], optional): [description]. Defaults to None.
+        parameters ([type], optional): [description]. Defaults to None.
+    """
+    ret = get_python_obj(df, obj_df=obj_df, parameters=parameters)
+    return json.dumps(ret, default=json_serial, indent=2)

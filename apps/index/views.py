@@ -2,12 +2,14 @@ import os
 from re import A
 from django.http.response import Http404
 from filehash import FileHash
+import json
 
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.views import View
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
+from django.core.files.base import ContentFile
 
 import plotly.graph_objects as go
 from plotly.offline import plot
@@ -91,27 +93,21 @@ def select_filter(request):
     numerical, categorical, object_attribute_list = utils.get_column_types(df)
     event_attribute_list = [*numerical, *categorical]
 
-    filtering_log = models.LogFiltering.objects.create()
-    all_attribute_list = " "
+    
 
     # Extract valid attributes associated with each object type
     object_attributes = utils.get_object_attributes(obj_df, object_attribute_list)
     event_dict = {}
     for attribute in event_attribute_list:
-        all_attribute_list += str(attribute) + " "
         event_dict[attribute] = utils.first_valid_entry(df[attribute])    
 
     object_attributes_examples = {}
     for key, values in object_attributes.items():
-        all_attribute_list += str(key) + " "
         object_attributes_examples[key] = []
         for value in values:
             object_attributes_examples[key].append(
                 (value, utils.first_valid_entry(obj_df[value]))
             )
-
-    filtering_log.all_attributes = all_attribute_list
-    filtering_log.save()
 
 
     column_width = 1 / (len(object_attributes) + 1) * 100
@@ -199,12 +195,11 @@ class PlotsView(View):
 
 class FilterView(View):
     def post(self, request):
-        #! TODO: determine filtering from request
-        ## copied from above
-        df, obj_df = ocel_importer.apply(os.path.abspath(EVENT_LOG_URL))
-        attribute_list = df.columns.tolist()
+        event_log = models.EventLog.objects.get(id=request.POST.get("id"))
+        df, obj_df = ocel_importer.apply(event_log.file.path)
+        # attribute_list = df.columns.tolist()
         numerical, categorical, object_types = utils.get_column_types(df)
-        combined_attribute_list = [*numerical, *categorical, *object_types]
+        # combined_attribute_list = [*numerical, *categorical, *object_types]
 
         # code to set cookies and obtain info on which checkboxes are checked. Gives list of values of the checkboxes.
         # reference: https://stackoverflow.com/questions/29246625/django-save-checked-checkboxes-on-reload
@@ -212,12 +207,18 @@ class FilterView(View):
         # checked = [request.POST.get('object_type') for object_type in object_types]
         checked = []
         for key in df.columns:
-            value = request.POST.get(key)
-            if value != None:
-                checked.append(value)
+            values = request.POST.getlist(key)
+            if values:
+                checked += values
 
+        checked = set(checked)
         df = df[[col for col in df.columns if col in checked]]
         obj_df = obj_df[[col for col in obj_df.columns if col in checked]]
+        filtered_log = models.FilteredLog.objects.create(parent=event_log)
+        filtered_log.name = request.POST.get("name")
+        filtered_log.filter = json.dumps(checked)
+        filtered_log.file.save(event_log.name + ".jsonocel", ContentFile(utils.apply_json(df,obj_df)))
+        filtered_log.save()
         context = {
             "num_events": len(df),
             "columns": [*df.columns, *obj_df.columns],
