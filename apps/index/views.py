@@ -44,6 +44,43 @@ def uploadfile(request):
     return render(request, "index/upload.html", context=context)
 
 
+#def select_filter(request):
+    # event_log = models.EventLog.objects.get(id=request.GET.get("id"))
+    # df, obj_df = ocel_importer.apply(event_log.file.path)
+    # attribute_list = df.columns.tolist()
+    # ## returns 3 lists, 1st two are written and need to be merged to get event attributes. 3rd list is for object attributes.
+    # numerical, categorical, object_attribute_list = utils.get_column_types(df)
+    # event_attribute_list = [*numerical, *categorical]
+
+    # # Extract valid attributes associated with each object type
+    # object_attributes = utils.get_object_attributes(obj_df, object_attribute_list)
+    # event_dict = {}
+    # for attribute in event_attribute_list:
+    #     event_dict[attribute] = utils.first_valid_entry(df[attribute])
+
+    # object_attributes_examples = {}
+    # for key, values in object_attributes.items():
+    #     object_attributes_examples[key] = []
+    #     for value in values:
+    #         object_attributes_examples[key].append(
+    #             (value, utils.first_valid_entry(obj_df[value]))
+    #         )
+
+    # column_width = 1 / (len(object_attributes) + 1) * 100
+    # return render(
+    #     request,
+    #     "index/filtering.html",
+    #     context={
+    #         "event_attributes": event_dict,
+    #         "column_width": column_width,
+    #         "object_attributes": object_attributes_examples.items(),
+    #         "num_events": len(df),
+    #         "num_objects": len(obj_df),
+    #         "event_log": event_log,
+    #     },
+    # )
+
+## trying model based filtering of log
 def select_filter(request):
     event_log = models.EventLog.objects.get(id=request.GET.get("id"))
     df, obj_df = ocel_importer.apply(event_log.file.path)
@@ -52,19 +89,28 @@ def select_filter(request):
     numerical, categorical, object_attribute_list = utils.get_column_types(df)
     event_attribute_list = [*numerical, *categorical]
 
+    filtering_log = models.LogFiltering.objects.create()
+    all_attribute_list = " "
+
     # Extract valid attributes associated with each object type
     object_attributes = utils.get_object_attributes(obj_df, object_attribute_list)
     event_dict = {}
     for attribute in event_attribute_list:
-        event_dict[attribute] = utils.first_valid_entry(df[attribute])
+        all_attribute_list += str(attribute) + " "
+        event_dict[attribute] = utils.first_valid_entry(df[attribute])    
 
     object_attributes_examples = {}
     for key, values in object_attributes.items():
+        all_attribute_list += str(key) + " "
         object_attributes_examples[key] = []
         for value in values:
             object_attributes_examples[key].append(
                 (value, utils.first_valid_entry(obj_df[value]))
             )
+
+    filtering_log.all_attributes = all_attribute_list
+    filtering_log.save()
+
 
     column_width = 1 / (len(object_attributes) + 1) * 100
     return render(
