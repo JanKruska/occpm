@@ -216,14 +216,16 @@ class FilterView(View):
         obj_df = obj_df[[col for col in obj_df.columns if col in checked]]
         filtered_log = models.FilteredLog.objects.create(parent=event_log)
         filtered_log.name = request.POST.get("name")
-        filtered_log.filter = json.dumps(checked)
+
+        filtered_log.filter = json.dumps(checked, default = utils.serialize_sets)
         filtered_log.file.save(event_log.name + ".jsonocel", ContentFile(utils.apply_json(df,obj_df)))
         filtered_log.save()
+     #   breakpoint()
         context = {
             "num_events": len(df),
             "columns": [*df.columns, *obj_df.columns],
             "list": [*numerical, *categorical],
-            "selected_filters": checked,
+            "selected_filters": sorted(checked),
         }
         return render(request, "index/filter.html", context=context)
 
