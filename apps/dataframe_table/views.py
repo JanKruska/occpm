@@ -34,7 +34,8 @@ class TableView(View):
         for row_label in row_labels:
             rows[row_label] = []
             for column_label in column_labels:
-                rows[row_label].append(len(exp[exp[row] == row_label]))
+                rows[row_label].append(column_label)
+                # rows[row_label].append(len(exp[exp[row] == row_label]))
 
         return render(
             request,
