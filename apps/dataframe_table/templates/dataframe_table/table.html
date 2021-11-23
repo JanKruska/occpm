@@ -6,8 +6,10 @@
 
 </head>
 <body>
-<form method="post" action="{% url 'filter' %}">
+<form method="post" action="{% url 'visualize' %}">
 {% csrf_token %}
+<input type="hidden" name="row" value="{{row}}">
+<input type="hidden" name="column" value="{{column}}">
 <div class="flex-vertical">
 <table class="table table-striped">
 <thead>

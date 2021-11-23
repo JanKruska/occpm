@@ -20,6 +20,7 @@ from apps.index.views import FilterView, PlotsView, uploadfile
 from django.conf import settings
 from django.conf.urls.static import static
 from apps.index import views
+from apps.vis.views import VisualizeView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -29,6 +30,7 @@ urlpatterns = [
     path("plots/", include("apps.index.urls")),
     path("table/", include("apps.dataframe_table.urls")),
     path("", views.uploadfile, name="upload"),
+    path("visualize", VisualizeView.as_view(), name="visualize"),
 ]
 
 if settings.DEBUG:

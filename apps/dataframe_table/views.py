@@ -36,9 +36,10 @@ class TableView(View):
             for column_label in column_labels:
                 rows[row_label].append(column_label)
                 # rows[row_label].append(len(exp[exp[row] == row_label]))
-
-        return render(
-            request,
-            "dataframe_table/table.html",
-            {"column_labels": column_labels, "rows": rows.items()},
-        )
+        context = {
+            "column_labels": column_labels,
+            "rows": rows.items(),
+            "row": row,
+            "column": column,
+        }
+        return render(request, "dataframe_table/table.html", context=context)
