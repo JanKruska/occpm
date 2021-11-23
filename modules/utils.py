@@ -121,3 +121,13 @@ def apply_json(df, obj_df=None, parameters=None):
     """
     ret = get_python_obj(df, obj_df=obj_df, parameters=parameters)
     return json.dumps(ret, default=json_serial, indent=2)
+
+def serialize_sets(set_obj):
+    ## Raises error that object of type set is not json serializable:
+    ## soln: 
+    #json_str = json.dumps(set([1,2,3]), default=serialize_sets)
+    #print(json_str)
+    
+    if isinstance(set_obj, set):
+        return list(set_obj)
+    return set_obj

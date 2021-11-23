@@ -16,8 +16,7 @@
 {% block content  %}
 <div class="flex" style="justify-content: center;">
   <p>The original log contains {{num_events}} events.</p><br/>
-  <p>The filtered log contains {{filtered_events}} events.</p>
-  {% comment %} <p>The filtered log is based on {{checked}} selections.</p> {% endcomment %}
+  <p>The filtered log is based on the attributes: {{selected_filters|join:","}} selections.</p> 
 
 <h3>Materialization:</h3>  
 <select name="materialization" id="materialization">
