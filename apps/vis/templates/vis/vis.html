@@ -14,30 +14,9 @@
 {% endblock %}
 
 {% block content  %}
-<div class="flex" style="justify-content: center;">
+<div class="vertical-flex" style="justify-content: center;">
   <p>The original log contains {{num_events}} events.</p><br/>
-  <p>The filtered log contains {{filtered_events}} events.</p>
-  {% comment %} <p>The filtered log is based on {{checked}} selections.</p> {% endcomment %}
-
-<h3>Materialization:</h3>  
-<select name="materialization" id="materialization">
-  <option value="existence">Existence</option>
-</select>
-
-<h3>Column:</h3>  
-<select name="row-select" id="row-select">
-{% for col in columns%}
-  <option value="{{col}}">{{col}}</option>
-{% endfor %}
-</select>
-<h3>Row:</h3>  
-<select name="column-select" id="column-select">
-{% for col in columns%}
-  <option value="{{col}}">{{col}}</option>
-{% endfor %}
-</select>
-</div>
-{% comment %} <p>The log contains {{num_objects}} objects</p> {% endcomment %}
-<div id="figure">
+  <p>The filtered log contains {{num_events_filtered}} events.</p><br/>
+  <p>The chosen filters were {{filters|join:","}}</p>
 </div>
 {% endblock %}

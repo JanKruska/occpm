@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "apps.index.apps.IndexConfig",
     "apps.dataframe_table.apps.DataframeTableConfig",
+    "apps.vis.apps.VisConfig",
 ]
 
 MIDDLEWARE = [
