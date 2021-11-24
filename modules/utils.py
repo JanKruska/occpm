@@ -41,11 +41,7 @@ def get_column_types(df):
     Returns:
         list,list,list: lists of column identifiers of numerical,categorical and object columns
     """
-    valid_columns = [
-        column
-        for column in df.columns
-        if not df.isnull().all()[column]
-    ]
+    valid_columns = [column for column in df.columns if not df.isnull().all()[column]]
     numerical = df.select_dtypes("number").columns.to_list()
 
     object = [column for column in valid_columns if series_is_type(df[column], list)]
@@ -88,22 +84,29 @@ def filter_numerical(df, filter):
         df = df[eval(df[object])]
     return df
 
-def filter(df,obj_df,columns,filters):
+
+def filter(df, obj_df, columns, filters):
     _, _, object_types = get_column_types(df)
-    object_attributes = get_object_attributes(obj_df,object_types)
-        
+    object_attributes = get_object_attributes(obj_df, object_types)
+
+    idx_or = df["event_id"] != df["event_id"]
     for filter in filters:
-        idx_or = df!=df
-        for column,value in zip(columns,filter):
-            idx_and = df==df
+        idx_and = df["event_id"] == df["event_id"]
+        for column, value in zip(columns, filter):
             if column in df.columns:
-                idx_and = idx_and & df[column]==value
+                idx_and = idx_and & (df[column] == value)
             elif column in obj_df.columns:
                 obj_idx = obj_df[obj_df[column] == value]["object_id"]
                 temp_df = succint_mdl_to_exploded_mdl.apply(df)
-                obj_type = [key for key,value in object_attributes.items() if column in value]
-                idx_and = idx_and & df["event_id"].isin(temp_df[temp_df[obj_type[0]].isin(obj_idx)]["event_id"])
-            idx_or = idx_or | idx_and
+                obj_type = [
+                    key for key, value in object_attributes.items() if column in value
+                ]
+                idx_and = idx_and & (
+                    df["event_id"].isin(
+                        temp_df[temp_df[obj_type[0]].isin(obj_idx)]["event_id"]
+                    )
+                )
+        idx_or = idx_or | idx_and
     return df[idx_or]
 
 
@@ -123,11 +126,14 @@ def get_object_attributes(obj_df, object_types):
         attr = [
             column
             for column in obj_df.columns
-            if not valid[column] #and column != "object_id" and column != "object_type"
+            if not valid[
+                column
+            ]  # and column != "object_id" and column != "object_type"
         ]
         if attr:
             attributes[column] = attr
     return attributes
+
 
 def apply_json(df, obj_df=None, parameters=None):
     """Should not be here, string printing is just missing form pm4pymdl
@@ -141,12 +147,13 @@ def apply_json(df, obj_df=None, parameters=None):
     ret = get_python_obj(df, obj_df=obj_df, parameters=parameters)
     return json.dumps(ret, default=json_serial, indent=2)
 
+
 def serialize_sets(set_obj):
     ## Raises error that object of type set is not json serializable:
-    ## soln: 
-    #json_str = json.dumps(set([1,2,3]), default=serialize_sets)
-    #print(json_str)
-    
+    ## soln:
+    # json_str = json.dumps(set([1,2,3]), default=serialize_sets)
+    # print(json_str)
+
     if isinstance(set_obj, set):
         return list(set_obj)
     return set_obj

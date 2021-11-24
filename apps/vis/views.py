@@ -5,7 +5,7 @@ from django.core.files.base import ContentFile
 from django.views import View
 
 from pm4pymdl.objects.ocel.importer import importer as ocel_importer
-from pm4pymdl.algo.mvp.utils import filter_act_attr_val,filter_act_ot
+from pm4pymdl.algo.mvp.utils import filter_act_attr_val, filter_act_ot
 from pm4pymdl.algo.mvp.utils import succint_mdl_to_exploded_mdl
 
 from apps.index import models
@@ -23,10 +23,8 @@ class VisualizeView(View):
             if request.POST.get(key) == "on":
                 filters.append([attr.strip("'") for attr in key.split("_")])
         df, obj_df = ocel_importer.apply(EVENT_LOG_URL)
-        
-        filtered_log = utils.filter(df,obj_df,[row,column],filters)
-                
-        # breakpoint()
+
+        filtered_log = utils.filter(df, obj_df, [row, column], filters)
 
         context = {
             "num_events": len(df),
