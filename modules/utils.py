@@ -1,5 +1,6 @@
 import json
 from pm4pymdl.objects.ocel.exporter.exporter import json_serial, get_python_obj
+from pm4pymdl.algo.mvp.utils import succint_mdl_to_exploded_mdl
 
 """
 Helper modules containing various useful utility functions.
@@ -86,6 +87,24 @@ def filter_numerical(df, filter):
     for object, eval in filter.items():
         df = df[eval(df[object])]
     return df
+
+def filter(df,obj_df,columns,filters):
+    _, _, object_types = get_column_types(df)
+    object_attributes = get_object_attributes(obj_df,object_types)
+        
+    for filter in filters:
+        idx_or = df!=df
+        for column,value in zip(columns,filter):
+            idx_and = df==df
+            if column in df.columns:
+                idx_and = idx_and & df[column]==value
+            elif column in obj_df.columns:
+                obj_idx = obj_df[obj_df[column] == value]["object_id"]
+                temp_df = succint_mdl_to_exploded_mdl.apply(df)
+                obj_type = [key for key,value in object_attributes.items() if column in value]
+                idx_and = idx_and & df["event_id"].isin(temp_df[temp_df[obj_type[0]].isin(obj_idx)]["event_id"])
+            idx_or = idx_or | idx_and
+    return df[idx_or]
 
 
 def get_object_attributes(obj_df, object_types):
