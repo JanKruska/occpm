@@ -11,13 +11,24 @@ $(document).ready(function () {
 });
 });
 </script>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
 {% endblock %}
 
 {% block content %}
+<br/>
+<br/>
+<p class="text-start"><h4>Start by selecting an uploaded event log or by uploading a new one using the button below:</h4></p>
 <form method="post" enctype="multipart/form-data">
   {% csrf_token %}
-  <input type="file" name="myfile">
-  <button type="submit">Upload</button>
+  <div class="input-group mb-3">
+  {% comment %}  <label for="formFile" class="form-label">Start by selecting an uploaded event log or by uploading a new one using the button below:</label> {% endcomment %}
+    <input class="form-control form-control-sm" type="file" id="myfile" name="myfile" placeholder="Upload an OCEL event log" required>
+  </div>
+
+  <button class="btn btn-outline-success" type="submit">Upload</button>
 </form>
 
 {% if uploaded_file_url %}
@@ -25,8 +36,16 @@ $(document).ready(function () {
 {% endif %}
 
 <div class="flex-vertical">
-<h2>Uploaded Event logs</h2>
-<table id="table">
+<p class="text-start"><h4>Uploaded Event logs:-</h4></p>
+<table class="table table-hover caption-top table-sm" id="table">
+ {% comment %} <caption >Uploaded Event logs:-</caption> {% endcomment %}
+ <thead class="table-dark">
+   <tr>
+     <th>Log name</th>
+     <th>Log path</th>
+     <th>Log size on disk</th>
+   </tr>
+ </thead>
 {% for event_log in event_logs%}
 <tr>
 <td hidden name="log_id" value="{{event_log.id}}"></td>
@@ -37,7 +56,10 @@ $(document).ready(function () {
 {% endfor%}
 </table>
 </div>
+
+
 <form method="get", action="{% url 'filtering' %}">
-  <button type="submit" id="submit" name="id" value="OK">Submit</button>
+  <p><button class="btn btn-outline-success" type="submit" id="submit" name="id" value="OK">Submit</button></p>
+  
 </form>
 {% endblock %}
