@@ -48,58 +48,19 @@ def uploadfile(request):
     return render(request, "index/upload.html", context=context)
 
 
-#def select_filter(request):
-    # event_log = models.EventLog.objects.get(id=request.GET.get("id"))
-    # df, obj_df = ocel_importer.apply(event_log.file.path)
-    # attribute_list = df.columns.tolist()
-    # ## returns 3 lists, 1st two are written and need to be merged to get event attributes. 3rd list is for object attributes.
-    # numerical, categorical, object_attribute_list = utils.get_column_types(df)
-    # event_attribute_list = [*numerical, *categorical]
-
-    # # Extract valid attributes associated with each object type
-    # object_attributes = utils.get_object_attributes(obj_df, object_attribute_list)
-    # event_dict = {}
-    # for attribute in event_attribute_list:
-    #     event_dict[attribute] = utils.first_valid_entry(df[attribute])
-
-    # object_attributes_examples = {}
-    # for key, values in object_attributes.items():
-    #     object_attributes_examples[key] = []
-    #     for value in values:
-    #         object_attributes_examples[key].append(
-    #             (value, utils.first_valid_entry(obj_df[value]))
-    #         )
-
-    # column_width = 1 / (len(object_attributes) + 1) * 100
-    # return render(
-    #     request,
-    #     "index/filtering.html",
-    #     context={
-    #         "event_attributes": event_dict,
-    #         "column_width": column_width,
-    #         "object_attributes": object_attributes_examples.items(),
-    #         "num_events": len(df),
-    #         "num_objects": len(obj_df),
-    #         "event_log": event_log,
-    #     },
-    # )
-
 ## trying model based filtering of log
 def select_filter(request):
-    event_log = models.EventLog.objects.get(id=request.GET.get("id"))
-    df, obj_df = ocel_importer.apply(event_log.file.path)
+    event_log, df, obj_df = utils.get_event_log(request)
     attribute_list = df.columns.tolist()
     ## returns 3 lists, 1st two are written and need to be merged to get event attributes. 3rd list is for object attributes.
     numerical, categorical, object_attribute_list = utils.get_column_types(df)
     event_attribute_list = [*numerical, *categorical]
 
-    
-
     # Extract valid attributes associated with each object type
     object_attributes = utils.get_object_attributes(obj_df, object_attribute_list)
     event_dict = {}
     for attribute in event_attribute_list:
-        event_dict[attribute] = utils.first_valid_entry(df[attribute])    
+        event_dict[attribute] = utils.first_valid_entry(df[attribute])
 
     object_attributes_examples = {}
     for key, values in object_attributes.items():
@@ -108,7 +69,6 @@ def select_filter(request):
             object_attributes_examples[key].append(
                 (value, utils.first_valid_entry(obj_df[value]))
             )
-
 
     column_width = 1 / (len(object_attributes) + 1) * 100
     return render(
@@ -126,31 +86,6 @@ def select_filter(request):
 
 
 class PlotsView(View):
-    # def post(self, request, column=None):
-    #     df, obj_df = ocel_importer.apply(os.path.abspath(EVENT_LOG_URL))
-    #     numerical, categorical, _ = utils.get_column_types(df)
-    #     if column == None or column not in df.columns:
-    #         return self.get(request)
-    #     elif column in numerical:
-    #         plot_div = plot(
-    #             plots.histogram_boxplot(df, column),
-    #             output_type="div",
-    #             include_plotlyjs=False,
-    #             link_text="",
-    #         )
-    #     elif column in categorical:
-    #         plot_div = plot(
-    #             plots.histogram(df, column),
-    #             output_type="div",
-    #             include_plotlyjs=False,
-    #             link_text="",
-    #         )
-    #     return render(
-    #         request,
-    #         "index/plots.html",
-    #         context={"plot_div": plot_div, "list": [*numerical, *categorical]},
-    #     )
-
     def get(self, request, column=None):
         log_type = request.GET.get("type")
         if log_type == "event_log":
@@ -217,10 +152,12 @@ class FilterView(View):
         filtered_log = models.FilteredLog.objects.create(parent=event_log)
         filtered_log.name = request.POST.get("name")
 
-        filtered_log.filter = json.dumps(checked, default = utils.serialize_sets)
-        filtered_log.file.save(event_log.name + ".jsonocel", ContentFile(utils.apply_json(df,obj_df)))
+        filtered_log.filter = json.dumps(checked, default=utils.serialize_sets)
+        filtered_log.file.save(
+            filtered_log.name + ".jsonocel", ContentFile(utils.apply_json(df, obj_df))
+        )
         filtered_log.save()
-     #   breakpoint()
+        #   breakpoint()
         context = {
             "num_events": len(df),
             "columns": [*df.columns, *obj_df.columns],

@@ -16,6 +16,7 @@ EVENT_LOG_URL = "media/running-example.jsonocel"
 
 class VisualizeView(View):
     def post(self, request):
+        event_log, df, obj_df = utils.get_event_log(request)
         row = request.POST.get("row")
         column = request.POST.get("column")
         filters = []
@@ -25,6 +26,16 @@ class VisualizeView(View):
         df, obj_df = ocel_importer.apply(EVENT_LOG_URL)
 
         filtered_log = utils.filter(df, obj_df, [row, column], filters)
+        attr_filtered_log = models.AttributeFilteredLog(
+            parent=models.FilteredLog.objects.get(id=request.POST.get("id"))
+        )
+        attr_filtered_log.name = request.POST.get("name")
+        attr_filtered_log.filter = json.dumps(filters)
+        attr_filtered_log.file.save(
+            attr_filtered_log.name + ".jsonocel",
+            ContentFile(utils.apply_json(filtered_log, obj_df)),
+        )
+        attr_filtered_log.save()
 
         context = {
             "num_events": len(df),

@@ -1,6 +1,9 @@
 import json
 from pm4pymdl.objects.ocel.exporter.exporter import json_serial, get_python_obj
 from pm4pymdl.algo.mvp.utils import succint_mdl_to_exploded_mdl
+from pm4pymdl.objects.ocel.importer import importer as ocel_importer
+
+from apps.index import models
 
 """
 Helper modules containing various useful utility functions.
@@ -157,3 +160,13 @@ def serialize_sets(set_obj):
     if isinstance(set_obj, set):
         return list(set_obj)
     return set_obj
+
+
+def get_event_log(request):
+    if request.method == "GET":
+        id = request.GET.get("id")
+    elif request.method == "POST":
+        id = request.POST.get("id")
+    event_log = models.EventLog.objects.get(id=id)
+    df, obj_df = ocel_importer.apply(event_log.file.path)
+    return event_log, df, obj_df
