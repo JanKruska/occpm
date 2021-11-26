@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from apps.index.views import FilterView, PlotsView, uploadfile
+from apps.index.views import FilterView, PlotsView, SelectFilterView, uploadfile
 
 from django.conf import settings
 from django.conf.urls.static import static
@@ -26,7 +26,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     # path("", include("apps.index.urls")),
     path("filter", FilterView.as_view(), name="filter"),
-    path("filtering", views.select_filter, name="filtering"),
+    path("filtering", SelectFilterView.as_view(), name="filtering"),
     path("plots/", include("apps.index.urls")),
     path("table/", include("apps.dataframe_table.urls")),
     path("", views.uploadfile, name="upload"),
