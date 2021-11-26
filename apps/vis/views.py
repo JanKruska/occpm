@@ -37,9 +37,31 @@ class VisualizeView(View):
         )
         attr_filtered_log.save()
 
+        #TODO: All this is duplicate with select_filter, extract to parent class
+        numerical, categorical, object_attribute_list = utils.get_column_types(df)
+        event_attribute_list = [*numerical, *categorical]
+        object_attributes = utils.get_object_attributes(obj_df, object_attribute_list)
+        event_dict = {}
+        for attribute in event_attribute_list:
+            event_dict[attribute] = utils.first_valid_entry(df[attribute])
+
+        object_attributes_examples = {}
+        for key, values in object_attributes.items():
+            object_attributes_examples[key] = []
+            for value in values:
+                object_attributes_examples[key].append(
+                    (value, utils.first_valid_entry(obj_df[value]))
+                )
+
+        column_width = 1 / (len(object_attributes) + 1) * 100
+        
         context = {
             "num_events": len(df),
             "num_events_filtered": len(filtered_log),
             "filters": filters,
+            "event_attributes": event_dict,
+            "column_width": column_width,
+            "object_attributes": object_attributes_examples.items(),
+            "event_log": attr_filtered_log,
         }
         return render(request, "vis/vis.html", context=context)

@@ -1,22 +1,69 @@
 {% extends 'index/base.html' %}
 
-
 <!DOCTYPE html>
-<meta charset="utf-8">
+<meta charset="utf-8" />
 {% block head %}
 <script>
   $(document).ready(function () {
-    $("#button").click(function () {
-      $("#figure").load("http://127.0.0.1:8000/plots/"+$(this).attr("value"));
+    $(document).on('click',".attr_name",function () {
+      event.preventDefault();
+      $("#figure").load("http://127.0.0.1:8000/plots/"+$(this).attr("value")+"?type=event_log&id={{event_log.id}}");
     });
   });
 </script>
-{% endblock %}
-
-{% block content  %}
-<div class="vertical-flex" style="justify-content: center;">
-  <p>The original log contains {{num_events}} events.</p><br/>
-  <p>The filtered log contains {{num_events_filtered}} events.</p><br/>
+{% endblock %} {% block content %}
+<div class="vertical-flex" style="justify-content: center">
+  <p>The original log contains {{num_events}} events.</p>
+  <br />
+  <p>The filtered log contains {{num_events_filtered}} events.</p>
+  <br />
   <p>The chosen filters were {{filters|join:","}}</p>
+  <div
+    class="flex"
+    style="
+      margin-top: 1%;
+      margin-left: 3%;
+      margin-right: 3%;
+      justify-content: center;
+    "
+  >
+    <div class="flex-vertical" style="flex-basis: {{ column_width }}%;">
+      <h2>Event level attributes</h2>
+      <table>
+        <tr>
+          <th>Attribute</th>
+          <th>Example value</th>
+        </tr>
+        {% for colname, example in event_attributes.items %} {% csrf_token %}
+        <tr>
+          <label>
+            <td>
+              <span class="attr_name" value="{{colname}}">{{colname}}</span>
+            </td>
+            <td>{{example}}</td>
+          </label>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+    {% for colname, values in object_attributes %} {% csrf_token %}
+    <div class="flex-vertical" style="flex-basis: {{ column_width }}%;">
+      <h2>{{colname}}</h2>
+      <table>
+        <tr>
+          <th>Attribute</th>
+          <th>Example value</th>
+        </tr>
+        {% for value,example in values %}
+        <tr>
+          <td><span class="attr_name" value="{{value}}">{{value}}</span></td>
+          <td>{{example}}</td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+    {% endfor %}
+    <div id="figure" style="flex-basis: 100%"></div>
+  </div>
 </div>
 {% endblock %}
