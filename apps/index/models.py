@@ -11,13 +11,6 @@ class EventLog(models.Model):
     hash = models.CharField(max_length=128)
 
 
-class LogFiltering(models.Model):
-    event_log_ref = ForeignKey(EventLog, on_delete=models.CASCADE)
-    # name_of_log = _____ take from EventLog model?
-    all_attributes = models.TextField()
-    filtered_attributes = models.TextField()
-
-
 class FilteredLog(EventLog):
     parent = ForeignKey(
         EventLog, on_delete=models.CASCADE, related_name="filtered_child"
