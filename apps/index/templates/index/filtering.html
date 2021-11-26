@@ -23,7 +23,7 @@
   {% block content  %}
 
   <div>
-  <span>The event log <b>{{event_log.name}}</b> contains {{num_events}} events and {{num_objects}} objects</span>
+  <span>The selected event log <b>{{event_log.name}}</b> contains a total of {{num_events}} events and {{num_objects}} objects</span>
   </div>
 
   <form method="post" action="{% url 'filter' %}">

@@ -43,7 +43,7 @@ def get_column_types(df):
     valid_columns = [
         column
         for column in df.columns
-        if not df.isnull().all()[column]
+        if column!= "event_id" and not df.isnull().all()[column] 
     ]
     numerical = df.select_dtypes("number").columns.to_list()
 
@@ -104,7 +104,7 @@ def get_object_attributes(obj_df, object_types):
         attr = [
             column
             for column in obj_df.columns
-            if not valid[column] #and column != "object_id" and column != "object_type"
+            if not valid[column] and column != "object_id" and column != "object_type"
         ]
         if attr:
             attributes[column] = attr
@@ -127,7 +127,7 @@ def serialize_sets(set_obj):
     ## soln: 
     #json_str = json.dumps(set([1,2,3]), default=serialize_sets)
     #print(json_str)
-    
+
     if isinstance(set_obj, set):
         return list(set_obj)
     return set_obj

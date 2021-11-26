@@ -205,7 +205,7 @@ class FilterView(View):
         # reference: https://stackoverflow.com/questions/29246625/django-save-checked-checkboxes-on-reload
         # https://stackoverflow.com/questions/52687188/how-to-access-the-checkbox-data-in-django-form
         # checked = [request.POST.get('object_type') for object_type in object_types]
-        checked = []
+        checked = ["event_id","object_id","object_type"]
         for key in df.columns:
             values = request.POST.getlist(key)
             if values:
