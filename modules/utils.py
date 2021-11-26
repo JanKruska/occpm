@@ -52,7 +52,7 @@ def get_column_types(df):
     categorical = [
         column
         for column in valid_columns
-        if column not in numerical and column not in object
+        if column not in numerical and column not in object and column not in ["event_id","object_id","object_type"]
     ]
     return numerical, categorical, object
 

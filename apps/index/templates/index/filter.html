@@ -1,42 +1,42 @@
 {% extends 'index/base.html' %}
 
-
 <!DOCTYPE html>
-<meta charset="utf-8">
+<meta charset="utf-8" />
 {% block head %}
 <script>
   $(document).ready(function () {
-    $("#button").click(function () {
-      $("#figure").load("http://127.0.0.1:8000/plots/"+$(this).attr("value"));
+    $( "#row-select,#column-select" ).change(function() {
+      $("#table").load("http://127.0.0.1:8000/table/"+$( "#row-select option:selected" ).attr("value")+"/"+$( "#column-select option:selected" ).attr("value")+"?id={{event_log.id}}");
     });
   });
 </script>
-{% endblock %}
+{% endblock %} {% block content %}
+<div class="flex" style="justify-content: center">
+  <p>The original log contains {{num_events}} events.</p>
+  <br />
+  <p>
+    The filtered log is based on the attributes: {{selected_filters|join:","}}
+    selections.
+  </p>
 
-{% block content  %}
-<div class="flex" style="justify-content: center;">
-  <p>The original log contains {{num_events}} events.</p><br/>
-  <p>The filtered log is based on the attributes: {{selected_filters|join:","}} selections.</p> 
+  <h3>Materialization:</h3>
+  <select name="materialization" id="materialization">
+    <option value="existence">Existence</option>
+  </select>
 
-<h3>Materialization:</h3>  
-<select name="materialization" id="materialization">
-  <option value="existence">Existence</option>
-</select>
-
-<h3>Column:</h3>  
-<select name="row-select" id="row-select">
-{% for col in columns%}
-  <option value="{{col}}">{{col}}</option>
-{% endfor %}
-</select>
-<h3>Row:</h3>  
-<select name="column-select" id="column-select">
-{% for col in columns%}
-  <option value="{{col}}">{{col}}</option>
-{% endfor %}
-</select>
+  <h3>Row:</h3>
+  <select name="row-select" id="row-select">
+    {% for col in columns%}
+    <option value="{{col}}">{{col}}</option>
+    {% endfor %}
+  </select>
+  <h3>Column:</h3>
+  <select name="column-select" id="column-select">
+    {% for col in columns%}
+    <option value="{{col}}">{{col}}</option>
+    {% endfor %}
+  </select>
 </div>
-{% comment %} <p>The log contains {{num_objects}} objects</p> {% endcomment %}
-<div id="figure">
-</div>
+
+<div id="table"></div>
 {% endblock %}

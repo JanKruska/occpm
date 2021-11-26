@@ -138,6 +138,7 @@ class FilterView(View):
     def post(self, request):
         event_log, df, obj_df = utils.get_event_log(request)
         numerical, categorical, object_types = utils.get_column_types(df)
+        obj_numerical, obj_categorical, _ = utils.get_column_types(obj_df)
 
         # code to set cookies and obtain info on which checkboxes are checked. Gives list of values of the checkboxes.
         # reference: https://stackoverflow.com/questions/29246625/django-save-checked-checkboxes-on-reload
@@ -150,8 +151,9 @@ class FilterView(View):
         filtered_log = self.save_filtered_log(df,obj_df,checked,event_log,request)
         context = {
             "num_events": len(df),
-            "columns": [*df.columns, *obj_df.columns],
+            "columns": [*categorical, *obj_categorical],
             "list": [*numerical, *categorical],
             "selected_filters": sorted(checked),
+            "event_log": filtered_log,
         }
         return render(request, "index/filter.html", context=context)
