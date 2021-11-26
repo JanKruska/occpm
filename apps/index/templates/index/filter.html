@@ -1,14 +1,12 @@
 {% extends 'index/base.html' %}
 
-
 <!DOCTYPE html>
-<meta charset="utf-8">
-
+<meta charset="utf-8" />
 {% block head %}
 <script>
   $(document).ready(function () {
-    $("#button").click(function () {
-      $("#figure").load("http://127.0.0.1:8000/plots/"+$(this).attr("value"));
+    $( "#row-select,#column-select" ).change(function() {
+      $("#table").load("http://127.0.0.1:8000/table/"+$( "#row-select option:selected" ).attr("value")+"/"+$( "#column-select option:selected" ).attr("value")+"?id={{event_log.id}}");
     });
   });
 </script>
@@ -71,7 +69,7 @@
   {% endcomment %}
 
     <div class="btn-group">
-      <h5>Column: </h5>  
+      <h5>Row: </h5>  
       <button class="btn btn-success dropdown-toggle" type="submit" id="row-select" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
         Select
       </button>
@@ -90,7 +88,7 @@
   {% endcomment %}
 
     <div class="btn-group">
-      <h5>Row: </h5> 
+      <h5>Column: </h5> 
       <button class="btn btn-success dropdown-toggle" type="submit" id="column-select" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
         Select
       </button>
@@ -111,6 +109,6 @@
 </div>
 
 {% comment %} <p>The log contains {{num_objects}} objects</p> {% endcomment %}
-<div id="figure">
+<div id="table">
 </div>
 {% endblock %}

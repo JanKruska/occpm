@@ -1,5 +1,9 @@
 import json
 from pm4pymdl.objects.ocel.exporter.exporter import json_serial, get_python_obj
+from pm4pymdl.algo.mvp.utils import succint_mdl_to_exploded_mdl
+from pm4pymdl.objects.ocel.importer import importer as ocel_importer
+
+from apps.index import models
 
 """
 Helper modules containing various useful utility functions.
@@ -52,7 +56,7 @@ def get_column_types(df):
     categorical = [
         column
         for column in valid_columns
-        if column not in numerical and column not in object
+        if column not in numerical and column not in object and column not in ["event_id","object_id","object_type"]
     ]
     return numerical, categorical, object
 
@@ -88,6 +92,31 @@ def filter_numerical(df, filter):
     return df
 
 
+def filter(df, obj_df, columns, filters):
+    _, _, object_types = get_column_types(df)
+    object_attributes = get_object_attributes(obj_df, object_types)
+
+    idx_or = df["event_id"] != df["event_id"]
+    for filter in filters:
+        idx_and = df["event_id"] == df["event_id"]
+        for column, value in zip(columns, filter):
+            if column in df.columns:
+                idx_and = idx_and & (df[column] == value)
+            elif column in obj_df.columns:
+                obj_idx = obj_df[obj_df[column] == value]["object_id"]
+                temp_df = succint_mdl_to_exploded_mdl.apply(df)
+                obj_type = [
+                    key for key, value in object_attributes.items() if column in value
+                ]
+                idx_and = idx_and & (
+                    df["event_id"].isin(
+                        temp_df[temp_df[obj_type[0]].isin(obj_idx)]["event_id"]
+                    )
+                )
+        idx_or = idx_or | idx_and
+    return df[idx_or]
+
+
 def get_object_attributes(obj_df, object_types):
     """Determines which attributes are valid for a list of object_types
 
@@ -110,6 +139,7 @@ def get_object_attributes(obj_df, object_types):
             attributes[column] = attr
     return attributes
 
+
 def apply_json(df, obj_df=None, parameters=None):
     """Should not be here, string printing is just missing form pm4pymdl
 
@@ -122,6 +152,7 @@ def apply_json(df, obj_df=None, parameters=None):
     ret = get_python_obj(df, obj_df=obj_df, parameters=parameters)
     return json.dumps(ret, default=json_serial, indent=2)
 
+
 def serialize_sets(set_obj):
     ## Raises error that object of type set is not json serializable:
     ## soln: 
@@ -131,3 +162,13 @@ def serialize_sets(set_obj):
     if isinstance(set_obj, set):
         return list(set_obj)
     return set_obj
+
+
+def get_event_log(request):
+    if request.method == "GET":
+        id = request.GET.get("id")
+    elif request.method == "POST":
+        id = request.POST.get("id")
+    event_log = models.EventLog.objects.get(id=id)
+    df, obj_df = ocel_importer.apply(event_log.file.path)
+    return event_log, df, obj_df

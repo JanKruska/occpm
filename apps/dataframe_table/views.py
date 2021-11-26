@@ -13,7 +13,7 @@ EVENT_LOG_URL = "media/running-example.jsonocel"
 # Create your views here.
 class TableView(View):
     def get(self, request, row=None, column=None):
-        df, obj_df = ocel_importer.apply(EVENT_LOG_URL)
+        event_log, df, obj_df = utils.get_event_log(request)
         attribute_list = df.columns.tolist()
         ## returns 3 lists, 1st two are written and need to be merged to get event attributes. 3rd list is for object attributes.
         _, categorical, _ = utils.get_column_types(df)
@@ -41,5 +41,7 @@ class TableView(View):
             "rows": rows.items(),
             "row": row,
             "column": column,
+            "log_id": request.GET.get("id"),
+            "event_log": event_log,
         }
         return render(request, "dataframe_table/table.html", context=context)
