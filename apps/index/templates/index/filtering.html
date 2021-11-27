@@ -37,7 +37,7 @@
           <th>Attribute</th>
           <th>Example value</th>
         </tr>
-        {% for colname, example in event_attributes.items %}
+        {% for colname, example in event_attributes %}
         {% csrf_token %}
         <tr>
         <label>

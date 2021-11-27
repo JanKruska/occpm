@@ -16,10 +16,17 @@ EVENT_LOG_URL = "media/running-example.jsonocel"
 
 
 class LogVisualizationView(View):
-    def get_event_example_value(self, df, event_attributes):
+    def get_event_example_value(self, df, obj_df, event_attributes, object_attributes):
         event_attribute_examples = {}
+        # Get event level attrs
         for attribute in event_attributes:
             event_attribute_examples[attribute] = utils.first_valid_entry(df[attribute])
+        # Get objects & examples
+        for attribute in object_attributes:
+            event_attribute_examples[attribute] = utils.first_valid_entry(
+                obj_df[obj_df["object_type"] == attribute]["object_id"]
+            )
+
         return event_attribute_examples
 
     def get_object_example_value(self, obj_df, object_attributes):
@@ -76,7 +83,9 @@ class VisualizeView(LogVisualizationView):
             "num_events_filtered": len(filtered_log),
             "filters": filters,
             "event_log": attr_filtered_log,
-            "event_attributes": self.get_event_example_value(df, event_attributes),
+            "event_attributes": self.get_event_example_value(
+                df, obj_df, event_attributes, object_attribute_list
+            ),
             "column_width": 1 / (len(object_attributes) + 1) * 100,
             "object_attributes": self.get_object_example_value(
                 obj_df, object_attributes

@@ -64,7 +64,9 @@ class SelectFilterView(LogVisualizationView):
             "index/filtering.html",
             context={
                 "column_width": 1 / (len(object_attributes) + 1) * 100,
-                "event_attributes": self.get_event_example_value(df, event_attributes),
+                "event_attributes": self.get_event_example_value(
+                    df, obj_df, event_attributes, object_attribute_list
+                ).items(),
                 "object_attributes": self.get_object_example_value(
                     obj_df, object_attributes
                 ).items(),
@@ -87,7 +89,7 @@ class PlotsView(View):
         else:
             raise Http404("no such log type supported")
         df, obj_df = ocel_importer.apply(event_log.file.path)
-        numerical, categorical, _ = utils.get_column_types(df)
+        numerical, categorical, objects = utils.get_column_types(df)
         obj_numerical, obj_categorical, _ = utils.get_column_types(obj_df)
 
         if column == None:
@@ -98,13 +100,15 @@ class PlotsView(View):
             )
         if column in numerical or column in obj_numerical:
             plotf = plots.histogram_boxplot
-        elif column in categorical or column in obj_categorical:
+        elif column in categorical or column in obj_categorical or column in objects:
             plotf = plots.histogram
 
-        if column in df.columns:
+        if column in [*categorical, *numerical]:
             target = df
         elif column in obj_df.columns:
             target = obj_df
+        elif column in objects:
+            target = succint_mdl_to_exploded_mdl.apply(df)
 
         plot_div = plot(
             plotf(target, column),
