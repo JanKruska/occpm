@@ -44,14 +44,14 @@ Select box for the event logs:-
   <br>
   <div class="row">
       <div class=" col">
-          <form name="choice" action="{% url 'filtering' %}" method="GET">
+          <form name="choice" action="" method="POST">
               {% csrf_token %}
               <select name="id" class="custom-select" size="10">
                   {% for event_log in event_logs %}
                   <option value="{{event_log.id}}">{{event_log.name}}</option>
                   {% endfor %}
               </select>
-              {% comment %} Button functionalities (to be implemented):
+
               <input style="margin-top: 10px;" data-toggle="tooltip" data-placement="top"
                     title="Set as the input" type="submit" class="btn btn-success" value="Set" name="setButton"
                     id='setButton' />
@@ -64,7 +64,7 @@ Select box for the event logs:-
               <input style="margin-top: 10px;" type="button" class="btn btn-primary" value="Compare Model Tab"
                     id="SwitchToCompare" />
               {% endif %}
-              {% endcomment %}
+             
               <br/>
               <p><button class="btn btn-outline-success" type="submit" id="submit">Submit</button></p>
           </form>
