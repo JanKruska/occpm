@@ -62,20 +62,25 @@
 
         {% block header %}
 
-        <div class="flex" id="header" style="background-color:white;margin-bottom: 1%;">
+        <div class="container-fluid" id="header" style="background-color:white;margin-bottom: 1%; padding:0">
 
             {% comment %} Official PADS logo changed {% endcomment %}
 
-
-            <div class="flex-horizontal" style="flex-grow: 0; height: 150px;">
-                <img style='height: 100%; width:100%;object-fit: contain ' src="{% static 'index/PADSLOGO.png' %}" />
+        <div class="d-flex flex-row justify-content-center align-items-center">
+            <div class="d-flex content" style="width:20%">
+                <a href="https://www.pads.rwth-aachen.de">
+                <img class="img-fluid ml-auto" style='' src="{% static 'index/PADSLOGO.png' %}" />
+                </a>
+            </div>
+            <div class="d-flex content flex-grow-1 align-items-center justify-content-center">
                 <p class ="fs-1 fw-bold " style="font-family:Arial">Object-Centric Comparative Process Mining</p>
                 {% comment %} ;font-size:20px; {% endcomment %}
             </div>
-            <div style="width:149px">
+            <div class="d-flex content">
                 <a href="https://github.com/JanKruska/occpm"><img loading="lazy" width="149" height="149" align="right"
                         src="https://github.blog/wp-content/uploads/2008/12/forkme_right_darkblue_121621.png?resize=149%2C149"
                         class="attachment-full size-full" alt="Fork me on GitHub" data-recalc-dims="1"></a>
+            </div>
             </div>
         </div>
 
