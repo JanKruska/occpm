@@ -7,27 +7,48 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('index', '0002_logfiltering'),
+        ("index", "0002_logfiltering"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='eventlog',
-            name='id',
-            field=models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID'),
+            model_name="eventlog",
+            name="id",
+            field=models.BigAutoField(
+                auto_created=True, primary_key=True, serialize=False, verbose_name="ID"
+            ),
         ),
         migrations.AlterField(
-            model_name='logfiltering',
-            name='id',
-            field=models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID'),
+            model_name="logfiltering",
+            name="id",
+            field=models.BigAutoField(
+                auto_created=True, primary_key=True, serialize=False, verbose_name="ID"
+            ),
         ),
         migrations.CreateModel(
-            name='FilteredLog',
+            name="FilteredLog",
             fields=[
-                ('eventlog_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='index.eventlog')),
-                ('filter', models.TextField(default='')),
-                ('parent', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='child', to='index.eventlog')),
+                (
+                    "eventlog_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="index.eventlog",
+                    ),
+                ),
+                ("filter", models.TextField(default="")),
+                (
+                    "parent",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="child",
+                        to="index.eventlog",
+                    ),
+                ),
             ],
-            bases=('index.eventlog',),
+            bases=("index.eventlog",),
         ),
     ]

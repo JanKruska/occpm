@@ -5,9 +5,13 @@
 {% block head %}
 <script>
   $(document).ready(function () {
-    $(document).on('click',".attr_name",function () {
+    $(document).on("click", ".attr_name", function () {
       event.preventDefault();
-      $("#figure").load("http://127.0.0.1:8000/plots/"+$(this).attr("value")+"?type=event_log&id={{event_log.id}}");
+      $("#figure").load(
+        "http://127.0.0.1:8000/plots/" +
+          $(this).attr("value") +
+          "?type=event_log&id={{event_log.id}}"
+      );
     });
   });
 </script>
@@ -46,7 +50,7 @@
         {% endfor %}
       </table>
     </div>
-    {% for colname, values in object_attributes %} 
+    {% for colname, values in object_attributes %}
     <div class="flex-vertical" style="flex-basis: {{ column_width }}%;">
       <h2>{{colname}}</h2>
       <table>

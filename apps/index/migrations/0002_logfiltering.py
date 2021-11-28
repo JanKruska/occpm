@@ -7,17 +7,30 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('index', '0001_initial'),
+        ("index", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='LogFiltering',
+            name="LogFiltering",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('all_attributes', models.TextField()),
-                ('filtered_attributes', models.TextField()),
-                ('event_log_ref', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='index.eventlog')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("all_attributes", models.TextField()),
+                ("filtered_attributes", models.TextField()),
+                (
+                    "event_log_ref",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="index.eventlog"
+                    ),
+                ),
             ],
         ),
     ]

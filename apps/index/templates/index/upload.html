@@ -1,92 +1,147 @@
-{% extends 'index/base.html' %}
-
-{% load static %}
-
-{% block content %}
-<div class="container-fluid" style="text-align: left;" >
-  <h3 class="mt-4" style="color:#00529F;">Event Logs</h3>
-  <br/>
-  <div class="row justify-content-start" >
-    <br>
-      <div class=" col-5">
-          <form name="load" action="" method="POST" enctype="multipart/form-data">
-              {% csrf_token %}
-              <p>Event log: <input  type="file" value="myfile" name="myfile" placeholder="Upload an OCEL event log" required/>
-              {% comment %}class="form-control form-control-sm"{% endcomment %}
-                <input type="submit" class="btn btn-primary mb-2" value="Upload EventLog" name="uploadButton" id='submitresEL' />
-              </p>
-          </form>
-      </div>
+{% extends 'index/base.html' %} {% load static %} {% block content %}
+<div class="container-fluid" style="text-align: left">
+  <h3 class="mt-4" style="color: #00529f">Event Logs</h3>
+  <br />
+  <div class="row justify-content-start">
+    <br />
+    <div class="col-5">
+      <form name="load" action="" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <p>
+          Event log:
+          <input
+            type="file"
+            value="myfile"
+            name="myfile"
+            placeholder="Upload an OCEL event log"
+            required
+          />
+          {% comment %}class="form-control form-control-sm"{% endcomment %}
+          <input
+            type="submit"
+            class="btn btn-primary mb-2"
+            value="Upload EventLog"
+            name="uploadButton"
+            id="submitresEL"
+          />
+        </p>
+      </form>
+    </div>
   </div>
 
-
-{% if uploaded_file_url %}
-<p>File uploaded at: <a href="{{ uploaded_file_url }}">{{ uploaded_file_url }}</a></p>
-{% endif %}
-
-{% comment %}
-##################################
-Select box for the event logs:- 
-##################################
-{% endcomment %}
-  <br>
+  {% if uploaded_file_url %}
+  <p>
+    File uploaded at:
+    <a href="{{ uploaded_file_url }}">{{ uploaded_file_url }}</a>
+  </p>
+  {% endif %} {% comment %} ################################## Select box for
+  the event logs:- ################################## {% endcomment %}
+  <br />
   <div class="row">
-      <div class=" col">
-          <form name="choice" action="" method="POST">
-              {% csrf_token %}
-              <select name="id" class="form-select" size="10">
-                  {% for event_log in event_logs %}
-                  <option value="{{event_log.id}}">{{event_log.name}}</option>
-                  {% endfor %}
-              </select>
+    <div class="col">
+      <form name="choice" action="" method="POST">
+        {% csrf_token %}
+        <select name="id" class="form-select" size="10">
+          {% for event_log in event_logs %}
+          <option value="{{event_log.id}}">{{event_log.name}}</option>
+          {% endfor %}
+        </select>
 
-              <input style="float: left;margin-top: 10px; margin-right: 10px;" data-toggle="tooltip" data-placement="top"
-                    title="Set as the input" type="submit" class="btn btn-success" value="Set" name="setButton"
-                    id='setButton' />
-              <input style="float: left; margin-top: 10px;" type="submit" class="btn btn-danger" value="Delete"
-                    name="deleteButton" id='deleteButton' />
-              <input style="float: right; margin-top: 10px;" type="submit" class="btn btn-info"
-                    value="Download" name="downloadButton" id='downloadButton' />
+        <input
+          style="float: left; margin-top: 10px; margin-right: 10px"
+          data-toggle="tooltip"
+          data-placement="top"
+          title="Set as the input"
+          type="submit"
+          class="btn btn-success"
+          value="Set"
+          name="setButton"
+          id="setButton"
+        />
+        <input
+          style="float: left; margin-top: 10px"
+          type="submit"
+          class="btn btn-danger"
+          value="Delete"
+          name="deleteButton"
+          id="deleteButton"
+        />
+        <input
+          style="float: right; margin-top: 10px"
+          type="submit"
+          class="btn btn-info"
+          value="Download"
+          name="downloadButton"
+          id="downloadButton"
+        />
 
-              {% comment %}
-              {% if log_name != null %}
-              <input style="margin-top: 10px;" type="button" class="btn btn-primary" value="Compare Model Tab"
-                    id="SwitchToCompare" />
-              {% endif %}
-              {% endcomment %}
-             
-          </form>
-      </div>
-
+        {% comment %} {% if log_name != null %}
+        <input
+          style="margin-top: 10px"
+          type="button"
+          class="btn btn-primary"
+          value="Compare Model Tab"
+          id="SwitchToCompare"
+        />
+        {% endif %} {% endcomment %}
+      </form>
+    </div>
   </div>
-
 </div>
 
-{% endblock %}
-
-
-{% comment %}
-#######################################################
-Code for the navigation tabs displayed on the webpage:- 
+{% endblock %} {% comment %}
+####################################################### Code for the navigation
+tabs displayed on the webpage:-
 #######################################################
 
 <div class="TabDiv">
   <ul class="nav nav-tabs" id="myTab" role="tablist" data-tabs="tabs">
-      <li class="nav-item">
-          <a class="nav-link active" id="eventlogs-tab" data-toggle="tab" href="#eventlogs" role="tab"
-             aria-controls="eventlogs" aria-selected="true">Event Logs</a>
-      </li>
-      <li class="nav-item">
-          <a class="nav-link" id="CompareModel-tab" data-toggle="tab" href="#CompareModel" role="tab"
-             aria-controls="CompareModel" aria-selected="true">Compare Model</a>
-      </li>
-      <li class="nav-item">
-          <a class="nav-link" id="Help-tab" data-toggle="tab" href="#Help" role="tab"
-             aria-controls="Help" aria-selected="true">Help Page</a>
-      </li>
+    <li class="nav-item">
+      <a
+        class="nav-link active"
+        id="eventlogs-tab"
+        data-toggle="tab"
+        href="#eventlogs"
+        role="tab"
+        aria-controls="eventlogs"
+        aria-selected="true"
+        >Event Logs</a
+      >
+    </li>
+    <li class="nav-item">
+      <a
+        class="nav-link"
+        id="CompareModel-tab"
+        data-toggle="tab"
+        href="#CompareModel"
+        role="tab"
+        aria-controls="CompareModel"
+        aria-selected="true"
+        >Compare Model</a
+      >
+    </li>
+    <li class="nav-item">
+      <a
+        class="nav-link"
+        id="Help-tab"
+        data-toggle="tab"
+        href="#Help"
+        role="tab"
+        aria-controls="Help"
+        aria-selected="true"
+        >Help Page</a
+      >
+    </li>
   </ul>
 
   <div class="tab-content" id="myTabContent">
-    <div class="tab-pane fade show active" id="eventlogs" role="tabpanel" aria-labelledby="eventlogs-tab"></div>
+    <div
+      class="tab-pane fade show active"
+      id="eventlogs"
+      role="tabpanel"
+      aria-labelledby="eventlogs-tab"
+    ></div>
 
-{% endcomment %}
+    {% endcomment %}
+  </div>
+</div>

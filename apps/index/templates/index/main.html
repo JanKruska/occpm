@@ -1,72 +1,81 @@
 {% extends 'index/base.html' %}
 
-
 <!DOCTYPE html>
-<meta charset="utf-8">
+<meta charset="utf-8" />
 
 <head></head>
 
 <body>
-  {% block content  %}
+  {% block content %}
   <div style="">
-
     <!-- Upload button -->
-    <form id='formid' action="form.php" method="POST" enctype="multipart/form-data">
-      <input id='fileid' type='file' name='filename' hidden />
-      <input id='buttonid' type='button' class="button button1" value='Import file' />
-      <input type='submit' class="button button1" value='Submit' />
+    <form
+      id="formid"
+      action="form.php"
+      method="POST"
+      enctype="multipart/form-data"
+    >
+      <input id="fileid" type="file" name="filename" hidden />
+      <input
+        id="buttonid"
+        type="button"
+        class="button button1"
+        value="Import file"
+      />
+      <input type="submit" class="button button1" value="Submit" />
     </form>
   </div>
 
   <!div
     style="background-color:white;color:white;padding:20px;height: 300px;margin-top: 1%;margin-left: 3%;margin-right: 3%;">
 
-    <div class="row" style="margin: 3% 3% 0 3%">
-      <div class="columnFirstDiv" style="background-color:lightgray;">
-        <p>Table 1</p>
-      </div>
-      <div class="columnFirstDiv" style="background-color:#F3F3F3;">
-        <p>table2</p>
-      </div>
-      <div class="columnFirstDiv" style="background-color:lightgray;">
-        <p>table3</p>
-      </div>
-      <div class="columnButton1" style="background-color:#F3F3F3;">
-        <p>buttons</p>
-      </div>
+  <div class="row" style="margin: 3% 3% 0 3%">
+    <div class="columnFirstDiv" style="background-color: lightgray">
+      <p>Table 1</p>
     </div>
+    <div class="columnFirstDiv" style="background-color: #f3f3f3">
+      <p>table2</p>
+    </div>
+    <div class="columnFirstDiv" style="background-color: lightgray">
+      <p>table3</p>
+    </div>
+    <div class="columnButton1" style="background-color: #f3f3f3">
+      <p>buttons</p>
+    </div>
+  </div>
 
-    <!/div> <!div
+  <!/div>
+  <!div
       style="background-color:#F3F3F3;color:white;padding:20px;height: 300px;margin-top: 1%;margin-left: 3%;margin-right: 3%;">
 
-      <div class="row" style="margin-top: 1%;margin-left: 3%;margin-right: 3%;">
-        <div class="columnSecondDiv" style="background-color:lightgray;">
-          <p>table 1</p>
-          {% autoescape off %}
-          {{ plot_div }}
-          {% endautoescape %}
-        </div>
-        <div class="columnButton" style="background-color:#F3F3F3;">
-          <p>buttons</p>
-        </div>
-        <div class="columnSecondDiv" style="background-color:lightgray;">
-          <p>table 2</p>
-        </div>
-      </div>
+  <div class="row" style="margin-top: 1%; margin-left: 3%; margin-right: 3%">
+    <div class="columnSecondDiv" style="background-color: lightgray">
+      <p>table 1</p>
+      {% autoescape off %} {{ plot_div }} {% endautoescape %}
+    </div>
+    <div class="columnButton" style="background-color: #f3f3f3">
+      <p>buttons</p>
+    </div>
+    <div class="columnSecondDiv" style="background-color: lightgray">
+      <p>table 2</p>
+    </div>
+  </div>
 
-      <!/div> <!div
+  <!/div>
+  <!div
         style="background-color:#F3F3F3;color:white;padding:20px;height: 300px;margin-top: 1%;margin-left: 3%;margin-right: 3%;">
 
-        <div class="row" style="margin-top: 1%;margin-left: 3%;margin-right: 3%;">
-          <div class="columnDFG" style="background-color:lightgray;">
-            <h2>Result(DFG or Petrinet)</h2>
-            <p></p>
-          </div>
-          <div class="columnDFG" style="background-color:#F3F3F3;">
-            <h2>Result(DFG or Petrinet)</h2>
-            <p></p>
-          </div>
-        </div>
+  <div class="row" style="margin-top: 1%; margin-left: 3%; margin-right: 3%">
+    <div class="columnDFG" style="background-color: lightgray">
+      <h2>Result(DFG or Petrinet)</h2>
+      <p></p>
+    </div>
+    <div class="columnDFG" style="background-color: #f3f3f3">
+      <h2>Result(DFG or Petrinet)</h2>
+      <p></p>
+    </div>
+  </div>
 
-        <!/div> {% endblock %}
-        </body>
+  <!/div>
+  {% endblock %}
+</body>

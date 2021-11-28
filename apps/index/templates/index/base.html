@@ -1,110 +1,150 @@
 {% load static %}
 
-<!doctype html>
+<!DOCTYPE html>
 
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>
+      {% block title %}Object Centric Comparative Process Mining{% endblock %}
+    </title>
+    <meta
+      name="description"
+      content="A simple HTML5 Template for new projects."
+    />
+    <meta name="author" content="SitePoint" />
 
-    <title>{% block title %}Object Centric Comparative Process Mining{% endblock %}</title>
-    <meta name="description" content="A simple HTML5 Template for new projects.">
-    <meta name="author" content="SitePoint">
+    <meta property="og:title" content="A Basic HTML5 Template" />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:url"
+      content="https://www.sitepoint.com/a-basic-html5-template/"
+    />
+    <meta
+      property="og:description"
+      content="A simple HTML5 Template for new projects."
+    />
+    <meta property="og:image" content="image.png" />
 
-    <meta property="og:title" content="A Basic HTML5 Template">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://www.sitepoint.com/a-basic-html5-template/">
-    <meta property="og:description" content="A simple HTML5 Template for new projects.">
-    <meta property="og:image" content="image.png">
-
-    <link rel="icon" href="/favicon.ico">
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-    <link rel="stylesheet" type="text/css" href="{% static 'index/style.css' %}">
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'index/style.css' %}"
+    />
     <script>
-        function setup() {
-            document.getElementById('buttonid').addEventListener('click', openDialog);
+      function setup() {
+        document
+          .getElementById("buttonid")
+          .addEventListener("click", openDialog);
 
-            function openDialog() {
-                document.getElementById('fileid').click();
-            }
-            document.getElementById('fileid').addEventListener('change', submitForm);
-
-            function submitForm() {
-                document.getElementById('formid').submit();
-            }
+        function openDialog() {
+          document.getElementById("fileid").click();
         }
+        document
+          .getElementById("fileid")
+          .addEventListener("change", submitForm);
+
+        function submitForm() {
+          document.getElementById("formid").submit();
+        }
+      }
     </script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+      crossorigin="anonymous"
+    ></script>
 
-    {% block head%}
+    {% block head%} {% endblock %}
+  </head>
 
-    {% endblock %}
-</head>
-
-<body onload="setup()">
+  <body onload="setup()">
     <div id="container">
-        {% comment %} <style>
-            #content {
-                position: relative;
-            }
+      {% comment %}
+      <style>
+        #content {
+          position: relative;
+        }
 
-            #content img {
-                position: absolute;
-                top: 0px;
-                right: 0px;
-            }
-        </style> {% endcomment %}
+        #content img {
+          position: absolute;
+          top: 0px;
+          right: 0px;
+        }
+      </style>
+      {% endcomment %} {% block header %}
 
-        {% block header %}
-
-        <div class="container-fluid" id="header" style="background-color:white;margin-bottom: 1%; padding:0">
-
-            {% comment %} Official PADS logo changed {% endcomment %}
+      <div
+        class="container-fluid"
+        id="header"
+        style="background-color: white; margin-bottom: 1%; padding: 0"
+      >
+        {% comment %} Official PADS logo changed {% endcomment %}
 
         <div class="d-flex flex-row justify-content-center align-items-center">
-            <div class="d-flex content" style="width:20%">
-                <a href="https://www.pads.rwth-aachen.de">
-                <img class="img-fluid ml-auto" style='' src="{% static 'index/PADSLOGO.png' %}" />
-                </a>
-            </div>
-            <div class="d-flex content flex-grow-1 align-items-center justify-content-center">
-                <p class ="fs-1 fw-bold " style="font-family:Arial">Object-Centric Comparative Process Mining</p>
-                {% comment %} ;font-size:20px; {% endcomment %}
-            </div>
-            <div class="d-flex content">
-                <a href="https://github.com/JanKruska/occpm"><img loading="lazy" width="149" height="149" align="right"
-                        src="https://github.blog/wp-content/uploads/2008/12/forkme_right_darkblue_121621.png?resize=149%2C149"
-                        class="attachment-full size-full" alt="Fork me on GitHub" data-recalc-dims="1"></a>
-            </div>
-            </div>
+          <div class="d-flex content" style="width: 20%">
+            <a href="https://www.pads.rwth-aachen.de">
+              <img
+                class="img-fluid ml-auto"
+                style=""
+                src="{% static 'index/PADSLOGO.png' %}"
+              />
+            </a>
+          </div>
+          <div
+            class="
+              d-flex
+              content
+              flex-grow-1
+              align-items-center
+              justify-content-center
+            "
+          >
+            <p class="fs-1 fw-bold" style="font-family: Arial">
+              Object-Centric Comparative Process Mining
+            </p>
+            {% comment %} ;font-size:20px; {% endcomment %}
+          </div>
+          <div class="d-flex content">
+            <a href="https://github.com/JanKruska/occpm"
+              ><img
+                loading="lazy"
+                width="149"
+                height="149"
+                align="right"
+                src="https://github.blog/wp-content/uploads/2008/12/forkme_right_darkblue_121621.png?resize=149%2C149"
+                class="attachment-full size-full"
+                alt="Fork me on GitHub"
+                data-recalc-dims="1"
+            /></a>
+          </div>
         </div>
+      </div>
 
-        {% endblock %}
+      {% endblock %}
 
-        <!div id="navbar" />
-        <!div id="sidebar" />
-        <div class="content">
-            {% block content %}
+      <!div id="navbar" />
+      <!div id="sidebar" />
+      <div class="content">{% block content %} {% endblock %}</div>
 
-            {% endblock %}
-        </div>
-
-        {% block footer %}
-
-        {% endblock %}
-
+      {% block footer %} {% endblock %}
     </div>
     <!-- 
 <div style="background-color:gray;color:white;padding:30px;height:50px;margin-left: 3%;margin-right: 3%;"> -->
 
-    {% block script %}
-
-    {% endblock %}
-</body>
-
+    {% block script %} {% endblock %}
+  </body>
 </html>

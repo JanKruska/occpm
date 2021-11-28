@@ -8,17 +8,30 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='EventLog',
+            name="EventLog",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=100)),
-                ('file', models.FileField(storage=django.core.files.storage.FileSystemStorage(), upload_to='')),
-                ('hash', models.CharField(max_length=128)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=100)),
+                (
+                    "file",
+                    models.FileField(
+                        storage=django.core.files.storage.FileSystemStorage(),
+                        upload_to="",
+                    ),
+                ),
+                ("hash", models.CharField(max_length=128)),
             ],
         ),
     ]

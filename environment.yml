@@ -3,19 +3,18 @@ channels:
   - defaults
 dependencies:
   - python=3.9
-  - pip 
+  - pip
   - pip:
-    - django
-    - pandas
-    - plantuml
-    - pm4py
-    - pm4pymdl
-    - requests
-    - setuptools
-    - python-decouple
-    - black
-    - pre-commit
-    - plotly
-    - filehash
+      - django
+      - pandas
+      - plantuml
+      - pm4py
+      - pm4pymdl
+      - requests
+      - setuptools
+      - python-decouple
+      - black
+      - pre-commit
+      - plotly
+      - filehash
 prefix: /home/jan/anaconda3/envs/occpm
-

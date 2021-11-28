@@ -1,36 +1,36 @@
 {% extends 'index/base.html' %}
 
-
 <!DOCTYPE html>
-<meta charset="utf-8">
+<meta charset="utf-8" />
 
 <head></head>
 
 <body>
-  {% block content  %}
+  {% block content %}
 
-  <div class="row" style="margin-top: 1%;margin-left: 3%;margin-right: 3%;">
-    <div class="columnSecondDiv" style="background-color:lightgray;">
+  <div class="row" style="margin-top: 1%; margin-left: 3%; margin-right: 3%">
+    <div class="columnSecondDiv" style="background-color: lightgray">
       <div class="flex">
-      {% for object in list %}
-      <form action="{% url 'histogram' object%}" method="post">
-        {% csrf_token %}
-        <button type="submit" name='btn_iris'>Show {{ object }}</button>
-      </form>
-      {% endfor %}
+        {% for object in list %}
+        <form action="{% url 'histogram' object%}" method="post">
+          {% csrf_token %}
+          <button type="submit" name="btn_iris">Show {{ object }}</button>
+        </form>
+        {% endfor %}
       </div>
-      {% comment %} <form action="{% url 'histogram' 2%}" method="post">
+      {% comment %}
+      <form action="{% url 'histogram' 2%}" method="post">
         {% csrf_token %}
-        <button type="submit" name='btn_tips' value={{excel_path}}>Show Tips dataset</button>
-      </form> {% endcomment %}
-      {% autoescape off %}
-      {{ plot_div }}
-      {% endautoescape %}
+        <button type="submit" name="btn_tips" value="{{excel_path}}">
+          Show Tips dataset
+        </button>
+      </form>
+      {% endcomment %} {% autoescape off %} {{ plot_div }} {% endautoescape %}
     </div>
-    <div class="columnButton" style="background-color:#F3F3F3;">
+    <div class="columnButton" style="background-color: #f3f3f3">
       <p>buttons</p>
     </div>
-    <div class="columnSecondDiv" style="background-color:lightgray;">
+    <div class="columnSecondDiv" style="background-color: lightgray">
       <p>table 2</p>
     </div>
   </div>
