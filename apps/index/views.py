@@ -140,7 +140,7 @@ class FilterView(View):
 
     def extract_filter(self, df, request):
         _, _, object_types = utils.get_column_types(df)
-        checked = ["event_id", "object_id", "object_type"]
+        checked = list(utils.ESSENTIAL_LOG_ATTRIBUTES)
         for key in df.columns:
             values = request.POST.getlist(key)
             if values:
