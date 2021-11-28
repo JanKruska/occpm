@@ -60,7 +60,7 @@
         </table>
         </div>
         {% for colname, values in object_attributes %}
-        <div class="d-flex flex-column justify-content-start align-self-start p-2" id="{{colname}}" style="flex-basis: {{ column_width }}%;display: none; ">
+        <div class="d-flex flex-column justify-content-start align-self-start p-2" id="{{colname}}" style="flex-basis: {{ column_width }}%;display: none !important; ">
           <h2>{{colname}}</h2>
           <table class="table table-hover table-sm ">
           <thead class="table-dark">
