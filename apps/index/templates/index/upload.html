@@ -45,11 +45,11 @@ Select box for the event logs:-
   <br>
   <div class="row">
       <div class=" col">
-          <form name="choice" action="" method="POST">
+          <form name="choice" action="{% url 'filtering' %}" method="GET">
               {% csrf_token %}
-              <select name="log_list" class="custom-select" size="10">
+              <select name="id" class="custom-select" size="10">
                   {% for event_log in event_logs %}
-                  <option value="{{event_log}}">{{event_log.name}}</option>
+                  <option value="{{event_log.id}}">{{event_log.name}}</option>
                   {% endfor %}
               </select>
               {% comment %} Button functionalities (to be implemented):
@@ -67,7 +67,7 @@ Select box for the event logs:-
               {% endif %}
               {% endcomment %}
               <br/>
-              <p><button class="btn btn-outline-success" type="submit" id="submit" name="id" value="OK">Submit</button></p>
+              <p><button class="btn btn-outline-success" type="submit" id="submit">Submit</button></p>
           </form>
       </div>
 
