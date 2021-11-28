@@ -4,12 +4,13 @@ from django.http.response import Http404
 from filehash import FileHash
 import json
 
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from django.views import View
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from django.core.files.base import ContentFile
+from wsgiref.util import FileWrapper
 
 import plotly.graph_objects as go
 from plotly.offline import plot
@@ -27,12 +28,35 @@ import modules.plots as plots
 from . import models
 import modules.utils as utils
 
-# EVENT_LOG_URL = "media/running-example.jsonocel"
 
+class UploadView(View):
+    def render(self, request, context={}):
+        event_logs = models.EventLog.objects.exclude(name__exact="")
+        context.update({"event_logs": event_logs})
+        return render(request, "index/upload.html", context=context)
 
-def uploadfile(request):
-    context = {}
-    if request.method == "POST" and request.FILES["myfile"]:
+    def set(self, request):
+        return redirect(f'/filtering?id={request.POST.get("id")}')
+
+    def delete(self, request):
+        models.EventLog.objects.filter(id=request.POST.get("id")).delete()
+        return self.render(request)
+
+    def download(self, request):
+        event_log, _, _ = utils.get_event_log(request)
+
+        try:
+            wrapper = FileWrapper(open(event_log.file.path, "rb"))
+            response = HttpResponse(wrapper, content_type="application/force-download")
+            response["Content-Disposition"] = "inline; filename=" + os.path.basename(
+                event_log.file.path
+            )
+            return response
+        except Exception as e:
+            raise Http404()
+
+    def upload(self, request):
+        context = {}
         myfile = request.FILES["myfile"]
         event_log = models.EventLog.objects.create()
         event_log.name = os.path.splitext(myfile.name)[0]
@@ -43,10 +67,20 @@ def uploadfile(request):
         event_log.save()
 
         context.update({"uploaded_file_url": event_log.file.url})
+        return self.render(request, context)
 
-    event_logs = models.EventLog.objects.exclude(name__exact="")
-    context.update({"event_logs": event_logs})
-    return render(request, "index/upload.html", context=context)
+    def post(self, request):
+        if "uploadButton" in request.POST:
+            return self.upload(request)
+        elif "deleteButton" in request.POST:
+            return self.delete(request)
+        elif "setButton" in request.POST:
+            return self.set(request)
+        elif "downloadButton" in request.POST:
+            return self.download(request)
+
+    def get(self, request):
+        return self.render(request)
 
 
 class SelectFilterView(LogVisualizationView):
