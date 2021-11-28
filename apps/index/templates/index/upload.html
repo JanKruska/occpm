@@ -11,8 +11,9 @@
       <div class=" col-5">
           <form name="load" action="" method="POST" enctype="multipart/form-data">
               {% csrf_token %}
-              <p>Event log: <input type="file" value="myfile" name="myfile" placeholder="Upload an OCEL event log" required/>
-              <input type="submit" class="btn btn-primary mb-2" value="Upload EventLog" name="uploadButton" id='submitresEL' />
+              <p>Event log: <input  type="file" value="myfile" name="myfile" placeholder="Upload an OCEL event log" required/>
+              {% comment %}class="form-control form-control-sm"{% endcomment %}
+                <input type="submit" class="btn btn-primary mb-2" value="Upload EventLog" name="uploadButton" id='submitresEL' />
               </p>
           </form>
       </div>
