@@ -2,31 +2,18 @@
 
 {% load static %}
 
-{% block head %}
-<script>
-$(document).ready(function () {
-   $("#table tr").click(function(){
-   $(this).addClass('selected').siblings().removeClass('selected'); 
-   $("#submit").attr("value",($("#table tr.selected td:first").attr("value")));
-});
-});
-</script>
-{% endblock %}
-
 {% block content %}
-<div class="container-fluid" style="justify-content: left;">
+<div class="container-fluid" style="text-align: left;" >
   <h3 class="mt-4" style="color:#00529F;">Event Logs</h3>
-  <br>
-  <div class="row">
-      <div class=" col">
+  <br/>
+  <div class="row justify-content-start" >
+    <br>
+      <div class=" col-5">
           <form name="load" action="" method="POST" enctype="multipart/form-data">
               {% csrf_token %}
-              <p>Event log: <input type="file" value="myfile" name="myfile" placeholder="Upload an OCEL event log" required/></p>
-              <p>
-                  <input type="submit" class="btn btn-primary mb-2" value="Upload EventLog" name="uploadButton"
-                         id='submitresEL' />
+              <p>Event log: <input type="file" value="myfile" name="myfile" placeholder="Upload an OCEL event log" required/>
+              <input type="submit" class="btn btn-primary mb-2" value="Upload EventLog" name="uploadButton" id='submitresEL' />
               </p>
-
           </form>
       </div>
   </div>
@@ -46,60 +33,33 @@ Select box for the event logs:-
       <div class=" col">
           <form name="choice" action="" method="POST">
               {% csrf_token %}
-              <select name="id" class="custom-select" size="10">
+              <select name="id" class="form-select" size="10">
                   {% for event_log in event_logs %}
                   <option value="{{event_log.id}}">{{event_log.name}}</option>
                   {% endfor %}
               </select>
 
-              <input style="margin-top: 10px;" data-toggle="tooltip" data-placement="top"
+              <input style="float: left;margin-top: 10px; margin-right: 10px;" data-toggle="tooltip" data-placement="top"
                     title="Set as the input" type="submit" class="btn btn-success" value="Set" name="setButton"
                     id='setButton' />
-              <input style="margin-top: 10px;" type="submit" class="btn btn-danger" value="Delete"
+              <input style="float: left; margin-top: 10px;" type="submit" class="btn btn-danger" value="Delete"
                     name="deleteButton" id='deleteButton' />
               <input style="float: right; margin-top: 10px;" type="submit" class="btn btn-info"
                     value="Download" name="downloadButton" id='downloadButton' />
 
+              {% comment %}
               {% if log_name != null %}
               <input style="margin-top: 10px;" type="button" class="btn btn-primary" value="Compare Model Tab"
                     id="SwitchToCompare" />
               {% endif %}
+              {% endcomment %}
              
-              <br/>
-              <p><button class="btn btn-outline-success" type="submit" id="submit">Submit</button></p>
           </form>
       </div>
 
   </div>
 
 </div>
-
-{% comment %}
-############################################
-Old event list code for reference:
-############################################
-<div class="flex-vertical">
-<p class="text-start"><h4>Uploaded Event logs:-</h4></p>
-<table class="table table-hover caption-top table-sm" id="table">
-  <caption >Uploaded Event logs:-</caption> 
- <thead class="table-dark">
-   <tr>
-     <th>Log name</th>
-     <th>Log path</th>
-     <th>Log size on disk</th>
-   </tr>
- </thead>
-{% for event_log in event_logs%}
-<tr>
-<td hidden name="log_id" value="{{event_log.id}}"></td>
-<td>{{event_log.name}}</td>
-<td>{{event_log.file.url}}</td>
-<td>{{event_log.file.size|filesizeformat}}</td>
-</tr>
-{% endfor%}
-</table>
-</div>
-{% endcomment %}
 
 {% endblock %}
 
