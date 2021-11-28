@@ -21,7 +21,6 @@ $(document).ready(function () {
       <div class=" col">
           <form name="load" action="" method="POST" enctype="multipart/form-data">
               {% csrf_token %}
-
               <p>Event log: <input type="file" value="myfile" name="myfile" placeholder="Upload an OCEL event log" required/></p>
               <p>
                   <input type="submit" class="btn btn-primary mb-2" value="Upload EventLog" name="uploadButton"

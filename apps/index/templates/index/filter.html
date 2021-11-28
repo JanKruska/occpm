@@ -61,7 +61,7 @@
     </ul>
   </div> {% endcomment %}
   <div class="col">
-  <select class="form-select form-select-sm" name="materialization" id="materialization">
+  <select class="form-select form-select" name="materialization" id="materialization">
     <option value="existence">Existence</option>
   </select>
   </div>
@@ -78,7 +78,7 @@
       </ul>
     </div> {% endcomment %}
     <div class="col">
-    <select class="form-select form-select-sm" name="row-select" id="row-select">
+    <select class="form-select form-select" name="row-select" id="row-select">
     {% for col in columns%}
       <option value="{{col}}">{{col}}</option>
     {% endfor %}
@@ -97,7 +97,7 @@
       </ul>
     </div> {% endcomment %}
   <div class="col">
-  <select class="form-select form-select-sm" name="column-select" id="column-select">
+  <select class="form-select form-select" name="column-select" id="column-select">
   {% for col in columns%}
     <option value="{{col}}">{{col}}</option>
   {% endfor %}
