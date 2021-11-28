@@ -149,7 +149,7 @@ class FilterView(View):
         context = {
             "num_events": len(df),
             "num_objects": len(obj_df),
-            "columns": [*categorical, *obj_categorical],
+            "columns": ["event_activity", *categorical, *obj_categorical],
             "list": [*numerical, *categorical],
             "selected_filters": sorted(checked),
             "event_log": filtered_log,

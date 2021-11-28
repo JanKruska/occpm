@@ -11,7 +11,13 @@ from apps.index import models
 """
 Helper modules containing various useful utility functions.
 """
-ESSENTIAL_LOG_ATTRIBUTES = ("event_id", "object_id", "object_type", "event_timestamp")
+ESSENTIAL_LOG_ATTRIBUTES = (
+    "event_id",
+    "object_id",
+    "object_type",
+    "event_timestamp",
+    "event_activity",
+)
 
 
 def first_valid_entry(series):
