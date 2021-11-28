@@ -60,9 +60,11 @@
         {% block header %}
 
         <div class="flex" id="header" style="background-color:white;margin-bottom: 1%;">
-            <div style="width:144px">
-                <img src="{% static 'index/Logo.jpg' %}" align="left" style="padding:10px;" />
+            {% comment %} Official PADS logo changed {% endcomment %}
+            <div style="height:150px;width:100%" >
+                <img style='height: 100%; width:100%;object-fit: contain ' src="{% static 'index/PADSLOGO.png' %}" /> 
             </div>
+
             <div class="flex-vertical" style="flex-grow: 1;align-self: center;">
                 <h1 style="font-family:Arial"><b>Object-Centric Comparative Process Mining</b></h1>
                 {% comment %} ;font-size:20px; {% endcomment %}
