@@ -13,8 +13,18 @@
     });
   });
 </script>
-
-
+<script>
+  $(document).ready(function () {
+    $(":checkbox").change(function() {
+    if(this.checked) {
+        $("#"+$(this).attr("name")).show("slow")
+    }
+    else{
+      $("#"+$(this).attr("name")).hide("slow")
+    }
+    });
+  });
+</script>
 {% endblock %}
 
 <body>
@@ -39,7 +49,7 @@
         {% csrf_token %}
         <tr>
         <label>
-          <td><input checked type="checkbox" name="{{colname}}" value="{{colname}}"></td>
+          <td><input class="form-check-input me-1" type="checkbox" name="{{colname}}" value="{{colname}}"></td>
           {% comment %} Used to generate colname = value pairs when the form is submitted. 
           Only checked ones will give the value to the server. {% endcomment %}
           <td><span class="attr_name" value="{{colname}}">{{colname}}</span></td>
@@ -51,7 +61,7 @@
         </div>
         {% for colname, values in object_attributes %}
         {% csrf_token %}
-        <div class="flex-vertical" id="{{colname}}" style="flex-basis: {{ column_width }}%;">
+        <div class="flex-vertical" id="{{colname}}" style="flex-basis: {{ column_width }}%;display: none">
           <h2>{{colname}}</h2>
           <table>
           <tr>
@@ -62,7 +72,7 @@
           {% for value,example in values %}
           <tr>
           <label>
-          <td><input checked type="checkbox" name="{{colname}}" value="{{value}}"></td>   
+          <td><input class="form-check-input me-1" type="checkbox" name="{{colname}}" value="{{value}}"></td>   
           {% comment %} Used to generate colname = value pairs when the form is submitted. 
           Only checked ones will give the value to the server. {% endcomment %}
           <td><span class="attr_name" value="{{value}}">{{value}}</span></td>
