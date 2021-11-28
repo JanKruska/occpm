@@ -52,60 +52,60 @@
 {% comment %} Making separate flex container for the second filtering {% endcomment %}
 
 <div class="flex-container" style="justify-content: center;">  
-  
-  <div class="btn-group">
+  <div class="row">
+  {% comment %} <div class="btn-group">
     <h5>Materialization: </h5>
     <button class="btn btn-success dropdown-toggle" type="submit" id="materialization" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
       Select
     </button>
     <ul class="dropdown-menu">
-      <li><a class="dropdown-item" href="#">Existence</a></li>
+      <li><a class="dropdown-item dropdown-item-action" href="#">Existence</a></li>
     </ul>
-  </div>
-  {% comment %}
-  <select class="form-select form-select-sm" size="3" name="materialization" id="materialization">
+  </div> {% endcomment %}
+  <div class="col">
+  <select class="form-select form-select-sm" name="materialization" id="materialization">
     <option value="existence">Existence</option>
   </select>
-  {% endcomment %}
+  </div>
 
-    <div class="btn-group">
+    {% comment %} <div class="btn-group">
       <h5>Row: </h5>  
       <button class="btn btn-success dropdown-toggle" type="submit" id="row-select" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
         Select
       </button>
       <ul class="dropdown-menu">
         {% for col in columns%}
-          <li><a class="dropdown-item" href="#">{{col}}</a></li>
+          <li><a class="dropdown-item dropdown-item-action" href="#">{{col}}</a></li>
         {% endfor %}
       </ul>
-    </div>
-  {% comment %}
-    <select class="form-select form-select-sm" size="3" name="row-select" id="row-select">
+    </div> {% endcomment %}
+    <div class="col">
+    <select class="form-select form-select-sm" name="row-select" id="row-select">
     {% for col in columns%}
       <option value="{{col}}">{{col}}</option>
     {% endfor %}
     </select>
-  {% endcomment %}
+    </div>
 
-    <div class="btn-group">
+    {% comment %} <div class="btn-group">
       <h5>Column: </h5> 
       <button class="btn btn-success dropdown-toggle" type="submit" id="column-select" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
         Select
       </button>
       <ul class="dropdown-menu">
         {% for col in columns%}
-          <li><a class="dropdown-item" href="#">{{col}}</a></li>
+          <li><a class="dropdown-item dropdown-item-action" href="#">{{col}}</a></li>
         {% endfor %}
       </ul>
-    </div>
-  {% comment %}
-  <select class="form-select form-select-sm" size="3" name="column-select" id="column-select">
+    </div> {% endcomment %}
+  <div class="col">
+  <select class="form-select form-select-sm" name="column-select" id="column-select">
   {% for col in columns%}
     <option value="{{col}}">{{col}}</option>
   {% endfor %}
   </select>
-  {% endcomment %}
-
+  </div>
+</div>
 </div>
 
 {% comment %} <p>The log contains {{num_objects}} objects</p> {% endcomment %}

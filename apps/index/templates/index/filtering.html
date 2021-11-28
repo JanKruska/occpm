@@ -37,7 +37,7 @@
           <th>Attribute</th>
           <th>Example value</th>
         </tr>
-        {% for colname, example in event_attributes.items %}
+        {% for colname, example in event_attributes %}
         {% csrf_token %}
         <tr>
         <label>
@@ -53,7 +53,7 @@
         </div>
         {% for colname, values in object_attributes %}
         {% csrf_token %}
-        <div class="flex-vertical" style="flex-basis: {{ column_width }}%;">
+        <div class="flex-vertical" id="{{colname}}" style="flex-basis: {{ column_width }}%;">
           <h2>{{colname}}</h2>
           <table>
           <tr>
