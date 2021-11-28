@@ -68,9 +68,9 @@ class VisualizeView(LogVisualizationView):
 
         row, column, filters = self.extract_filter(request)
         # Filter log
-        filtered_log = utils.filter(df, obj_df, [row, column], filters)
+        filtered_log, obj_filtered = utils.filter(df, obj_df, [row, column], filters)
         attr_filtered_log = self.save_filtered_log(
-            filtered_log, obj_df, filters, request
+            filtered_log, obj_filtered, filters, request
         )
 
         # Determine attributes in filtered log
@@ -85,7 +85,7 @@ class VisualizeView(LogVisualizationView):
             "event_log": attr_filtered_log,
             "event_attributes": self.get_event_example_value(
                 df, obj_df, event_attributes, object_attribute_list
-            ),
+            ).items(),
             "column_width": 1 / (len(object_attributes) + 1) * 100,
             "object_attributes": self.get_object_example_value(
                 obj_df, object_attributes

@@ -1,6 +1,9 @@
 import json
 from pm4pymdl.objects.ocel.exporter.exporter import json_serial, get_python_obj
-from pm4pymdl.algo.mvp.utils import succint_mdl_to_exploded_mdl
+from pm4pymdl.algo.mvp.utils import (
+    succint_mdl_to_exploded_mdl,
+    exploded_mdl_to_succint_mdl,
+)
 from pm4pymdl.objects.ocel.importer import importer as ocel_importer
 
 from apps.index import models
@@ -100,13 +103,15 @@ def filter(df, obj_df, columns, filters):
     object_attributes = get_object_attributes(obj_df, object_types)
 
     idx_or = df["event_id"] != df["event_id"]
+    # obj_idx_or = obj_df["object_id"] != obj_df["object_id"]
     for filter in filters:
         idx_and = df["event_id"] == df["event_id"]
         for column, value in zip(columns, filter):
             if column in df.columns:
                 idx_and = idx_and & (df[column] == value)
             elif column in obj_df.columns:
-                obj_idx = obj_df[obj_df[column] == value]["object_id"]
+                valid = obj_df[column] == value
+                obj_idx = obj_df[valid]["object_id"]
                 temp_df = succint_mdl_to_exploded_mdl.apply(df)
                 obj_type = [
                     key for key, value in object_attributes.items() if column in value
@@ -116,8 +121,12 @@ def filter(df, obj_df, columns, filters):
                         temp_df[temp_df[obj_type[0]].isin(obj_idx)]["event_id"]
                     )
                 )
+                # obj_idx_or |= valid
         idx_or = idx_or | idx_and
-    return df[idx_or]
+    df = df[idx_or]
+    temp_df = succint_mdl_to_exploded_mdl.apply(df)
+    obj_df = obj_df[obj_df["object_id"].isin(temp_df[object_types].values.ravel())]
+    return df, obj_df  # ,obj_df[obj_idx_or]
 
 
 def get_object_attributes(obj_df, object_types):
