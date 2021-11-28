@@ -140,7 +140,7 @@ class FilterView(View):
 
     def extract_filter(self, df, request):
         _, _, object_types = utils.get_column_types(df)
-        checked = object_types + ["event_id", "object_id", "object_type"]
+        checked = ["event_id", "object_id", "object_type"]
         for key in df.columns:
             values = request.POST.getlist(key)
             if values:
@@ -151,7 +151,6 @@ class FilterView(View):
     def post(self, request):
         event_log, df, obj_df = utils.get_event_log(request)
         numerical, categorical, object_types = utils.get_column_types(df)
-        obj_numerical, obj_categorical, _ = utils.get_column_types(obj_df)
 
         # code to set cookies and obtain info on which checkboxes are checked. Gives list of values of the checkboxes.
         # reference: https://stackoverflow.com/questions/29246625/django-save-checked-checkboxes-on-reload
@@ -159,11 +158,16 @@ class FilterView(View):
 
         checked = self.extract_filter(df, request)
         # Filter log
-        df = df[[col for col in df.columns if col in checked]]
-        obj_df = obj_df[[col for col in obj_df.columns if col in checked]]
+        df = df[checked.intersection(df.columns)]
+        obj_df = obj_df[checked.intersection(obj_df.columns)]
+        obj_df = obj_df[obj_df["object_type"].isin(checked.intersection(object_types))]
         filtered_log = self.save_filtered_log(df, obj_df, checked, event_log, request)
+
+        numerical, categorical, object_types = utils.get_column_types(df)
+        obj_numerical, obj_categorical, _ = utils.get_column_types(obj_df)
         context = {
             "num_events": len(df),
+            "num_objects": len(obj_df),
             "columns": [*categorical, *obj_categorical],
             "list": [*numerical, *categorical],
             "selected_filters": sorted(checked),
@@ -340,7 +344,3 @@ class FilterView(View):
 #         return render(request, 'upload.html', {'eventlog_list': eventlogs, 'n_eventlog_list': n_eventlogs})
 
 #         # return render(request, 'upload.html')
-
-
-
-

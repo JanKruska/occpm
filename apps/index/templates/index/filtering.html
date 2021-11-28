@@ -15,7 +15,7 @@
 </script>
 <script>
   $(document).ready(function () {
-    $(":checkbox").change(function() {
+    $(".event-level").change(function() {
     if(this.checked) {
         $("#"+$(this).attr("name")).show("slow")
     }
@@ -46,10 +46,9 @@
           <th>Example value</th>
         </tr>
         {% for colname, example in event_attributes %}
-        {% csrf_token %}
         <tr>
         <label>
-          <td><input class="form-check-input me-1" type="checkbox" name="{{colname}}" value="{{colname}}"></td>
+          <td><input class="form-check-input me-1 event-level" type="checkbox" name="{{colname}}" value="{{colname}}"></td>
           {% comment %} Used to generate colname = value pairs when the form is submitted. 
           Only checked ones will give the value to the server. {% endcomment %}
           <td><span class="attr_name" value="{{colname}}">{{colname}}</span></td>
