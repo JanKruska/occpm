@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     "apps.index.apps.IndexConfig",
     "apps.dataframe_table.apps.DataframeTableConfig",
     "apps.vis.apps.VisConfig",
+    "apps.plots.apps.PlotsConfig",
 ]
 
 MIDDLEWARE = [
