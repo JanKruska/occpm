@@ -8,6 +8,7 @@ from apps.index import models
 """
 Helper modules containing various useful utility functions.
 """
+ESSENTIAL_LOG_ATTRIBUTES = ("event_id", "object_id", "object_type", "event_timestamp")
 
 
 def first_valid_entry(series):
@@ -47,7 +48,7 @@ def get_column_types(df):
     valid_columns = [
         column
         for column in df.columns
-        if column!= "event_id" and not df.isnull().all()[column] 
+        if column != "event_id" and not df.isnull().all()[column]
     ]
     numerical = df.select_dtypes("number").columns.to_list()
 
@@ -56,7 +57,9 @@ def get_column_types(df):
     categorical = [
         column
         for column in valid_columns
-        if column not in numerical and column not in object and column not in ["event_id","object_id","object_type"]
+        if column not in numerical
+        and column not in object
+        and column not in ESSENTIAL_LOG_ATTRIBUTES
     ]
     return numerical, categorical, object
 
@@ -155,9 +158,9 @@ def apply_json(df, obj_df=None, parameters=None):
 
 def serialize_sets(set_obj):
     ## Raises error that object of type set is not json serializable:
-    ## soln: 
-    #json_str = json.dumps(set([1,2,3]), default=serialize_sets)
-    #print(json_str)
+    ## soln:
+    # json_str = json.dumps(set([1,2,3]), default=serialize_sets)
+    # print(json_str)
 
     if isinstance(set_obj, set):
         return list(set_obj)

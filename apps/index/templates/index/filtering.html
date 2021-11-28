@@ -35,6 +35,7 @@
   </div>
 
   <form method="post" action="{% url 'filter' %}">
+  {% csrf_token %}
   <input type="hidden" name="id" value="{{event_log.id}}">
   <div class="flex" style="margin-top: 1%;margin-left: 3%;margin-right: 3%;justify-content: center;">
         <div class="flex-vertical" style="flex-basis: {{ column_width }}%;">
@@ -59,7 +60,6 @@
         </table>
         </div>
         {% for colname, values in object_attributes %}
-        {% csrf_token %}
         <div class="flex-vertical" id="{{colname}}" style="flex-basis: {{ column_width }}%;display: none">
           <h2>{{colname}}</h2>
           <table>
