@@ -8,9 +8,9 @@
     $(document).on("click", ".attr_name", function () {
       event.preventDefault();
       $("#figure").load(
-        "http://127.0.0.1:8000/plots/" +
+        "http://127.0.0.1:8000/plots/histogram/" +
           $(this).attr("value") +
-          "?type=event_log&id={{event_log.id}}"
+          "?id={{event_log.id}}"
       );
     });
   });

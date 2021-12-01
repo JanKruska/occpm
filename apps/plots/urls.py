@@ -3,6 +3,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path("", views.PlotsView.as_view(), name="index"),
-    path("<str:column>", views.PlotsView.as_view(), name="histogram"),
+    path("", views.HistogramView.as_view(), name="index"),
+    path("histogram/<str:column>", views.HistogramView.as_view(), name="histogram"),
+    path("dfg", views.DFGView.as_view(), name="dfg"),
 ]

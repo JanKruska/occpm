@@ -17,4 +17,5 @@ dependencies:
       - pre-commit
       - plotly
       - filehash
+      - graphviz
 prefix: /home/jan/anaconda3/envs/occpm
