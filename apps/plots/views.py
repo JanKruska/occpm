@@ -1,5 +1,6 @@
-from django.http.response import Http404
+import os
 
+from django.http.response import Http404, HttpResponse
 from django.shortcuts import render
 from django.views import View
 from django.conf import settings
@@ -55,18 +56,28 @@ class HistogramView(View):
             link_text="",
         )
         return render(request, "plots/raw.html", context={"object": plot_div})
-    
+
+
 class DFGView(View):
     def get(self, request):
-        event_log = models.EventLog.objects.get(id=request.GET.get("id"))
-        
-        df, obj_df = ocel_importer.apply(event_log.file.path)
+        event_log, df, obj_df = utils.get_event_log(request)
 
-        
         model = discovery.apply(df, parameters={"epsilon": 0, "noise_threshold": 0})
-        gviz = visualizer.apply(model, parameters={"min_act_freq": 5, "min_edge_freq": 5})
+        gviz = visualizer.apply(
+            model,
+            parameters={
+                "min_act_freq": request.GET.get("act_freq", 100),
+                "min_edge_freq": request.GET.get("edge_freq", 100),
+            },
+        )
 
-        return render(request, "plots/raw.html")
+        visualizer.save(gviz, os.path.join(settings.MEDIA_ROOT, "test.png"))
+        return render(
+            request,
+            "plots/image.html",
+            context={"image": settings.MEDIA_URL + "test.png"},
+        )
+
 
 # def dfg_to_g6(dfg):
 #     unique_nodes = []

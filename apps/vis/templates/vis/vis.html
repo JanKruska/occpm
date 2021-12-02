@@ -15,6 +15,17 @@
     });
   });
 </script>
+<script>
+  $(document).ready(function () {
+    $(document).on("click", "#btn-dfg", function () {
+      event.preventDefault();
+      $("#dfg").load(
+        "http://127.0.0.1:8000/plots/dfg" +
+          "?id={{event_log.id}}"
+      );
+    });
+  });
+</script>
 {% endblock %} {% block content %}
 <div class="vertical-flex" style="justify-content: center">
   <p>The original log contains {{num_events}} events.</p>
@@ -68,6 +79,8 @@
     </div>
     {% endfor %}
     <div id="figure" style="flex-basis: 100%"></div>
+    <button type="button" class="btn btn-success" id="btn-dfg">Display DFG</button>
+    <div id="dfg" style="flex-basis: 100%"></div>
   </div>
 </div>
 {% endblock %}
