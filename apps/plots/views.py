@@ -66,8 +66,8 @@ class DFGView(View):
         gviz = visualizer.apply(
             model,
             parameters={
-                "min_act_freq": request.GET.get("act_freq", 100),
-                "min_edge_freq": request.GET.get("edge_freq", 100),
+                "min_act_freq": int(request.GET.get("act_freq", 100)),
+                "min_edge_freq": int(request.GET.get("edge_freq", 100)),
             },
         )
 

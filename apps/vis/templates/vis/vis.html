@@ -19,10 +19,13 @@
   $(document).ready(function () {
     $(document).on("click", "#btn-dfg", function () {
       event.preventDefault();
+      $("#btn-dfg-loading").show()
+      $("#btn-dfg").hide()
       $("#dfg").load(
-        "http://127.0.0.1:8000/plots/dfg" +
-          "?id={{event_log.id}}"
-      );
+        "http://127.0.0.1:8000/plots/dfg" + "?id={{event_log.id}}&act_freq="+$("#range-act-freq").val()+"&edge_freq="+$("#range-edge-freq").val(), function() {
+          $("#btn-dfg-loading").hide()
+          $("#btn-dfg").show()
+        });
     });
   });
 </script>
@@ -32,55 +35,123 @@
   <br />
   <p>The filtered log contains {{num_events_filtered}} events.</p>
   <br />
+
   <p>The chosen filters were {{filters|join:","}}</p>
+</div>
+<div
+  class="d-flex flex-wrap flex-row align-self-start p-2"
+  style="
+    margin-top: 1%;
+    margin-left: 3%;
+    margin-right: 3%;
+    justify-content: center;
+  "
+>
   <div
-    class="flex"
-    style="
-      margin-top: 1%;
-      margin-left: 3%;
-      margin-right: 3%;
-      justify-content: center;
-    "
+    class="d-flex flex-column justify-content-start p-2"
+    style="flex-basis: {{ column_width }}%;"
   >
-    <div class="flex-vertical" style="flex-basis: {{ column_width }}%;">
-      <h2>Event level attributes</h2>
-      <table>
-        <tr>
-          <th>Attribute</th>
-          <th>Example value</th>
-        </tr>
-        {% for colname, example in event_attributes %}
-        <tr>
-          <label>
-            <td>
-              <span class="attr_name" value="{{colname}}">{{colname}}</span>
-            </td>
-            <td>{{example}}</td>
-          </label>
-        </tr>
-        {% endfor %}
-      </table>
-    </div>
-    {% for colname, values in object_attributes %}
-    <div class="flex-vertical" style="flex-basis: {{ column_width }}%;">
-      <h2>{{colname}}</h2>
-      <table>
-        <tr>
-          <th>Attribute</th>
-          <th>Example value</th>
-        </tr>
-        {% for value,example in values %}
-        <tr>
-          <td><span class="attr_name" value="{{value}}">{{value}}</span></td>
+    <h2>Event level attributes</h2>
+    <table class="table table-hover table-sm">
+      <thead class="table-dark">
+        <th>Attribute</th>
+        <th>Example value</th>
+      </thead>
+      {% for colname, example in event_attributes %}
+      <tr>
+        <label>
+          <td>
+            <span class="attr_name" value="{{colname}}">{{colname}}</span>
+          </td>
           <td>{{example}}</td>
-        </tr>
-        {% endfor %}
-      </table>
-    </div>
-    {% endfor %}
-    <div id="figure" style="flex-basis: 100%"></div>
-    <button type="button" class="btn btn-success" id="btn-dfg">Display DFG</button>
-    <div id="dfg" style="flex-basis: 100%"></div>
+        </label>
+      </tr>
+      {% endfor %}
+    </table>
   </div>
+  {% for colname, values in object_attributes %}
+  <div
+    class="d-flex flex-column justify-content-start p-2"
+    style="flex-basis: {{ column_width }}%;"
+  >
+    <h2>{{colname}}</h2>
+    <table class="table table-hover table-sm">
+      <thead class="table-dark">
+        <th>Attribute</th>
+        <th>Example value</th>
+      </thead>
+      {% for value,example in values %}
+      <tr>
+        <td><span class="attr_name" value="{{value}}">{{value}}</span></td>
+        <td>{{example}}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+  {% endfor %}
+</div>
+<div id="figure" style="flex-basis: 100%"></div>
+
+<div
+  class="d-flex flex-row p-2 align-items-center"
+  style="
+    margin-top: 1%;
+    margin-left: 3%;
+    margin-right: 3%;
+    justify-content: center;
+  "
+>
+  <label for="customRange2" class="form-label p-2"
+    >Minimum Edge Frequency:</label
+  >
+  <span class="p-2">0</span>
+  <input
+    type="range"
+    class="form-range p-2"
+    min="0"
+    max="1000"
+    id="range-edge-freq"
+  />
+  <span class="p-2">1000</span>
+</div>
+
+<div
+  class="d-flex flex-row p-2 align-items-center"
+  style="
+    margin-top: 1%;
+    margin-left: 3%;
+    margin-right: 3%;
+    justify-content: center;
+  "
+>
+  <label for="customRange2" class="form-label p-2"
+    >Minimum Activity Frequency:</label
+  >
+  <span class="p-2">0</span>
+  <input
+    type="range"
+    class="form-range p-2"
+    min="0"
+    max="1000"
+    id="range-act-freq"
+  />
+  <span class="p-2">1000</span>
+</div>
+
+<div
+  class="d-flex flex-column p-2 align-items-center"
+  style="
+    margin-top: 1%;
+    margin-left: 3%;
+    margin-right: 3%;
+    justify-content: center;
+  "
+>
+<button class="btn btn-primary" type="button" id="btn-dfg">Display DFG</button>
+<button class="btn btn-primary" type="button" id="btn-dfg-loading" style="display: none !important; " disabled>
+  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+  Loading...
+</button>
+<div id="dfg" style="flex-basis: 100%"></div>
 </div>
 {% endblock %}

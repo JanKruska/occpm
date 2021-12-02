@@ -1,4 +1,6 @@
 import json
+import numpy as np
+import pandas as pd
 from pm4pymdl.objects.ocel.exporter.exporter import json_serial, get_python_obj
 from pm4pymdl.algo.mvp.utils import (
     succint_mdl_to_exploded_mdl,
@@ -131,7 +133,11 @@ def filter(df, obj_df, columns, filters):
         idx_or = idx_or | idx_and
     df = df[idx_or]
     temp_df = succint_mdl_to_exploded_mdl.apply(df)
-    obj_df = obj_df[obj_df["object_id"].isin(temp_df[object_types].values.ravel())]
+    valid_objects = temp_df[
+        [type for type in object_types if type in temp_df.columns]
+    ].values.ravel()
+    valid_objects = valid_objects[~pd.isnull(valid_objects)]
+    obj_df = obj_df[obj_df["object_id"].isin(valid_objects)]
     return df, obj_df  # ,obj_df[obj_idx_or]
 
 
