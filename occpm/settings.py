@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     "apps.dataframe_table.apps.DataframeTableConfig",
     "apps.vis.apps.VisConfig",
     "apps.plots.apps.PlotsConfig",
+    "django_cleanup.apps.CleanupConfig",
 ]
 
 MIDDLEWARE = [
