@@ -31,12 +31,10 @@
 </script>
 {% endblock %} {% block content %}
 <div class="vertical-flex" style="justify-content: center">
-  <p>The original log contains {{num_events}} events.</p>
-  <br />
-  <p>The filtered log contains {{num_events_filtered}} events.</p>
+  <p>This log contains {{num_events}} events.</p>
   <br />
 
-  <p>The chosen filters were {{filters|join:","}}</p>
+  {% if event_log.cell_filter%}<p>The chosen filters were {{event_log.cell_filter}}</p>{% endif %}
 </div>
 <div
   class="d-flex flex-wrap flex-row align-self-start p-2"

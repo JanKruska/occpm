@@ -12,14 +12,14 @@ class EventLog(models.Model):
 
 
 class FilteredLog(EventLog):
-    parent = ForeignKey(
+    unfiltered_log = ForeignKey(
         EventLog, on_delete=models.CASCADE, related_name="filtered_child"
     )
-    filter = models.TextField(default="")
+    column_filter = models.TextField(default="")
 
 
 class AttributeFilteredLog(EventLog):
-    parent = ForeignKey(
+    column_filtered_log = ForeignKey(
         FilteredLog, on_delete=models.CASCADE, related_name="attr_filtered_child"
     )
-    filter = models.TextField(default="")
+    cell_filter = models.TextField(default="")

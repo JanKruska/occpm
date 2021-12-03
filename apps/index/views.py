@@ -28,7 +28,9 @@ class UploadView(View):
         return render(request, "index/upload.html", context=context)
 
     def set(self, request):
-        return redirect(f'/filtering?id={request.POST.get("id")}')
+        event_log, _, _ = utils.get_event_log(request)
+        context = {"event_log": event_log}
+        return self.render(request, context)
 
     def delete(self, request):
         models.EventLog.objects.filter(id=request.POST.get("id")).delete()
@@ -72,7 +74,11 @@ class UploadView(View):
             return self.download(request)
 
     def get(self, request):
-        return self.render(request)
+        context = {}
+        if request.GET.get("id"):
+            event_log, _, _ = utils.get_event_log(request)
+            context.update({"event_log": event_log})
+        return self.render(request, context)
 
 
 class SelectFilterView(LogVisualizationView):
@@ -105,14 +111,16 @@ class SelectFilterView(LogVisualizationView):
 
 class FilterView(View):
     def save_filtered_log(self, df, obj_df, column_filter, parent, request):
-        filtered_log = models.FilteredLog.objects.create(parent=parent)
+        filtered_log = models.FilteredLog.objects.create(unfiltered_log=parent)
         filtered_log.name = request.POST.get("name")
 
         # code to set cookies and obtain info on which checkboxes are checked. Gives list of values of the checkboxes.
         # reference: https://stackoverflow.com/questions/29246625/django-save-checked-checkboxes-on-reload
         # https://stackoverflow.com/questions/52687188/how-to-access-the-checkbox-data-in-django-form
         # checked = [request.POST.get('object_type') for object_type in object_types]
-        filtered_log.filter = json.dumps(column_filter, default=utils.serialize_sets)
+        filtered_log.column_filter = json.dumps(
+            column_filter, default=utils.serialize_sets
+        )
         filtered_log.file.save(
             filtered_log.name + ".jsonocel", ContentFile(utils.apply_json(df, obj_df))
         )
@@ -129,6 +137,28 @@ class FilterView(View):
         checked = set(checked)
         return checked
 
+    def get(self, request):
+        event_log, df, obj_df = utils.get_event_log(request)
+        numerical, categorical, object_types = utils.get_column_types(df)
+        obj_numerical, obj_categorical, _ = utils.get_column_types(obj_df)
+
+        if isinstance(event_log, models.FilteredLog):
+            checked = json.loads(event_log.column_filter)
+        elif isinstance(event_log, models.AttributeFilteredLog):
+            checked = json.loads(event_log.column_filtered_log.column_filter)
+        else:
+            checked = []
+
+        context = {
+            "num_events": len(df),
+            "num_objects": len(obj_df),
+            "columns": ["event_activity", *categorical, *obj_categorical],
+            "list": [*numerical, *categorical],
+            "selected_filters": sorted(checked),
+            "event_log": event_log,
+        }
+        return render(request, "index/filter.html", context=context)
+
     def post(self, request):
         event_log, df, obj_df = utils.get_event_log(request)
         numerical, categorical, object_types = utils.get_column_types(df)
@@ -143,15 +173,4 @@ class FilterView(View):
         obj_df = obj_df[checked.intersection(obj_df.columns)]
         obj_df = obj_df[obj_df["object_type"].isin(checked.intersection(object_types))]
         filtered_log = self.save_filtered_log(df, obj_df, checked, event_log, request)
-
-        numerical, categorical, object_types = utils.get_column_types(df)
-        obj_numerical, obj_categorical, _ = utils.get_column_types(obj_df)
-        context = {
-            "num_events": len(df),
-            "num_objects": len(obj_df),
-            "columns": ["event_activity", *categorical, *obj_categorical],
-            "list": [*numerical, *categorical],
-            "selected_filters": sorted(checked),
-            "event_log": filtered_log,
-        }
-        return render(request, "index/filter.html", context=context)
+        return redirect(f"/filter?id={filtered_log.id}")

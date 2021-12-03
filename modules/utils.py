@@ -194,5 +194,12 @@ def get_event_log(request):
     elif request.method == "POST":
         id = request.POST.get("id")
     event_log = models.EventLog.objects.get(id=id)
+
+    # Cast event_log object to appropriate type
+    if hasattr(event_log, "filteredlog"):
+        event_log = event_log.filteredlog
+    elif hasattr(event_log, "attributefilteredlog"):
+        event_log = event_log.attributefilteredlog
+
     df, obj_df = ocel_importer.apply(event_log.file.path)
     return event_log, df, obj_df

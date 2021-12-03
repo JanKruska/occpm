@@ -1,6 +1,6 @@
 import json
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.core.files.base import ContentFile
 from django.views import View
 from numpy import object0
@@ -42,11 +42,12 @@ class LogVisualizationView(View):
 
 class VisualizeView(LogVisualizationView):
     def save_filtered_log(self, filtered_log, obj_df, filters, request):
+        parent = models.FilteredLog.objects.get(id=request.POST.get("id"))
         attr_filtered_log = models.AttributeFilteredLog(
-            parent=models.FilteredLog.objects.get(id=request.POST.get("id"))
+            column_filtered_log=parent,
         )
         attr_filtered_log.name = request.POST.get("name")
-        attr_filtered_log.filter = json.dumps(filters)
+        attr_filtered_log.cell_filter = json.dumps(filters)
         attr_filtered_log.file.save(
             attr_filtered_log.name + ".jsonocel",
             ContentFile(utils.apply_json(filtered_log, obj_df)),
@@ -63,16 +64,8 @@ class VisualizeView(LogVisualizationView):
                 filters.append([attr.strip("'") for attr in key.split("_")])
         return row, column, filters
 
-    def post(self, request):
+    def get(self, request):
         event_log, df, obj_df = utils.get_event_log(request)
-
-        row, column, filters = self.extract_filter(request)
-        # Filter log
-        filtered_log, obj_filtered = utils.filter(df, obj_df, [row, column], filters)
-        attr_filtered_log = self.save_filtered_log(
-            filtered_log, obj_filtered, filters, request
-        )
-
         # Determine attributes in filtered log
         numerical, categorical, object_attribute_list = utils.get_column_types(df)
         event_attributes = [*numerical, *categorical]
@@ -80,9 +73,7 @@ class VisualizeView(LogVisualizationView):
 
         context = {
             "num_events": len(df),
-            "num_events_filtered": len(filtered_log),
-            "filters": filters,
-            "event_log": attr_filtered_log,
+            "event_log": event_log,
             "event_attributes": self.get_event_example_value(
                 df, obj_df, event_attributes, object_attribute_list
             ).items(),
@@ -92,3 +83,14 @@ class VisualizeView(LogVisualizationView):
             ).items(),
         }
         return render(request, "vis/vis.html", context=context)
+
+    def post(self, request):
+        event_log, df, obj_df = utils.get_event_log(request)
+
+        row, column, filters = self.extract_filter(request)
+        # Filter log
+        filtered_log, obj_filtered = utils.filter(df, obj_df, [row, column], filters)
+        attr_filtered_log = self.save_filtered_log(
+            filtered_log, obj_filtered, filters, request
+        )
+        return redirect(f"/visualize?id={attr_filtered_log.id}")
