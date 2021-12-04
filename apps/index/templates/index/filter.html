@@ -3,14 +3,6 @@
 <!DOCTYPE html>
 <meta charset="utf-8" />
 {% block head %}
-<script>
-  $(document).ready(function () {
-    $( "#row-select,#column-select" ).change(function() {
-      $("#table").load("http://127.0.0.1:8000/table/"+$( "#row-select option:selected" ).attr("value")+"/"+$( "#column-select option:selected" ).attr("value")+"?id={{event_log.id}}");
-    });
-  });
-</script>
-
 <style>
   .flex-container {
     display: flex;
@@ -27,6 +19,14 @@
 {% endblock %}
 
 {% block content  %}
+<script>
+  $(document).ready(function () {
+    $( "#row-select,#column-select" ).change(function() {
+      $("#table").load("http://127.0.0.1:8000/table/"+$( "#row-select option:selected" ).attr("value")+"/"+$( "#column-select option:selected" ).attr("value")+"?id={{event_log.id}}");
+      $("#btn-create-cell").removeAttr('disabled');
+    });
+  });
+</script>
 
 <br/>
 <div class="flex-container" style="justify-content: left;">
@@ -107,6 +107,15 @@
 </div>
 
 {% comment %} <p>The log contains {{num_objects}} objects</p> {% endcomment %}
+<form id="cell-filter" method="post" action="{% url 'visualize' %}">
+  {% csrf_token %}
+<div class="d-flex flex-column">
 <div id="table">
 </div>
+<div>
+<input type="text" name="name" value="{{event_log.name}}-cell" />
+<button type="submit" class="btn btn-primary" id="btn-create-cell" disabled>Create Cell</button>
+</div>
+</div>
+</form>
 {% endblock %}

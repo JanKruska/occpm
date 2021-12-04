@@ -89,12 +89,15 @@
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Filtering</a>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="/filtering{% if event_log.id%}?id={{event_log.id}}{% endif %}">First-level Log Filter</a></li>
-                <li><a class="dropdown-item" href="/filter{% if event_log.id%}?id={{event_log.id}}{% endif %}">Second-level Log Filter</a></li>
+                <li><a class="dropdown-item" href="/filtering{% if event_log.id%}?id={{event_log.id}}{% endif %}">Column Filtering</a></li>
+                <li><a class="dropdown-item" href="/filter{% if event_log.id%}?id={{event_log.id}}{% endif %}">Row Filtering</a></li>
               </ul>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/visualize{% if event_log.id%}?id={{event_log.id}}{% endif %}">Visualization</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/comparative{% if event_log.id%}?id={{event_log.id}}{% endif %}">Comparative</a>
             </li>
           </ul>
         </div>
@@ -169,7 +172,7 @@
 
       <!div id="navbar" />
       <!div id="sidebar" />
-      <div class="content">{% block content %} {% endblock %}</div>
+      <div id="content">{% block content %} {% endblock %}</div>
 
       {% block footer %} {% endblock %}
     </div>

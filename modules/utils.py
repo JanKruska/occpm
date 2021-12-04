@@ -201,5 +201,11 @@ def get_event_log(request):
     elif hasattr(event_log, "attributefilteredlog"):
         event_log = event_log.attributefilteredlog
 
-    df, obj_df = ocel_importer.apply(event_log.file.path)
+    tuple = ocel_importer.apply(event_log.file.path)
+    #! This is not clean python, Do pull request for pm4pymdl project
+    if len(tuple) == 2:
+        df, obj_df = tuple
+    else:
+        df = tuple
+        obj_df = pd.DataFrame()
     return event_log, df, obj_df

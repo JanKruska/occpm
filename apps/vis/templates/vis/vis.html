@@ -2,7 +2,7 @@
 
 <!DOCTYPE html>
 <meta charset="utf-8" />
-{% block head %}
+ {% block content %}
 <script>
   $(document).ready(function () {
     $(document).on("click", ".attr_name", function () {
@@ -15,6 +15,7 @@
     });
   });
 </script>
+
 <script>
   $(document).ready(function () {
     $(document).on("click", "#btn-dfg", function () {
@@ -29,7 +30,6 @@
     });
   });
 </script>
-{% endblock %} {% block content %}
 <div class="vertical-flex" style="justify-content: center">
   <p>This log contains {{num_events}} events.</p>
   <br />

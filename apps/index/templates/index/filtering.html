@@ -4,37 +4,36 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 
-{% block head %}
-<script>
-  $(document).ready(function () {
-    $(document).on('click',".attr_name",function () {
-      event.preventDefault();
-      $("#figure").load("http://127.0.0.1:8000/plots/histogram/"+$(this).attr("value")+"?id={{event_log.id}}");
-    });
-  });
-</script>
-<script>
-  $(document).ready(function () {
-    $(".event-level").change(function() {
-    if(this.checked) {
-        $("#"+$(this).attr("name")).show("slow")
-    }
-    else{
-      $("#"+$(this).attr("name")).hide("slow")
-    }
-    });
-  });
-</script>
-{% endblock %}
-
 <body>
   {% block content  %}
+  <script>
+    $(document).ready(function () {
+      $(document).on('click',".attr_name",function () {
+        event.preventDefault();
+        $("#figure").load("http://127.0.0.1:8000/plots/histogram/"+$(this).attr("value")+"?id={{event_log.id}}");
+      });
+    });
+  </script>
+  <script>
+    $(document).ready(function () {
+      $(".event-level").change(function() {
+      if(this.checked) {
+          //$("#"+$(this).attr("name")).show("slow")
+          $("#"+$(this).attr("name")).addClass("d-flex").removeClass("d-none");
+      }
+      else{
+        //$("#"+$(this).attr("name")).hide("slow")
+        $("#"+$(this).attr("name")).removeClass("d-flex").addClass("d-none");
+      }
+      });
+    });
+  </script>
 
   <div>
   <span>The selected event log <b>{{event_log.name}}</b> contains a total of {{num_events}} events and {{num_objects}} objects</span>
   </div>
 
-  <form method="post" action="{% url 'filter' %}">
+  <form id="column-filter" method="post" action="{% url 'filter' %}">
   {% csrf_token %}
   <input type="hidden" name="id" value="{{event_log.id}}">
   <div class="d-flex flex-wrap flex-row align-items-center align-self-start p-2" style="margin-top: 1%;margin-left: 3%;margin-right: 3%;justify-content: center;">
@@ -60,7 +59,7 @@
         </table>
         </div>
         {% for colname, values in object_attributes %}
-        <div class="d-flex flex-column justify-content-start align-self-start p-2" id="{{colname}}" style="flex-basis: {{ column_width }}%;display: none !important; ">
+        <div class="d-none flex-column justify-content-start align-self-start p-2" id="{{colname}}" style="flex-basis: {{ column_width }}%;">
           <h2>{{colname}}</h2>
           <table class="table table-hover table-sm ">
           <thead class="table-dark">

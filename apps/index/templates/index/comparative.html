@@ -1,0 +1,62 @@
+{% extends 'index/base.html' %} 
+{% load static %} 
+{% block head %}
+<script>
+  function load_row_filtering(){
+    $.ajax({
+      url: 'http://127.0.0.1:8000/filtering?id={{event_log.id}}',
+      success: function(html) {
+        var content = $('<div />').html(html).find('#content');
+        $('#left-content').html(content);
+        $('#column-filter').submit(function(e){
+          e.preventDefault();
+          $.ajax({
+            url: e.target.action,
+            type: 'post',
+            data:$('#column-filter').serialize(),
+            success:function(a,b,c){
+              load_column_filtering(a)
+            }
+          });
+        });
+      }
+    });
+  }
+
+  function load_column_filtering(html){
+    var content = $('<div />').html(html).find('#content');
+    $('#left-content').html(content);
+    console.log($('#cell-filter'))
+    $('#cell-filter').submit(function(e){
+      console.log(e)
+      e.preventDefault();
+      $.ajax({
+        url: e.target.action,
+        type: 'post',
+        data:$('#cell-filter').serialize(),
+        success:function(a,b,c){
+          console.log(a)
+          console.log(b)
+          console.log(c)
+          load_visualization(a)
+        }
+      });
+    });
+  }
+
+  function load_visualization(html){
+    var content = $('<div />').html(html).find('#content');
+    $('#left-content').html(content);
+  }
+</script>
+<script>
+  $( document ).ready(function() {
+    //$("#left-content").load("http://127.0.0.1:8000/filtering?id={{event_log.id}} #content");
+    load_row_filtering()
+});
+</script>
+{% endblock head %}
+{% block content %}
+<div  id="left-content">
+</div>
+{% endblock content %}

@@ -174,3 +174,12 @@ class FilterView(View):
         obj_df = obj_df[obj_df["object_type"].isin(checked.intersection(object_types))]
         filtered_log = self.save_filtered_log(df, obj_df, checked, event_log, request)
         return redirect(f"/filter?id={filtered_log.id}")
+
+
+class ComparativeView(View):
+    def get(self, request):
+        event_log, _, _ = utils.get_event_log(request)
+        context = {
+            "event_log": event_log,
+        }
+        return render(request, "index/comparative.html", context=context)

@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from apps.index.views import FilterView, SelectFilterView, UploadView
+from apps.index.views import ComparativeView, FilterView, SelectFilterView, UploadView
 
 from django.conf import settings
 from django.conf.urls.static import static
@@ -31,6 +31,7 @@ urlpatterns = [
     path("table/", include("apps.dataframe_table.urls")),
     path("", UploadView.as_view(), name="upload"),
     path("visualize", VisualizeView.as_view(), name="visualize"),
+    path("comparative", ComparativeView.as_view(), name="comparative"),
 ]
 
 if settings.DEBUG:
