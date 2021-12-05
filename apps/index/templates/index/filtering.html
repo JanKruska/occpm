@@ -1,33 +1,19 @@
 {% extends 'index/base.html' %}
-
+{% load static %}
 
 <!DOCTYPE html>
 <meta charset="utf-8">
+{% block head %}
+
+<script src="{% static 'index/interactive.js' %}"></script>
+<script>
+  register_oc_table("")
+  register_histogram("",{{event_log.id}})
+</script>
+{% endblock %}
 
 <body>
   {% block content  %}
-  <script>
-    $(document).ready(function () {
-      $(document).on('click',".attr_name",function () {
-        event.preventDefault();
-        $("#figure").load("http://127.0.0.1:8000/plots/histogram/"+$(this).attr("value")+"?id={{event_log.id}}");
-      });
-    });
-  </script>
-  <script>
-    $(document).ready(function () {
-      $(".event-level").change(function() {
-      if(this.checked) {
-          //$("#"+$(this).attr("name")).show("slow")
-          $("#"+$(this).attr("name")).addClass("d-flex").removeClass("d-none");
-      }
-      else{
-        //$("#"+$(this).attr("name")).hide("slow")
-        $("#"+$(this).attr("name")).removeClass("d-flex").addClass("d-none");
-      }
-      });
-    });
-  </script>
 
   <div>
   <span>The selected event log <b>{{event_log.name}}</b> contains a total of {{num_events}} events and {{num_objects}} objects</span>

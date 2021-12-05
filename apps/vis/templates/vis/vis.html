@@ -1,35 +1,17 @@
 {% extends 'index/base.html' %}
+{% load static %}
 
 <!DOCTYPE html>
 <meta charset="utf-8" />
- {% block content %}
+{% block head%}
+<script src="{% static 'index/interactive.js' %}"></script>
 <script>
-  $(document).ready(function () {
-    $(document).on("click", ".attr_name", function () {
-      event.preventDefault();
-      $("#figure").load(
-        "http://127.0.0.1:8000/plots/histogram/" +
-          $(this).attr("value") +
-          "?id={{event_log.id}}"
-      );
-    });
-  });
+  register_dfg("",{{event_log.id}})
+  register_histogram("",{{event_log.id}})
 </script>
+{% endblock %}
 
-<script>
-  $(document).ready(function () {
-    $(document).on("click", "#btn-dfg", function () {
-      event.preventDefault();
-      $("#btn-dfg-loading").show()
-      $("#btn-dfg").hide()
-      $("#dfg").load(
-        "http://127.0.0.1:8000/plots/dfg" + "?id={{event_log.id}}&act_freq="+$("#range-act-freq").val()+"&edge_freq="+$("#range-edge-freq").val(), function() {
-          $("#btn-dfg-loading").hide()
-          $("#btn-dfg").show()
-        });
-    });
-  });
-</script>
+{% block content %}
 <div class="vertical-flex" style="justify-content: center">
   <p>This log contains {{num_events}} events.</p>
   <br />

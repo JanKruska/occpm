@@ -1,8 +1,14 @@
 {% extends 'index/base.html' %}
+{% load static %}
 
 <!DOCTYPE html>
 <meta charset="utf-8" />
 {% block head %}
+<script src="{% static 'index/interactive.js' %}"></script>
+<script>
+  register_cell_table("",{{event_log.id}})
+</script>
+
 <style>
   .flex-container {
     display: flex;
@@ -19,14 +25,6 @@
 {% endblock %}
 
 {% block content  %}
-<script>
-  $(document).ready(function () {
-    $( "#row-select,#column-select" ).change(function() {
-      $("#table").load("http://127.0.0.1:8000/table/"+$( "#row-select option:selected" ).attr("value")+"/"+$( "#column-select option:selected" ).attr("value")+"?id={{event_log.id}}");
-      $("#btn-create-cell").removeAttr('disabled');
-    });
-  });
-</script>
 
 <br/>
 <div class="flex-container" style="justify-content: left;">
