@@ -15,7 +15,7 @@ function register_oc_table(context){
 
 function register_histogram(context,id){
     $(document).ready(function () {
-        $(document).on('click',".attr_name",function () {
+        $(context + " .attr_name").on('click',function () {
           event.preventDefault();
           $(context + " #figure").load("http://127.0.0.1:8000/plots/histogram/"+$(this).attr("value")+"?id="+id);
         });

@@ -107,6 +107,7 @@
 {% comment %} <p>The log contains {{num_objects}} objects</p> {% endcomment %}
 <form id="cell-filter" method="post" action="{% url 'visualize' %}">
   {% csrf_token %}
+  <input type="hidden" name="id" value="{{event_log.id}}" />
 <div class="d-flex flex-column">
 <div id="table">
 </div>

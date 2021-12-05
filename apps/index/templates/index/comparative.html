@@ -1,21 +1,33 @@
 {% extends 'index/base.html' %} 
 {% load static %} 
 {% block head %}
+<script src="{% static 'index/interactive.js' %}"></script>
 <script>
-  function load_row_filtering(){
+  function id2target(string,target){
+    return string.replace(/(#)([^'" ]*)/gm,"$1"+target.replace("#","")+"$2")
+  }
+
+  function load_row_filtering(target){
     $.ajax({
       url: 'http://127.0.0.1:8000/filtering?id={{event_log.id}}',
       success: function(html) {
+        //html = html.replace(/(id=")(\S*")/gm,"$1"+target.replace("#","")+"$2").replace(/("#)([^'"]*")/gm,"$1"+target.replace("#","")+"$2")
+        //console.log(html)
+        //var content = $('<div />').html(html).find(id2target('#content',target));
         var content = $('<div />').html(html).find('#content');
-        $('#left-content').html(content);
-        $('#column-filter').submit(function(e){
+        //console.log()
+        //$("[id^=*]",content).attr("id","test")
+        $(target).html(content);
+        register_oc_table(target)
+        register_histogram(target,{{event_log.id}})
+        $(target).find('#column-filter').submit(function(e){
           e.preventDefault();
           $.ajax({
             url: e.target.action,
             type: 'post',
-            data:$('#column-filter').serialize(),
-            success:function(a,b,c){
-              load_column_filtering(a)
+            data:$(target).find('#column-filter').serialize(),
+            success:function(response){
+              load_column_filtering(response,target)
             }
           });
         });
@@ -23,40 +35,45 @@
     });
   }
 
-  function load_column_filtering(html){
+  function load_column_filtering(html,target){
     var content = $('<div />').html(html).find('#content');
-    $('#left-content').html(content);
-    console.log($('#cell-filter'))
-    $('#cell-filter').submit(function(e){
-      console.log(e)
+    $(target).html(content);
+    register_cell_table(target,{{event_log.id}})
+    $(target).find('#cell-filter').submit(function(e){
       e.preventDefault();
       $.ajax({
         url: e.target.action,
         type: 'post',
-        data:$('#cell-filter').serialize(),
-        success:function(a,b,c){
-          console.log(a)
-          console.log(b)
-          console.log(c)
-          load_visualization(a)
+        data:$(target).find('#cell-filter').serialize(),
+        success:function(response){
+          load_visualization(response,target)
         }
       });
     });
   }
 
-  function load_visualization(html){
+  function load_visualization(html,target){
     var content = $('<div />').html(html).find('#content');
-    $('#left-content').html(content);
+    $(target).html(content);
+    register_dfg(target,{{event_log.id}})//TODO: Use proper id from request
+    register_histogram(target,{{event_log.id}})
   }
 </script>
 <script>
   $( document ).ready(function() {
     //$("#left-content").load("http://127.0.0.1:8000/filtering?id={{event_log.id}} #content");
-    load_row_filtering()
+    load_row_filtering("#left-content")
+    load_row_filtering("#right-content")
 });
 </script>
 {% endblock head %}
 {% block content %}
-<div  id="left-content">
+<div class="container-fluid" >
+  <div class="row">
+<div class="col" id="left-content">
+</div>
+<div class="col" id="right-content">
+</div>
+</div>
 </div>
 {% endblock content %}
