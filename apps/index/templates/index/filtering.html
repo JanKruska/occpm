@@ -9,6 +9,7 @@
 <script>
   register_oc_table("")
   register_histogram("",{{event_log.id}})
+  onclick_hide_show("","#btn-submit","#btn-submit","#btn-submit-loading")
 </script>
 {% endblock %}
 
@@ -73,7 +74,11 @@
         <div class=" col-5">
               <p>Name for filtered log: 
               <input type="text" name="name" value="{{event_log.name}}-filtered">
-                <input type="submit" value="Create Cubes" class="btn btn-primary mb-2" />
+                <input class="btn btn-primary mb-2" type="submit" id="btn-submit" value="Create Cubes"  />
+                <button class="btn btn-primary" type="button" id="btn-submit-loading" style="display: none !important; " disabled>
+                  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  Loading...
+                </button>
               </p>
           </form>
       </div>

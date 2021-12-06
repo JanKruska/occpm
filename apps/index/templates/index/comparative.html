@@ -20,6 +20,7 @@
         $(target).html(content);
         register_oc_table(target)
         register_histogram(target,{{event_log.id}})
+        onclick_hide_show(target,"#btn-submit","#btn-submit","#btn-submit-loading")
         $(target).find('#column-filter').submit(function(e){
           e.preventDefault();
           $.ajax({
@@ -39,6 +40,7 @@
     var content = $('<div />').html(html).find('#content');
     $(target).html(content);
     register_cell_table(target,{{event_log.id}})
+    onclick_hide_show(target,"#btn-create-cell","#btn-create-cell","#btn-create-cell-loading")
     $(target).find('#cell-filter').submit(function(e){
       e.preventDefault();
       $.ajax({

@@ -25,6 +25,7 @@ function register_histogram(context,id){
 function register_cell_table(context,id){
     $(document).ready(function () {
         $(context + " #row-select,#column-select" ).change(function() {
+          $(context + " #table").html('<div class="spinner-border" role="status"></div>');
           $(context + " #table").load("http://127.0.0.1:8000/table/"+$( "#row-select option:selected" ).attr("value")+"/"+$( "#column-select option:selected" ).attr("value")+"?id="+id);
           $(context + " #btn-create-cell").removeAttr('disabled');
         });
@@ -44,4 +45,13 @@ function register_dfg(context,id){
             });
         });
       });
+}
+
+function onclick_hide_show(context,element,normal,loading){
+  $(document).ready(function () {
+    $(context + " " +element).on("click", function () {
+      $(context + " " + normal).hide();
+      $(context + " " + loading).show();
+  });
+  });
 }
