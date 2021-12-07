@@ -41,7 +41,6 @@ class TableView(View):
             "rows": rows.items(),
             "row": row,
             "column": column,
-            "log_id": request.GET.get("id"),
             "event_log": event_log,
         }
         return render(request, "dataframe_table/table.html", context=context)
