@@ -151,4 +151,4 @@ MEDIA_URL = "/media/"
 EVENT_LOG_URL = None
 
 # directory for markdown view 
-#MARKDOWN_VIEW_BASE_DIR = 
+MARKDOWN_VIEW_TEMPLATE = "index/markdown.html"
