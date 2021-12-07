@@ -55,3 +55,9 @@ function onclick_hide_show(context,element,normal,loading){
   });
   });
 }
+
+function set_navbar_active(element){
+  $(document).ready(function () {
+    $(element).addClass("active")
+  });
+}

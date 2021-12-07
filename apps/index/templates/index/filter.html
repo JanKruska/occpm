@@ -6,6 +6,7 @@
 {% block head %}
 <script src="{% static 'index/interactive.js' %}"></script>
 <script>
+  set_navbar_active("#nav-filtering")
   register_cell_table("",{{event_log.id}})
   onclick_hide_show("","#btn-create-cell","#btn-create-cell","#btn-create-cell-loading")
 </script>

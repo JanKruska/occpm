@@ -3,6 +3,8 @@
 {% block head %}
 <script src="{% static 'index/interactive.js' %}"></script>
 <script>
+  set_navbar_active("#nav-comparative")
+
   function id2target(string,target){
     return string.replace(/(#)([^'" ]*)/gm,"$1"+target.replace("#","")+"$2")
   }

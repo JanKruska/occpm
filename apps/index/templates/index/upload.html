@@ -1,4 +1,11 @@
-{% extends 'index/base.html' %} {% load static %} {% block content %}
+{% extends 'index/base.html' %} {% load static %} 
+{% block head %}
+<script src="{% static 'index/interactive.js' %}"></script>
+<script>
+  set_navbar_active("#nav-upload")
+</script>
+{% endblock %}
+{% block content %}
 <div class="container-fluid" style="text-align: left">
   <h3 class="mt-4" style="color: #00529f">Event Logs</h3>
   <br />

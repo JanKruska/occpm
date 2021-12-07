@@ -84,23 +84,23 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="nav nav-tabs ">
             <li class="nav-item">
-              <a class="nav-link" href="/{% if event_log.id%}?id={{event_log.id}}{% endif %}">Upload</a>
+              <a class="nav-link" id="nav-upload" href="/{% if event_log.id%}?id={{event_log.id}}{% endif %}">Upload</a>
             </li>
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Filtering</a>
+              <a class="nav-link dropdown-toggle" id="nav-filtering" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Filtering</a>
               <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="/filtering{% if event_log.id%}?id={{event_log.id}}{% endif %}">Column Filtering</a></li>
                 <li><a class="dropdown-item" href="/filter{% if event_log.id%}?id={{event_log.id}}{% endif %}">Row Filtering</a></li>
               </ul>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/visualize{% if event_log.id%}?id={{event_log.id}}{% endif %}">Visualization</a>
+              <a class="nav-link" id="nav-visualization" href="/visualize{% if event_log.id%}?id={{event_log.id}}{% endif %}">Visualization</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/comparative{% if event_log.id%}?id={{event_log.id}}{% endif %}">Comparative</a>
+              <a class="nav-link" id="nav-comparative" href="/comparative{% if event_log.id%}?id={{event_log.id}}{% endif %}">Comparative</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/documentation">User Manual</a>
+              <a class="nav-link" id="nav-user-manual" href="/documentation">User Manual</a>
             </li>
           </ul>
         </div>
