@@ -22,6 +22,8 @@ from django.conf.urls.static import static
 from apps.index import views
 from apps.vis.views import VisualizeView
 
+from markdown_view.views import MarkdownView
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     # path("", include("apps.index.urls")),
@@ -32,6 +34,10 @@ urlpatterns = [
     path("", UploadView.as_view(), name="upload"),
     path("visualize", VisualizeView.as_view(), name="visualize"),
     path("comparative", ComparativeView.as_view(), name="comparative"),
+   # path("documentation/", include("apps.documentation.urls"))
+   path('documentation/', MarkdownView.as_view(file_name='/README.md'),
+    name="documentation"),
+
 ]
 
 if settings.DEBUG:

@@ -1,0 +1,7 @@
+{% load static %} 
+
+{% load templatetags/markdown_extras %}
+
+<p>{{% static 'README.md' | markdown | safe %}}</p>
+
+
