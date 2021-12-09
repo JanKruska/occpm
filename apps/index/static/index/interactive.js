@@ -17,7 +17,7 @@ function register_histogram(context,id){
     $(document).ready(function () {
         $(context + " .attr_name").on('click',function () {
           event.preventDefault();
-          $(context + " #figure").load("http://127.0.0.1:8000/plots/histogram/"+$(this).attr("value")+"?id="+id);
+          $(context + " #figure").load("/plots/histogram/"+$(this).attr("value")+"?id="+id);
         });
       });
 }
@@ -26,7 +26,7 @@ function register_cell_table(context,id){
     $(document).ready(function () {
         $(context + " #row-select,#column-select" ).change(function() {
           $(context + " #table").html('<div class="spinner-border" role="status"></div>');
-          $(context + " #table").load("http://127.0.0.1:8000/table/"+$( "#row-select option:selected" ).attr("value")+"/"+$( "#column-select option:selected" ).attr("value")+"?id="+id);
+          $(context + " #table").load("/table/"+$( "#row-select option:selected" ).attr("value")+"/"+$( "#column-select option:selected" ).attr("value")+"?id="+id);
           $(context + " #btn-create-cell").removeAttr('disabled');
         });
       });
@@ -39,7 +39,7 @@ function register_dfg(context,id){
           $(context + " #btn-dfg-loading").show()
           $(context + " #btn-dfg").hide()
           $("#dfg").load(
-            "http://127.0.0.1:8000/plots/dfg" + "?id="+id+"&act_freq="+$("#range-act-freq").val()+"&edge_freq="+$("#range-edge-freq").val(), function() {
+            "/plots/dfg" + "?id="+id+"&act_freq="+$("#range-act-freq").val()+"&edge_freq="+$("#range-edge-freq").val(), function() {
               $(context + " #btn-dfg-loading").hide()
               $(context + " #btn-dfg").show()
             });

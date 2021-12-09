@@ -6,7 +6,18 @@ Source code for our project «Object-Centric Comparative Process Mining» in the
 
 # Installation
 
-## Environment
+## Using Docker
+The code comes with a Dockerfile to build and run the application inside a [docker](https://www.docker.com/) container
+To build the container run
+```
+docker build --rm -t occpm:latest .
+```
+After the container is build the webapp can be run using
+```
+docker run -p 8000:8000 occpm
+```
+## Manual Install
+### Environment
 
 When using conda you can create an environment from the provided `environment.yml` by:
 
@@ -17,11 +28,11 @@ $ conda activate occpm
 
 If any dependency is missing please add it and only it to `environment.yml` without specifying a version number and please **do not** use `conda env export > environment.yml` since one should avoid hard references to specific package versions unless explicitly necessary.
 
-### Static environment
+#### Static environment
 
 If the environment created from `environment.yml` does not work you can try using `environment_static.yml`(which was created using `conda env export > environment_static.yml`) to obtain an environment with the exact versions used during development, however this is not guaranteed to work across OS's and if possible one should not use out-of-date versions of packages.
 
-# Running the server
+### Running the server
 
 To run the application execute:
 

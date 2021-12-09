@@ -7,6 +7,7 @@ dependencies:
   - pip:
       - django
       - django-cleanup
+      - django-markdown-view
       - pandas
       - plantuml
       - pm4py

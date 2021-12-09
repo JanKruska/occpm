@@ -11,7 +11,7 @@
 
   function load_row_filtering(target){
     $.ajax({
-      url: 'http://127.0.0.1:8000/filtering?id={{event_log.id}}',
+      url: '/filtering?id={{event_log.id}}',
       success: function(html) {
         //html = html.replace(/(id=")(\S*")/gm,"$1"+target.replace("#","")+"$2").replace(/("#)([^'"]*")/gm,"$1"+target.replace("#","")+"$2")
         //console.log(html)
@@ -65,7 +65,7 @@
 </script>
 <script>
   $( document ).ready(function() {
-    //$("#left-content").load("http://127.0.0.1:8000/filtering?id={{event_log.id}} #content");
+    //$("#left-content").load("/filtering?id={{event_log.id}} #content");
     load_row_filtering("#left-content")
     load_row_filtering("#right-content")
 });
