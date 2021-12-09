@@ -65,6 +65,7 @@ class DFGView(View):
         model = discovery.apply(df, parameters={"epsilon": 0, "noise_threshold": 0})
         gviz = visualizer.apply(
             model,
+            measure=request.GET.get("measure", "frequency"),
             parameters={
                 "min_act_freq": int(request.GET.get("act_freq", 100)),
                 "min_edge_freq": int(request.GET.get("edge_freq", 100)),

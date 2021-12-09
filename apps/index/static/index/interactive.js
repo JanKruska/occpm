@@ -34,17 +34,30 @@ function register_cell_table(context,id){
 
 function register_dfg(context,id){
     $(document).ready(function () {
-        $(document).on("click", "#btn-dfg", function () {
+        $(document).on("click", "#btn-dfg-freq", function () {
           event.preventDefault();
-          $(context + " #btn-dfg-loading").show()
-          $(context + " #btn-dfg").hide()
+          loading_show(context,"#btn-dfg-freq")
           $("#dfg").load(
-            "/plots/dfg" + "?id="+id+"&act_freq="+$("#range-act-freq").val()+"&edge_freq="+$("#range-edge-freq").val(), function() {
-              $(context + " #btn-dfg-loading").hide()
-              $(context + " #btn-dfg").show()
+            "/plots/dfg" + "?id="+id
+            +"&act_freq="+$("#range-act-freq").val()
+            +"&edge_freq="+$("#range-edge-freq").val()
+            +"&measure=frequency", function() {
+              loading_hide(context,"#btn-dfg-freq")
             });
         });
+      $(document).on("click", "#btn-dfg-perf", function () {
+        event.preventDefault();
+        loading_show(context,"#btn-dfg-perf")
+        $("#dfg").load(
+          "/plots/dfg" 
+          + "?id="+id
+          +"&act_freq="+$("#range-act-freq").val()
+          +"&edge_freq="+$("#range-edge-freq").val()
+          +"&measure=performance", function() {
+            loading_hide(context,"#btn-dfg-perf")
+          });
       });
+    });
 }
 
 function onclick_hide_show(context,element,normal,loading){
@@ -54,6 +67,16 @@ function onclick_hide_show(context,element,normal,loading){
       $(context + " " + loading).show();
   });
   });
+}
+
+function loading_show(context,button){
+  $(context + " " + button +"-loading").show()
+  $(context + " " + button).hide()
+}
+
+function loading_hide(context,button){
+  $(context + " " + button +"-loading").hide()
+  $(context + " " + button).show()
 }
 
 function set_navbar_active(element){

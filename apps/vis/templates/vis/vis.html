@@ -128,11 +128,18 @@
     justify-content: center;
   "
 >
-<button class="btn btn-primary" type="button" id="btn-dfg">Display DFG</button>
-<button class="btn btn-primary" type="button" id="btn-dfg-loading" style="display: none !important; " disabled>
+<div class="flex-row">
+<button class="btn btn-primary" type="button" id="btn-dfg-freq">Display Frequency DFG</button>
+<button class="btn btn-primary" type="button" id="btn-dfg-freq-loading" style="display: none !important; " disabled>
   <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
   Loading...
 </button>
+<button class="btn btn-primary" type="button" id="btn-dfg-perf">Display Performance DFG</button>
+<button class="btn btn-primary" type="button" id="btn-dfg-perf-loading" style="display: none !important; " disabled>
+  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+  Loading...
+</button>
+</div>
 <div id="dfg" style="flex-basis: 100%"></div>
 </div>
 {% endblock %}
