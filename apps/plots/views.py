@@ -1,4 +1,5 @@
 import os
+import tempfile
 
 from django.http.response import Http404, HttpResponse
 from django.shortcuts import render
@@ -16,7 +17,10 @@ from pm4pymdl.algo.mvp.utils import (
     exploded_mdl_to_succint_mdl,
 )
 from pm4pymdl.algo.mvp.gen_framework3 import discovery
-from pm4pymdl.visualization.mvp.gen_framework3 import visualizer as visualizer
+from pm4pymdl.visualization.mvp.gen_framework3 import visualizer as dfg_visualizer
+from pm4pymdl.algo.mvp.get_logs_and_replay import algorithm as petri_disc_factory
+from pm4pymdl.visualization.mvp.gen_framework import visualizer as mdfg_vis_factory
+from pm4pymdl.visualization.petrinet import visualizer as pn_vis_factory
 
 
 import modules.plots as plots
@@ -63,7 +67,7 @@ class DFGView(View):
         event_log, df, obj_df = utils.get_event_log(request)
 
         model = discovery.apply(df, parameters={"epsilon": 0, "noise_threshold": 0})
-        gviz = visualizer.apply(
+        gviz = dfg_visualizer.apply(
             model,
             measure=request.GET.get("measure", "frequency"),
             parameters={
@@ -72,41 +76,25 @@ class DFGView(View):
             },
         )
 
-        visualizer.save(gviz, os.path.join(settings.MEDIA_ROOT, "test.png"))
+        dfg_visualizer.save(gviz, os.path.join(settings.MEDIA_ROOT, "dfg.png"))
         return render(
             request,
             "plots/image.html",
-            context={"image": settings.MEDIA_URL + "test.png"},
+            context={"image": settings.MEDIA_URL + "dfg.png"},
         )
 
 
-# def dfg_to_g6(dfg):
-#     unique_nodes = []
-#     # print(dfg)
-#     for i in dfg:
-#         unique_nodes.extend(i)
-#     unique_nodes = list(set(unique_nodes))
+class PetriNetView(View):
+    def get(self, request):
+        event_log, df, obj_df = utils.get_event_log(request)
 
-#     unique_nodes_dict = {}
-
-#     for index, node in enumerate(unique_nodes):
-#         unique_nodes_dict[node] = "node_" + str(index)
-
-#     nodes = [{'id': unique_nodes_dict[i], 'name': i, 'isUnique':False, 'conf': [
-#         {
-#             'label': 'Name',
-#             'value': i
-#         }
-#     ]} for i in unique_nodes_dict]
-#     freqList = [int(dfg[i]) for i in dfg]
-#     maxVal = max(freqList) if len(freqList) != 0 else 0
-#     minVal = min(freqList) if len(freqList) != 0 else 0
-
-#     edges = [{'source': unique_nodes_dict[i[0]], 'target': unique_nodes_dict[i[1]], 'label': round(dfg[i], 2),
-#               "style": {"lineWidth": ((int(dfg[i]) - minVal) / (maxVal - minVal) * (20 - 2) + 2), "endArrow": True}} for
-#              i in
-#              dfg]
-#     data = {
-#         "nodes": nodes,
-#         "edges": edges,
-#     }
+        model = petri_disc_factory.apply(
+            df, parameters={"min_node_freq": 100, "min_edge_freq": 100}
+        )
+        gviz = pn_vis_factory.apply(model, parameters={"format": "svg"})
+        mdfg_vis_factory.save(gviz, os.path.join(settings.MEDIA_ROOT, "petri.svg"))
+        return render(
+            request,
+            "plots/image.html",
+            context={"image": settings.MEDIA_URL + "petri.svg"},
+        )

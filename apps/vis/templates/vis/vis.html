@@ -1,23 +1,22 @@
-{% extends 'index/base.html' %}
-{% load static %}
+{% extends 'index/base.html' %} {% load static %}
 
 <!DOCTYPE html>
 <meta charset="utf-8" />
 {% block head%}
 <script src="{% static 'index/interactive.js' %}"></script>
 <script>
-  register_dfg("",{{event_log.id}})
+  register_vis_buttons("",{{event_log.id}})
   register_histogram("",{{event_log.id}})
   set_navbar_active("#nav-visualization")
 </script>
-{% endblock %}
-
-{% block content %}
+{% endblock %} {% block content %}
 <div class="vertical-flex" style="justify-content: center">
   <p>This log contains {{num_events}} events.</p>
   <br />
 
-  {% if event_log.cell_filter%}<p>The chosen filters were {{event_log.cell_filter}}</p>{% endif %}
+  {% if event_log.cell_filter%}
+  <p>The chosen filters were {{event_log.cell_filter}}</p>
+  {% endif %}
 </div>
 <div
   class="d-flex flex-wrap flex-row align-self-start p-2"
@@ -73,73 +72,219 @@
 </div>
 <div id="figure" style="flex-basis: 100%"></div>
 
-<div
-  class="d-flex flex-row p-2 align-items-center"
-  style="
-    margin-top: 1%;
-    margin-left: 3%;
-    margin-right: 3%;
-    justify-content: center;
-  "
->
-  <label for="customRange2" class="form-label p-2"
-    >Minimum Edge Frequency:</label
+<!-- Visualization Displays-->
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button
+      class="nav-link active"
+      id="nav-dfg"
+      data-bs-toggle="tab"
+      data-bs-target="#div-dfg"
+      type="button"
+      role="tab"
+      aria-controls="dfg"
+      aria-selected="true"
+    >
+      DFGs
+    </button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button
+      class="nav-link"
+      id="nav-petri"
+      data-bs-toggle="tab"
+      data-bs-target="#div-petri"
+      type="button"
+      role="tab"
+      aria-controls="petri"
+      aria-selected="false"
+    >
+      Petri Nets
+    </button>
+  </li>
+</ul>
+<div class="tab-content" id="myTabContent">
+  <div
+    class="tab-pane fade show active"
+    id="div-dfg"
+    role="tabpanel"
+    aria-labelledby="nav-dfg"
   >
-  <span class="p-2">0</span>
-  <input
-    type="range"
-    class="form-range p-2"
-    min="0"
-    max="1000"
-    id="range-edge-freq"
-  />
-  <span class="p-2">1000</span>
+    <div
+      class="d-flex flex-row p-2 align-items-center"
+      style="
+        margin-top: 1%;
+        margin-left: 3%;
+        margin-right: 3%;
+        justify-content: center;
+      "
+    >
+      <label for="customRange2" class="form-label p-2"
+        >Minimum Edge Frequency:</label
+      >
+      <span class="p-2">0</span>
+      <input
+        type="range"
+        class="form-range p-2"
+        min="0"
+        max="1000"
+        id="range-edge-freq"
+      />
+      <span class="p-2">1000</span>
+    </div>
+    <div
+    class="d-flex flex-row p-2 align-items-center"
+    style="
+      margin-top: 1%;
+      margin-left: 3%;
+      margin-right: 3%;
+      justify-content: center;
+    "
+  >
+    
+      <label for="customRange2" class="form-label p-2"
+        >Minimum Activity Frequency:</label
+      >
+      <span class="p-2">0</span>
+      <input
+        type="range"
+        class="form-range p-2"
+        min="0"
+        max="1000"
+        id="range-act-freq"
+      />
+      <span class="p-2">1000</span>
+    </div>
+    <div
+      class="d-flex flex-column p-2 align-items-center"
+      style="
+        margin-top: 1%;
+        margin-left: 3%;
+        margin-right: 3%;
+        justify-content: center;
+      "
+    >
+      <div class="flex-row">
+        <button class="btn btn-primary" type="button" id="btn-dfg-freq">
+          Display Frequency DFG
+        </button>
+        <button
+          class="btn btn-primary"
+          type="button"
+          id="btn-dfg-freq-loading"
+          style="display: none !important"
+          disabled
+        >
+          <span
+            class="spinner-border spinner-border-sm"
+            role="status"
+            aria-hidden="true"
+          ></span>
+          Loading...
+        </button>
+        <button class="btn btn-primary" type="button" id="btn-dfg-perf">
+          Display Performance DFG
+        </button>
+        <button
+          class="btn btn-primary"
+          type="button"
+          id="btn-dfg-perf-loading"
+          style="display: none !important"
+          disabled
+        >
+          <span
+            class="spinner-border spinner-border-sm"
+            role="status"
+            aria-hidden="true"
+          ></span>
+          Loading...
+        </button>
+      </div>
+      <div id="dfg" style="flex-basis: 100%"></div>
+    </div>
+    </div>
+    <div
+      class="tab-pane fade"
+      id="div-petri"
+      role="tabpanel"
+      aria-labelledby="nav-petri"
+    >
+    <div
+      class="d-flex flex-row p-2 align-items-center"
+      style="
+        margin-top: 1%;
+        margin-left: 3%;
+        margin-right: 3%;
+        justify-content: center;
+      "
+    >
+      <label for="customRange2" class="form-label p-2"
+        >Minimum Edge Frequency:</label
+      >
+      <span class="p-2">0</span>
+      <input
+        type="range"
+        class="form-range p-2"
+        min="0"
+        max="1000"
+        id="range-edge-freq"
+      />
+      <span class="p-2">1000</span>
+    </div>
+    <div
+    class="d-flex flex-row p-2 align-items-center"
+    style="
+      margin-top: 1%;
+      margin-left: 3%;
+      margin-right: 3%;
+      justify-content: center;
+    "
+  >
+    
+      <label for="customRange2" class="form-label p-2"
+        >Minimum Activity Frequency:</label
+      >
+      <span class="p-2">0</span>
+      <input
+        type="range"
+        class="form-range p-2"
+        min="0"
+        max="1000"
+        id="range-act-freq"
+      />
+      <span class="p-2">1000</span>
+    </div>
+    <div
+      class="d-flex flex-column p-2 align-items-center"
+      style="
+        margin-top: 1%;
+        margin-left: 3%;
+        margin-right: 3%;
+        justify-content: center;
+      "
+    >
+      <div class="flex-row">
+        <button class="btn btn-primary" type="button" id="btn-petri">
+          Display Petri Net
+        </button>
+        <button
+          class="btn btn-primary"
+          type="button"
+          id="btn-petri-loading"
+          style="display: none !important"
+          disabled
+        >
+          <span
+            class="spinner-border spinner-border-sm"
+            role="status"
+            aria-hidden="true"
+          ></span>
+          Loading...
+        </button>
+      </div>
+    <div id="petri" style="flex-basis: 100%"></div>
+    </div>
+  </div>
 </div>
 
-<div
-  class="d-flex flex-row p-2 align-items-center"
-  style="
-    margin-top: 1%;
-    margin-left: 3%;
-    margin-right: 3%;
-    justify-content: center;
-  "
->
-  <label for="customRange2" class="form-label p-2"
-    >Minimum Activity Frequency:</label
-  >
-  <span class="p-2">0</span>
-  <input
-    type="range"
-    class="form-range p-2"
-    min="0"
-    max="1000"
-    id="range-act-freq"
-  />
-  <span class="p-2">1000</span>
-</div>
-
-<div
-  class="d-flex flex-column p-2 align-items-center"
-  style="
-    margin-top: 1%;
-    margin-left: 3%;
-    margin-right: 3%;
-    justify-content: center;
-  "
->
-<div class="flex-row">
-<button class="btn btn-primary" type="button" id="btn-dfg-freq">Display Frequency DFG</button>
-<button class="btn btn-primary" type="button" id="btn-dfg-freq-loading" style="display: none !important; " disabled>
-  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-  Loading...
-</button>
-<button class="btn btn-primary" type="button" id="btn-dfg-perf">Display Performance DFG</button>
-<button class="btn btn-primary" type="button" id="btn-dfg-perf-loading" style="display: none !important; " disabled>
-  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-  Loading...
-</button>
-</div>
-<div id="dfg" style="flex-basis: 100%"></div>
-</div>
 {% endblock %}

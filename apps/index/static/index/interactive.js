@@ -32,31 +32,42 @@ function register_cell_table(context,id){
       });
 }
 
-function register_dfg(context,id){
+function register_vis_buttons(context,id){
     $(document).ready(function () {
         $(document).on("click", "#btn-dfg-freq", function () {
           event.preventDefault();
           loading_show(context,"#btn-dfg-freq")
           $("#dfg").load(
             "/plots/dfg" + "?id="+id
-            +"&act_freq="+$("#range-act-freq").val()
-            +"&edge_freq="+$("#range-edge-freq").val()
+            +"&act_freq="+$("#div-dfg #range-act-freq").val()
+            +"&edge_freq="+$("#div-dfg #range-edge-freq").val()
             +"&measure=frequency", function() {
               loading_hide(context,"#btn-dfg-freq")
             });
         });
-      $(document).on("click", "#btn-dfg-perf", function () {
-        event.preventDefault();
-        loading_show(context,"#btn-dfg-perf")
-        $("#dfg").load(
-          "/plots/dfg" 
-          + "?id="+id
-          +"&act_freq="+$("#range-act-freq").val()
-          +"&edge_freq="+$("#range-edge-freq").val()
-          +"&measure=performance", function() {
-            loading_hide(context,"#btn-dfg-perf")
-          });
-      });
+        $(document).on("click", "#btn-dfg-perf", function () {
+          event.preventDefault();
+          loading_show(context,"#btn-dfg-perf")
+          $("#dfg").load(
+            "/plots/dfg" 
+            + "?id="+id
+            +"&act_freq="+$("#div-dfg #range-act-freq").val()
+            +"&edge_freq="+$("#div-dfg #range-edge-freq").val()
+            +"&measure=performance", function() {
+              loading_hide(context,"#btn-dfg-perf")
+            });
+        });
+        $(document).on("click", "#btn-petri", function () {
+          event.preventDefault();
+          loading_show(context,"#btn-petri")
+          $("#petri").load(
+            "/plots/petri" 
+            + "?id="+id
+            +"&act_freq="+$("#div-petri #range-act-freq").val()
+            +"&edge_freq="+$("#div-petri #range-edge-freq").val(), function() {
+              loading_hide(context,"#btn-petri")
+            });
+        });
     });
 }
 

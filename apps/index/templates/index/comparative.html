@@ -59,7 +59,7 @@
   function load_visualization(html,target){
     var content = $('<div />').html(html).find('#content');
     $(target).html(content);
-    register_dfg(target,{{event_log.id}})//TODO: Use proper id from request
+    register_vis_buttons(target,{{event_log.id}})//TODO: Use proper id from request
     register_histogram(target,{{event_log.id}})
   }
 </script>
