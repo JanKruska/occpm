@@ -9,24 +9,26 @@
     return string.replace(/(#)([^'" ]*)/gm,"$1"+target.replace("#","")+"$2")
   }
 
-  function load_row_filtering(target){
+  function load_column_filtering(target){
     $.ajax({
       url: '/filtering?id={{event_log.id}}',
       success: function(html) {
         var content = $('<div />').html(html).find('#content');
-        $(target).html(content);
+        $(target+"-column-filtering").html(content);
         var id = content.find('[name="id"]').attr("value")
         register_oc_table(target)
-        register_histogram(target,id)
-        onclick_hide_show(target,"#btn-submit","#btn-submit","#btn-submit-loading")
+        register_histogram(target+"-column-filtering",id)
         $(target).find('#column-filter').submit(function(e){
           e.preventDefault();
+          loading_show(target,"#btn-submit")
           $.ajax({
             url: e.target.action,
             type: 'post',
             data:$(target).find('#column-filter').serialize(),
             success:function(response){
-              load_column_filtering(response,target)
+              load_row_filtering(response,target)
+              loading_hide(target,"#btn-submit")
+              $(target+"-column-filtering").parent().collapse("hide")
             }
           });
         });
@@ -34,20 +36,23 @@
     });
   }
 
-  function load_column_filtering(html,target){
+  function load_row_filtering(html,target){
     var content = $('<div />').html(html).find('#content');
     var id = content.find('[name="id"]').attr("value");
-    $(target).html(content);
+    $(target+"-row-filtering").html(content);
+    $(target+"-row-filtering").parent().collapse("show")
     register_cell_table(target,id)
-    onclick_hide_show(target,"#btn-create-cell","#btn-create-cell","#btn-create-cell-loading")
     $(target).find('#cell-filter').submit(function(e){
       e.preventDefault();
+      loading_show(target,"#btn-create-cell")
       $.ajax({
         url: e.target.action,
         type: 'post',
         data:$(target).find('#cell-filter').serialize(),
         success:function(response){
           load_visualization(response,target)
+          loading_hide(target,"#btn-create-cell")
+          $(target + "-row-filtering").parent().collapse("hide")
         }
       });
     });
@@ -56,16 +61,17 @@
   function load_visualization(html,target){
     var content = $('<div />').html(html).find('#content');
     var id = content.find('[name="id"]').attr("value")
-    $(target).html(content);
+    $(target+"-visualization").html(content);
+    $(target+"-visualization").parent().collapse("show")
     register_vis_buttons(target,id)
-    register_histogram(target,id)
+    register_histogram(target+"-visualization",id)
   }
 </script>
 <script>
   $( document ).ready(function() {
     //$("#left-content").load("/filtering?id={{event_log.id}} #content");
-    load_row_filtering("#left-content")
-    load_row_filtering("#right-content")
+    load_column_filtering("#left-content")
+    load_column_filtering("#right-content")
 });
 </script>
 {% endblock head %}
@@ -73,8 +79,78 @@
 <div class="container-fluid" >
   <div class="row">
 <div class="col" id="left-content">
+  <div class="accordion" id="accordionPanelsStayOpenExample">
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+          Column Filtering
+        </button>
+      </h2>
+      <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
+        <div class="accordion-body" id="left-content-column-filtering">
+        </div>
+      </div>
+    </div>
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+          Row Filtering
+        </button>
+      </h2>
+      <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
+        <div class="accordion-body" id="left-content-row-filtering">
+        </div>
+      </div>
+    </div>
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="panelsStayOpen-headingThree">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
+          Visualization
+        </button>
+      </h2>
+      <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
+        <div class="accordion-body" id="left-content-visualization">
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 <div class="col" id="right-content">
+  <div class="accordion" id="accordionPanelsStayOpenExample">
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+          Column Filtering
+        </button>
+      </h2>
+      <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
+        <div class="accordion-body" id="right-content-column-filtering">
+        </div>
+      </div>
+    </div>
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+          Row Filtering
+        </button>
+      </h2>
+      <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
+        <div class="accordion-body" id="right-content-row-filtering">
+        </div>
+      </div>
+    </div>
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="panelsStayOpen-headingThree">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
+          Visualization
+        </button>
+      </h2>
+      <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
+        <div class="accordion-body" id="right-content-visualization">
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 </div>
 </div>
