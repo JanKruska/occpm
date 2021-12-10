@@ -231,4 +231,6 @@ def event_log_by_hash(serialized_string):
         hash = sha512hasher.hash_file(temp.name)
     logs = [obj for obj in models.EventLog.objects.all() if obj.hash == hash]
     if logs:
-        return cast_event_log(logs[0])
+        return hash, cast_event_log(logs[0])
+    else:
+        return hash, None

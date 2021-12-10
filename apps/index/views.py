@@ -53,7 +53,7 @@ class UploadView(View):
     def upload(self, request):
         context = {}
         myfile = request.FILES["myfile"]
-        event_log = utils.event_log_by_hash(myfile.read())
+        hash, event_log = utils.event_log_by_hash(myfile.read())
         if event_log is None:
             event_log = models.EventLog.objects.create()
             event_log.name = os.path.splitext(myfile.name)[0]
@@ -113,10 +113,11 @@ class SelectFilterView(LogVisualizationView):
 class FilterView(View):
     def save_filtered_log(self, df, obj_df, column_filter, parent, request):
         json_string = utils.apply_json(df, obj_df)
-        filtered_log = utils.event_log_by_hash(json_string.encode())
+        hash, filtered_log = utils.event_log_by_hash(json_string.encode())
         if filtered_log is None:
             filtered_log = models.FilteredLog.objects.create(unfiltered_log=parent)
             filtered_log.name = request.POST.get("name")
+            filtered_log.hash = hash
 
             # code to set cookies and obtain info on which checkboxes are checked. Gives list of values of the checkboxes.
             # reference: https://stackoverflow.com/questions/29246625/django-save-checked-checkboxes-on-reload
