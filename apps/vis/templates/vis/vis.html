@@ -10,6 +10,24 @@
   set_navbar_active("#nav-visualization")
 </script>
 {% endblock %} {% block content %}
+<script>
+  $(document).ready(function () {
+  $('.nav-tabs li button').click(function (e) {     
+    e.preventDefault()
+    //get selected href
+    var href = $(this).attr('href');    
+    
+    //set all nav tabs to inactive
+    $('.nav-tabs button').removeClass('active');
+    
+    //get all nav tabs matching the href and set to active
+    $('.nav-tabs button[href="'+href+'"]').addClass('active');
+    //active tab
+    $('.tab-pane').removeClass('show active');
+    $('.tab-pane'+href).addClass('show active');
+})
+});
+</script>
 <div class="vertical-flex" style="justify-content: center">
   <input type="hidden" name="id" value="{{event_log.id}}">
   <p>This log contains {{num_events}} events.</p>
@@ -79,8 +97,9 @@
     <button
       class="nav-link active"
       id="nav-dfg"
-      data-bs-toggle="tab"
-      data-bs-target="#div-dfg"
+      _data-bs-toggle="tab"
+      _data-bs-target="#div-dfg"
+      href="#div-dfg"
       type="button"
       role="tab"
       aria-controls="dfg"
@@ -93,8 +112,9 @@
     <button
       class="nav-link"
       id="nav-petri"
-      data-bs-toggle="tab"
-      data-bs-target="#div-petri"
+      _data-bs-toggle="tab"
+      _data-bs-target="#div-petri"
+      href="#div-petri"
       type="button"
       role="tab"
       aria-controls="petri"

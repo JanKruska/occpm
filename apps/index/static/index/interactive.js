@@ -24,9 +24,9 @@ function register_histogram(context,id){
 
 function register_cell_table(context,id){
     $(document).ready(function () {
-        $(context + " #row-select,#column-select" ).change(function() {
+        $(context + " #row-select,"+context +" #column-select").change(function() {
           $(context + " #table").html('<div class="spinner-border" role="status"></div>');
-          $(context + " #table").load("/table/"+$( "#row-select option:selected" ).attr("value")+"/"+$( "#column-select option:selected" ).attr("value")+"?id="+id);
+          $(context + " #table").load("/table/"+$(context + " #row-select option:selected" ).attr("value")+"/"+$(context + " #column-select option:selected" ).attr("value")+"?id="+id);
           $(context + " #btn-create-cell").removeAttr('disabled');
         });
       });
@@ -34,37 +34,37 @@ function register_cell_table(context,id){
 
 function register_vis_buttons(context,id){
     $(document).ready(function () {
-        $(document).on("click", "#btn-dfg-freq", function () {
+        $(context + " #btn-dfg-freq").on("click", function () {
           event.preventDefault();
           loading_show(context,"#btn-dfg-freq")
-          $("#dfg").load(
+          $(context + " #dfg").load(
             "/plots/dfg" + "?id="+id
-            +"&act_freq="+$("#div-dfg #range-act-freq").val()
-            +"&edge_freq="+$("#div-dfg #range-edge-freq").val()
+            +"&act_freq="+$(context + " #div-dfg #range-act-freq").val()
+            +"&edge_freq="+$(context + " #div-dfg #range-edge-freq").val()
             +"&measure=frequency", function() {
               loading_hide(context,"#btn-dfg-freq")
             });
         });
-        $(document).on("click", "#btn-dfg-perf", function () {
+        $(context + " #btn-dfg-perf").on("click", function () {
           event.preventDefault();
           loading_show(context,"#btn-dfg-perf")
-          $("#dfg").load(
+          $(context + " #dfg").load(
             "/plots/dfg" 
             + "?id="+id
-            +"&act_freq="+$("#div-dfg #range-act-freq").val()
-            +"&edge_freq="+$("#div-dfg #range-edge-freq").val()
+            +"&act_freq="+$(context + " #div-dfg #range-act-freq").val()
+            +"&edge_freq="+$(context + " #div-dfg #range-edge-freq").val()
             +"&measure=performance", function() {
               loading_hide(context,"#btn-dfg-perf")
             });
         });
-        $(document).on("click", "#btn-petri", function () {
+        $(context + " #btn-petri").on("click", function () {
           event.preventDefault();
           loading_show(context,"#btn-petri")
-          $("#petri").load(
+          $(context + " #petri").load(
             "/plots/petri" 
             + "?id="+id
-            +"&act_freq="+$("#div-petri #range-act-freq").val()
-            +"&edge_freq="+$("#div-petri #range-edge-freq").val(), function() {
+            +"&act_freq="+$(context + " #div-petri #range-act-freq").val()
+            +"&edge_freq="+$(context + " #div-petri #range-edge-freq").val(), function() {
               loading_hide(context,"#btn-petri")
             });
         });

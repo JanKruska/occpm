@@ -13,12 +13,7 @@
     $.ajax({
       url: '/filtering?id={{event_log.id}}',
       success: function(html) {
-        //html = html.replace(/(id=")(\S*")/gm,"$1"+target.replace("#","")+"$2").replace(/("#)([^'"]*")/gm,"$1"+target.replace("#","")+"$2")
-        //console.log(html)
-        //var content = $('<div />').html(html).find(id2target('#content',target));
         var content = $('<div />').html(html).find('#content');
-        //console.log()
-        //$("[id^=*]",content).attr("id","test")
         $(target).html(content);
         var id = content.find('[name="id"]').attr("value")
         register_oc_table(target)
@@ -41,8 +36,9 @@
 
   function load_column_filtering(html,target){
     var content = $('<div />').html(html).find('#content');
+    var id = content.find('[name="id"]').attr("value");
     $(target).html(content);
-    register_cell_table(target,{{event_log.id}})
+    register_cell_table(target,id)
     onclick_hide_show(target,"#btn-create-cell","#btn-create-cell","#btn-create-cell-loading")
     $(target).find('#cell-filter').submit(function(e){
       e.preventDefault();
@@ -61,7 +57,7 @@
     var content = $('<div />').html(html).find('#content');
     var id = content.find('[name="id"]').attr("value")
     $(target).html(content);
-    register_vis_buttons(target,id)//TODO: Use proper id from request
+    register_vis_buttons(target,id)
     register_histogram(target,id)
   }
 </script>
