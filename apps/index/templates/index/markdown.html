@@ -34,6 +34,10 @@
 {% comment %}{{ page_title|safe }}{% endcomment %}
 
 {% comment %} div implementation {% endcomment %}
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-4">
 {% if use_toc %}
     <section class= "markdown-body" id="markdown_view_toc">
         <h2>Table of Contents</h2>
@@ -41,11 +45,14 @@
         {{ markdown_toc }}
     </section>
 {% endif %}
-
+</div>
+<div class="col-8">
 <section class= "markdown-body" id="markdown_view_content">
 	{{ markdown_content }}
 </section>
-
+</div>
+</div>
+</div>
 {% if use_highlight_js %}
     <script>
         hljs.initHighlightingOnLoad();
