@@ -7,12 +7,12 @@
 ### Using Docker
 <hr style="border:1px solid gray"> </hr>
 
-The code comes with a Dockerfile to build and run the application inside a [docker](https://www.docker.com/) container.
-To build the container run:
+The code comes with a Dockerfile to build and run the application inside a [docker](https://www.docker.com/) container
+To build the container run
 ```
 docker build --rm -t occpm:latest .
 ```
-After the container is build the webapp can be run using:
+After the container is build the webapp can be run using
 ```
 docker run -p 8000:8000 occpm
 ```
