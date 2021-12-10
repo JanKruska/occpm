@@ -65,9 +65,9 @@ The project uses existing algorithms for process discovery in the pm4py-mdl pack
 <hr style="border:2px solid gray"> </hr>
 
 # Basic layout of the application  
+![](./layout1.png "Layout of app")
 <hr style="border:2px solid gray"> </hr>
 <br />
-
 ## Navigation bar
 <hr style="border:1px solid gray"> </hr>
 
@@ -110,6 +110,7 @@ The last tab that displays this user manual for increasing explainability of the
 <hr style="border:2px solid gray"> </hr>
 
 # Uploading an event log and other log functionalities
+![](./upload1.png "Upload page")
 <hr style="border:2px solid gray"> </hr>
 <br />
 This is the first page the user sees when opening the application. The different components of the page are explained in detail below:
@@ -145,6 +146,7 @@ The "Download" button is there to be able to select and download the displayed l
 <hr style="border:2px solid gray"> </hr>
 
 # Filtering of Object-centric Logs
+
 <hr style="border:2px solid gray"> </hr>
 <br />
 
@@ -153,6 +155,7 @@ This section describes the filtering functionalities that have been implemented 
 ## Selection of first filtering layer with log’s attributes and creating a process cube cell
 <hr style="border:1px solid gray"> </hr>
 
+![](./filtering1.png "Column Filtering")
 The first filtering describes the "Column filtering" of the log based on event and object type attributes of the OCEL log. The starting text on the page tells you about the number of events and objects contained in the originally selected log. (Remember that this can also be a filtered log, as all original logs and processed ones are collected in the database which the user can access at any time from the upload page).
 
 #### Attributes List
@@ -162,6 +165,7 @@ Next, we have a table showing all event-level attributes of the selected log. Th
 
 #### Filtering on Object Types
 <hr style="border:1px solid gray" width="30%"> </hr>
+
 
 For the object types, on selecting the checkbox the table for that particular object type is shown containing its attributes that the log can be filtered on which the user can also select. (Notice the dynamic response of the webpage where these "extra" tables disappear once the checkbox is unselected.) 
 
@@ -173,6 +177,7 @@ Finally, once the user is happy with his choice of columns, they can name the fi
 ## Selection of second filtering layer with values of event-level and object-level attributes for detailed analysis
 <hr style="border:1px solid gray"> </hr>
 
+![](./filtering2.png "Column Filtering")
 On clicking the "Create Cubes" button from the previous section, the user is redirected to the second filtering page; or "Row filtering":
 
 #### Pre-filtered Log Statistics
@@ -199,6 +204,8 @@ Upon clicking
 <hr style="border:2px solid gray"> </hr>
 <br />
 
+
+![](./visualization1.png "Column Filtering")
 This section explains the visualization tab view from the application after creating the process cube cells. The visualization basically consists of the following three components:
 
 ## (Filtered) Log Information
@@ -214,6 +221,7 @@ Display the chosen attributes in tables similar to the ones seen on the first-le
 ## Visualization diagrams
 <hr style="border:1px solid gray"> </hr>
 
+![](./visualization1.png "Column Filtering")
 This section contains two sliders for adjusting the **Minimum Edge Frequency** and also the **Minimum Activity Frequency**. The user then has the choice to display the corresponding DFG or Petri Net on the page by clicking on the "Display Frequency DFG" and "Display Performance DFG" buttons for the DFG and "Display Petri Net" button for the petri net.
 
 <br />
@@ -223,6 +231,7 @@ This section contains two sliders for adjusting the **Minimum Edge Frequency** a
 <hr style="border:2px solid gray"> </hr>
 <br />
 
+![](./comparative.png "Column Filtering")
 Here, 2 different process cells can be created and analysed in parallel with their respective visualizations. Both halves of the webpage work according to the workflow described in the above sections with the same interface.
 
 <br />
