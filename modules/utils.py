@@ -1,5 +1,7 @@
 import json
+import tempfile
 from django.http.response import Http404
+from filehash.filehash import FileHash
 import numpy as np
 import pandas as pd
 from pm4pymdl.objects.ocel.exporter.exporter import json_serial, get_python_obj
@@ -189,6 +191,15 @@ def serialize_sets(set_obj):
     return set_obj
 
 
+def cast_event_log(event_log):
+    # Cast event_log object to appropriate type
+    if hasattr(event_log, "filteredlog"):
+        event_log = event_log.filteredlog
+    elif hasattr(event_log, "attributefilteredlog"):
+        event_log = event_log.attributefilteredlog
+    return event_log
+
+
 def get_event_log(request):
     if request.method == "GET":
         id = request.GET.get("id")
@@ -200,11 +211,7 @@ def get_event_log(request):
         raise Http404(
             "No such EventLog exists, either no id was specified or there is a problem with the database"
         )
-    # Cast event_log object to appropriate type
-    if hasattr(event_log, "filteredlog"):
-        event_log = event_log.filteredlog
-    elif hasattr(event_log, "attributefilteredlog"):
-        event_log = event_log.attributefilteredlog
+    event_log = cast_event_log(event_log)
 
     tuple = ocel_importer.apply(event_log.file.path)
     #! This is not clean python, Do pull request for pm4pymdl project
@@ -214,3 +221,14 @@ def get_event_log(request):
         df = tuple
         obj_df = pd.DataFrame()
     return event_log, df, obj_df
+
+
+def event_log_by_hash(serialized_string):
+    with tempfile.NamedTemporaryFile() as temp:
+        # data = payload.get_payload(decode=True)
+        temp.write(serialized_string)
+        sha512hasher = FileHash("sha512")
+        hash = sha512hasher.hash_file(temp.name)
+    logs = [obj for obj in models.EventLog.objects.all() if obj.hash == hash]
+    if logs:
+        return cast_event_log(logs[0])
