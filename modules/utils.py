@@ -62,7 +62,7 @@ def get_column_types(df):
     valid_columns = [
         column
         for column in df.columns
-        if column != "event_id" and not df.isnull().all()[column]
+        if column not in ESSENTIAL_LOG_ATTRIBUTES and not df.isnull().all()[column]
     ]
     numerical = df.select_dtypes("number").columns.to_list()
 
@@ -71,9 +71,8 @@ def get_column_types(df):
     categorical = [
         column
         for column in valid_columns
-        if column not in numerical
-        and column not in object
-        and column not in ESSENTIAL_LOG_ATTRIBUTES
+        if column not in numerical and column not in object
+        # and column not in ESSENTIAL_LOG_ATTRIBUTES
     ]
     return numerical, categorical, object
 

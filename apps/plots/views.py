@@ -30,8 +30,7 @@ import modules.utils as utils
 
 class HistogramView(View):
     def get(self, request, column=None):
-        event_log = models.EventLog.objects.get(id=request.GET.get("id"))
-        df, obj_df = ocel_importer.apply(event_log.file.path)
+        event_log, df, obj_df = utils.get_event_log(request)
         numerical, categorical, objects = utils.get_column_types(df)
         obj_numerical, obj_categorical, _ = utils.get_column_types(obj_df)
 
@@ -45,6 +44,8 @@ class HistogramView(View):
             plotf = plots.histogram_boxplot
         elif column in categorical or column in obj_categorical or column in objects:
             plotf = plots.histogram
+        else:
+            raise Http404("No such column in event log")
 
         if column in [*categorical, *numerical]:
             target = df

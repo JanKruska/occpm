@@ -140,3 +140,5 @@ media/
 #OCEL logs
 *.jsonocel
 *.xmlocel
+
+cache/

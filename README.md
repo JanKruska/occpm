@@ -74,3 +74,8 @@ Alternatively if you want to avoid the hassle of remembering to run black all th
 ```
 pre-commit install
 ```
+## Tests
+A test suit is included that can be run using 
+```
+python manage.py test apps
+```
