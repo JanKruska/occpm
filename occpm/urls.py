@@ -35,7 +35,7 @@ urlpatterns = [
     path("visualize", VisualizeView.as_view(), name="visualize"),
     path("comparative", ComparativeView.as_view(), name="comparative"),
    # path("documentation/", include("apps.documentation.urls"))
-   path('documentation/', MarkdownView.as_view(file_name='/README.md'),
+   path('documentation/', MarkdownView.as_view(file_name='/User_Manual.md'),
     name="documentation"),
 
 ]
