@@ -1,4 +1,5 @@
 import json
+from django.http.response import Http404
 import numpy as np
 import pandas as pd
 from pm4pymdl.objects.ocel.exporter.exporter import json_serial, get_python_obj
@@ -193,8 +194,12 @@ def get_event_log(request):
         id = request.GET.get("id")
     elif request.method == "POST":
         id = request.POST.get("id")
-    event_log = models.EventLog.objects.get(id=id)
-
+    try:
+        event_log = models.EventLog.objects.get(id=id)
+    except:
+        raise Http404(
+            "No such EventLog exists, either no id was specified or there is a problem with the database"
+        )
     # Cast event_log object to appropriate type
     if hasattr(event_log, "filteredlog"):
         event_log = event_log.filteredlog
