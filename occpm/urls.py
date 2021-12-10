@@ -34,10 +34,12 @@ urlpatterns = [
     path("", UploadView.as_view(), name="upload"),
     path("visualize", VisualizeView.as_view(), name="visualize"),
     path("comparative", ComparativeView.as_view(), name="comparative"),
-   # path("documentation/", include("apps.documentation.urls"))
-   path('documentation/', MarkdownView.as_view(file_name='/User_Manual.md'),
-    name="documentation"),
-
+    # path("documentation/", include("apps.documentation.urls"))
+    path(
+        "documentation/",
+        MarkdownView.as_view(file_name="/user-manual/User_Manual.md"),
+        name="documentation",
+    ),
 ]
 
 if settings.DEBUG:
