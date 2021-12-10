@@ -17,73 +17,84 @@
 <body>
   {% block content  %}
 
-  <div>
-  <span>The selected event log <b>{{event_log.name}}</b> contains a total of {{num_events}} events and {{num_objects}} objects</span>
+  <div class="container-fluid" style="text-align: left">
+    <h3 class="mt-4" style="color: #00529f">Event Log Info</h3>
+  <br />
+    <div class="row justify-content-start">
+      <br />
+      <p>The selected event log <b>{{event_log.name}}</b> contains a total of <b>{{num_events}}</b> events and <b>{{num_objects}}</b> objects.</p>
+    </div>
   </div>
 
-  <form id="column-filter" method="post" action="{% url 'filter' %}">
-  {% csrf_token %}
-  <input type="hidden" name="id" value="{{event_log.id}}">
-  <div class="d-flex flex-wrap flex-row align-items-center align-self-start p-2" style="margin-top: 1%;margin-left: 3%;margin-right: 3%;justify-content: center;">
-        <div class="d-flex flex-column justify-content-start p-2" style="flex-basis: {{ column_width }}%;">
-        <h2>Event level attributes</h2>
-        <table class="table table-hover table-sm">
-        <thead class="table-dark">
-          <th/>
-          <th>Attribute</th>
-          <th>Example value</th>
-        </thead>
-        {% for colname, example in event_attributes %}
-        <tr>
-        <label>
-          <td><input class="form-check-input me-1 event-level" type="checkbox" name="{{colname}}" value="{{colname}}"></td>
-          {% comment %} Used to generate colname = value pairs when the form is submitted. 
-          Only checked ones will give the value to the server. {% endcomment %}
-          <td><span class="attr_name" value="{{colname}}">{{colname}}</span></td>
-          <td>{{example}}</td>
-        </label>
-        </tr>
-        {% endfor %}
-        </table>
-        </div>
-        {% for colname, values in object_attributes %}
-        <div class="d-none flex-column justify-content-start align-self-start p-2" id="{{colname}}" style="flex-basis: {{ column_width }}%;">
-          <h2>{{colname}}</h2>
-          <table class="table table-hover table-sm ">
+  <div class="container-fluid" style="text-align: left">
+  <br />
+    <form id="column-filter" method="post" action="{% url 'filter' %}">
+    {% csrf_token %}
+    <input type="hidden" name="id" value="{{event_log.id}}">
+    <div class="d-flex flex-wrap flex-row align-items-center align-self-start p-2" style="margin-top: 1%;margin-left: 3%;margin-right: 3%;justify-content: center;">
+          <div class="d-flex flex-column justify-content-start p-2" style="flex-basis: {{ column_width }}%;">
+          <h3>Event level attributes</h3>
+          <table class="table table-hover table-sm">
           <thead class="table-dark">
-          <th/>
-          <th>Attribute</th>
-          <th>Example value</th>
+            <th/>
+            <th>Attribute</th>
+            <th>Example value</th>
           </thead>
-          {% for value,example in values %}
+          {% for colname, example in event_attributes %}
           <tr>
           <label>
-          <td><input class="form-check-input me-1" type="checkbox" name="{{colname}}" value="{{value}}"></td>   
-          {% comment %} Used to generate colname = value pairs when the form is submitted. 
-          Only checked ones will give the value to the server. {% endcomment %}
-          <td><span class="attr_name" value="{{value}}">{{value}}</span></td>
-          <td>{{example}}</td>
+            <td><input class="form-check-input me-1 event-level" type="checkbox" name="{{colname}}" value="{{colname}}"></td>
+            {% comment %} Used to generate colname = value pairs when the form is submitted. 
+            Only checked ones will give the value to the server. {% endcomment %}
+            <td><span class="attr_name" value="{{colname}}">{{colname}}</span></td>
+            <td>{{example}}</td>
           </label>
           </tr>
           {% endfor %}
           </table>
           </div>
-        {% endfor %}
-        <div id="figure" style="flex-basis: 100%;">
-        </div>
-
-        <div class=" col-5">
-              <p>Name for filtered log: 
-              <input type="text" name="name" value="{{event_log.name}}-filtered">
-                <input class="btn btn-primary mb-2" type="submit" id="btn-submit" value="Create Cubes"  />
-                <button class="btn btn-primary" type="button" id="btn-submit-loading" style="display: none !important; " disabled>
-                  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                  Loading...
-                </button>
-              </p>
-          </form>
-      </div>
+          {% for colname, values in object_attributes %}
+          <div class="d-none flex-column justify-content-start align-self-start p-2" id="{{colname}}" style="flex-basis: {{ column_width }}%;">
+            <h2>{{colname}}</h2>
+            <table class="table table-hover table-sm ">
+            <thead class="table-dark">
+            <th/>
+            <th>Attribute</th>
+            <th>Example value</th>
+            </thead>
+            {% for value,example in values %}
+            <tr>
+            <label>
+            <td><input class="form-check-input me-1" type="checkbox" name="{{colname}}" value="{{value}}"></td>   
+            {% comment %} Used to generate colname = value pairs when the form is submitted. 
+            Only checked ones will give the value to the server. {% endcomment %}
+            <td><span class="attr_name" value="{{value}}">{{value}}</span></td>
+            <td>{{example}}</td>
+            </label>
+            </tr>
+            {% endfor %}
+            </table>
+            </div>
+          {% endfor %}
+          <div id="figure" style="flex-basis: 100%;">
+          </div>
+    </div>
   </div>
-  </form>
+
+  
+  <br />     
+      <div class="d-flex justify-content-center flex-col align-items-baseline flex-wrap" style="margin-top: 1%;margin-left: 3%;margin-right: 3%;justify-content: center;">
+        <div class="p-2 align-self-baseline">Enter a name for the filtered log: </div> 
+        <div class="p-2"><input type="text" name="name" value="{{event_log.name}}-filtered"></div>
+        <div class="p-2">
+            <input class="btn btn-primary mb-2" type="submit" id="btn-submit" value="Create Cubes"  />
+            <button class="btn btn-primary" type="button" id="btn-submit-loading" style="display: none !important; " disabled>
+              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Loading...
+            </button>
+        </div>
+      </div>
+    </form>
+  
 </body>
 {% endblock %}
