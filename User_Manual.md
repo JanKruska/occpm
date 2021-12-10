@@ -153,7 +153,7 @@ This section describes the filtering functionalities that have been implemented 
 ## Selection of first filtering layer with log’s attributes and creating a process cube cell
 <hr style="border:1px solid gray"> </hr>
 
-The first filtering describes the "Column filtering" of the log based on event and object type attributes of the OCEL log. The first line on the page tells you about the number of events and objects contained in the originally selected log. (Remember that this can also be a filtered log, as all original logs and processed ones are collected in the database which the user can access at any time from the upload page).
+The first filtering describes the "Column filtering" of the log based on event and object type attributes of the OCEL log. The starting text on the page tells you about the number of events and objects contained in the originally selected log. (Remember that this can also be a filtered log, as all original logs and processed ones are collected in the database which the user can access at any time from the upload page).
 
 #### Attributes List
 <hr style="border:1px solid gray" width="30%"> </hr>

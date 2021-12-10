@@ -29,28 +29,25 @@
 {% block content  %}
 
 <br/>
-<div class="flex-container" style="justify-content: left;">
-  <p><h4>Some summary statistics for the filtered log are provided below to compare with the original log:-</h4></p>
-  <br/>
-  <br/>
-  <p><h6>1. The filtered log contains <b>{{num_events}}</b> events and <b>{{num_objects}} objects</b>.</h6></p>
-  <p><h6>2. The filtered log is based on the attributes: {{selected_filters|join:","}} selections.</h6></p>
-  {% comment %}
-    <ul class="list-group list-group-horizontal-xxl">
-      <li class="list-group-item">The original log contains {{num_events}} events.</li>
-      <li class="list-group-item">The filtered log is based on the attributes: {{selected_filters|join:","}} selections.</li>
-    </ul>
-  {% endcomment %}
+<div class="container-fluid" style="text-align: left">
+  <h3 class="mt-4" style="color: #00529f">Filtered Log Info</h3>
+<br />
+  <div class="row justify-content-start">
+  <p>
+    1. The filtered log contains <b>{{num_events}}</b> events and <b>{{num_objects}} objects</b>.
+    <br />
+    2. The filtered log is based on the attributes: {{selected_filters|join:", "}} selections.
+  </p>
+  </div>
 </div>
 
-<br/>
-<br/>
-<p><h4>Select further filtering options below:- </h4></p>
-
 {% comment %} Making separate flex container for the second filtering {% endcomment %}
+<br/>
+<div class="container-fluid" style="text-align: left">
+  <h3 class="mt-4" style="color: #00529f">Select Filtering</h3>
+<br />
+  <div class="d-flex flex-wrap flex-row align-items-center align-self-start p-2" style="margin-top: 1%;margin-left: 3%;margin-right: 3%;justify-content: center;">
 
-<div class="flex-container" style="justify-content: center;">  
-  <div class="row">
   {% comment %} <div class="btn-group">
     <h5>Materialization: </h5>
     <button class="btn btn-success dropdown-toggle" type="submit" id="materialization" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
@@ -60,11 +57,15 @@
       <li><a class="dropdown-item dropdown-item-action" href="#">Existence</a></li>
     </ul>
   </div> {% endcomment %}
-  <div class="col">
-  <select class="form-select form-select" name="materialization" id="materialization">
-    <option value="existence">Existence</option>
-  </select>
-  </div>
+
+    <div class="d-flex justify-content-evenly flex-col align-items-baseline" style="margin-top: 1%;margin-left: 3%;margin-right: 3%;">
+      <div class="p-2"><p>Materialization:</p></div>
+      <div class="p-2">
+        <select class="form-select form-select" name="materialization" id="materialization">
+          <option value="existence">Existence</option>
+        </select>
+      </div>
+    </div>
 
     {% comment %} <div class="btn-group">
       <h5>Row: </h5>  
@@ -77,16 +78,20 @@
         {% endfor %}
       </ul>
     </div> {% endcomment %}
-    <div class="col">
-    <select class="form-select form-select" name="row-select" id="row-select">
-    {% for col in columns%}
-      <option value="{{col}}">{{col}}</option>
-    {% endfor %}
-    </select>
+
+    <div class="d-flex justify-content-evenly flex-col align-items-baseline" style="margin-top: 1%;margin-left: 3%;margin-right: 3%;">
+      <div class="p-2"><p>Row:</p></div>
+      <div class="p-2">
+        <select class="form-select form-select" name="row-select" id="row-select">
+          {% for col in columns%}
+            <option value="{{col}}">{{col}}</option>
+          {% endfor %}
+        </select>
+      </div>
     </div>
 
     {% comment %} <div class="btn-group">
-      <h5>Column: </h5> 
+      <h5>Column : </h5> 
       <button class="btn btn-success dropdown-toggle" type="submit" id="column-select" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
         Select
       </button>
@@ -96,32 +101,41 @@
         {% endfor %}
       </ul>
     </div> {% endcomment %}
-  <div class="col">
-  <select class="form-select form-select" name="column-select" id="column-select">
-  {% for col in columns%}
-    <option value="{{col}}">{{col}}</option>
-  {% endfor %}
-  </select>
-  </div>
+
+    <div class="d-flex justify-content-evenly flex-col align-items-baseline" style="margin-top: 1%;margin-left: 3%;margin-right: 3%;">
+      <div class="p-2"><p>Column: </p></div>
+      <div class="p-2">
+        <select class="form-select form-select" name="column-select" id="column-select">
+         {% for col in columns%}
+         <option value="{{col}}">{{col}}</option>
+         {% endfor %}
+        </select>
+      </div>
+    </div>
 </div>
 </div>
 
 {% comment %} <p>The log contains {{num_objects}} objects</p> {% endcomment %}
+
 <form id="cell-filter" method="post" action="{% url 'visualize' %}">
   {% csrf_token %}
-  <input type="hidden" name="id" value="{{event_log.id}}" />
-<div class="d-flex flex-column">
-<div id="table">
-  
-</div>
-<div>
-<input type="text" name="name" value="{{event_log.name}}-cell" />
-<button type="submit" class="btn btn-primary" id="btn-create-cell" disabled>Create Cell</button>
-<button class="btn btn-primary" type="button" id="btn-create-cell-loading" style="display: none !important; " disabled>
-  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-  Loading...
-</button>
-</div>
+  <input type="hidden" name="id" value="{{event_log.id}}" />  
+  <br />
+  <div class="d-flex flex-row justify-content-center" id="table">
+  </div>
+
+  <br />
+  <div class="d-flex justify-content-center flex-col align-items-center flex-wrap" style="margin-top: 1%;margin-left: 3%;margin-right: 3%;justify-content: center;">
+    <div class="p-2 align-self-center">Enter a name for the filtered log: </div>
+    <div class="p-2"><input type="text" name="name" value="{{event_log.name}}-cell" /></div>  
+    <div class="p-2">
+      <button type="submit" class="btn btn-primary" id="btn-create-cell" disabled>Create Cell</button>
+        <button class="btn btn-primary" type="button" id="btn-create-cell-loading" style="display: none !important; " disabled>
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          Loading...
+        </button>
+    </div>  
+  </div>
 </div>
 </form>
 {% endblock %}
