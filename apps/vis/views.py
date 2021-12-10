@@ -42,17 +42,21 @@ class LogVisualizationView(View):
 
 class VisualizeView(LogVisualizationView):
     def save_filtered_log(self, filtered_log, obj_df, filters, request):
-        parent = models.FilteredLog.objects.get(id=request.POST.get("id"))
-        attr_filtered_log = models.AttributeFilteredLog(
-            column_filtered_log=parent,
-        )
-        attr_filtered_log.name = request.POST.get("name")
-        attr_filtered_log.cell_filter = json.dumps(filters)
-        attr_filtered_log.file.save(
-            attr_filtered_log.name + ".jsonocel",
-            ContentFile(utils.apply_json(filtered_log, obj_df)),
-        )
-        attr_filtered_log.save()
+        json_string = utils.apply_json(filtered_log, obj_df)
+        hash, attr_filtered_log = utils.event_log_by_hash(json_string.encode())
+        if attr_filtered_log is None:
+            parent = models.FilteredLog.objects.get(id=request.POST.get("id"))
+            attr_filtered_log = models.AttributeFilteredLog(
+                column_filtered_log=parent,
+            )
+            attr_filtered_log.name = request.POST.get("name")
+            attr_filtered_log.hash = hash
+            attr_filtered_log.cell_filter = json.dumps(filters)
+            attr_filtered_log.file.save(
+                attr_filtered_log.name + ".jsonocel",
+                ContentFile(json_string),
+            )
+            attr_filtered_log.save()
         return attr_filtered_log
 
     def extract_filter(self, request):

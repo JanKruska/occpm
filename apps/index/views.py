@@ -2,6 +2,7 @@ import os
 from django.http.response import Http404
 from filehash import FileHash
 import json
+import tempfile
 
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
@@ -52,13 +53,13 @@ class UploadView(View):
     def upload(self, request):
         context = {}
         myfile = request.FILES["myfile"]
-        event_log = models.EventLog.objects.create()
-        event_log.name = os.path.splitext(myfile.name)[0]
-        event_log.file = myfile
-        sha512hasher = FileHash("sha512")
-        event_log.save()
-        event_log.hash = sha512hasher.hash_file(event_log.file.path)
-        event_log.save()
+        hash, event_log = utils.event_log_by_hash(myfile.read())
+        if event_log is None:
+            event_log = models.EventLog.objects.create()
+            event_log.name = os.path.splitext(myfile.name)[0]
+            event_log.file = myfile
+            event_log.hash = hash
+            event_log.save()
 
         context.update({"uploaded_file_url": event_log.file.url})
         return self.render(request, context)
@@ -111,20 +112,24 @@ class SelectFilterView(LogVisualizationView):
 
 class FilterView(View):
     def save_filtered_log(self, df, obj_df, column_filter, parent, request):
-        filtered_log = models.FilteredLog.objects.create(unfiltered_log=parent)
-        filtered_log.name = request.POST.get("name")
+        json_string = utils.apply_json(df, obj_df)
+        hash, filtered_log = utils.event_log_by_hash(json_string.encode())
+        if filtered_log is None:
+            filtered_log = models.FilteredLog.objects.create(unfiltered_log=parent)
+            filtered_log.name = request.POST.get("name")
+            filtered_log.hash = hash
 
-        # code to set cookies and obtain info on which checkboxes are checked. Gives list of values of the checkboxes.
-        # reference: https://stackoverflow.com/questions/29246625/django-save-checked-checkboxes-on-reload
-        # https://stackoverflow.com/questions/52687188/how-to-access-the-checkbox-data-in-django-form
-        # checked = [request.POST.get('object_type') for object_type in object_types]
-        filtered_log.column_filter = json.dumps(
-            column_filter, default=utils.serialize_sets
-        )
-        filtered_log.file.save(
-            filtered_log.name + ".jsonocel", ContentFile(utils.apply_json(df, obj_df))
-        )
-        filtered_log.save()
+            # code to set cookies and obtain info on which checkboxes are checked. Gives list of values of the checkboxes.
+            # reference: https://stackoverflow.com/questions/29246625/django-save-checked-checkboxes-on-reload
+            # https://stackoverflow.com/questions/52687188/how-to-access-the-checkbox-data-in-django-form
+            # checked = [request.POST.get('object_type') for object_type in object_types]
+            filtered_log.column_filter = json.dumps(
+                column_filter, default=utils.serialize_sets
+            )
+            filtered_log.file.save(
+                filtered_log.name + ".jsonocel", ContentFile(json_string)
+            )
+            filtered_log.save()
         return filtered_log
 
     def extract_filter(self, df, request):
