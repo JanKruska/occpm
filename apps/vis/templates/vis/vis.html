@@ -11,6 +11,7 @@
 </script>
 {% endblock %} {% block content %}
 <div class="vertical-flex" style="justify-content: center">
+  <input type="hidden" name="id" value="{{event_log.id}}">
   <p>This log contains {{num_events}} events.</p>
   <br />
 
