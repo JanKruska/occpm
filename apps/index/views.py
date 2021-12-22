@@ -1,6 +1,5 @@
 import os
 from django.http.response import Http404
-from filehash import FileHash
 import json
 import tempfile
 

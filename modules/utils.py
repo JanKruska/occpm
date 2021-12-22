@@ -2,7 +2,6 @@ import hashlib
 import json
 import tempfile
 from django.http.response import Http404
-from filehash.filehash import FileHash
 import numpy as np
 import pandas as pd
 from pm4pymdl.objects.ocel.exporter.exporter import json_serial, get_python_obj
