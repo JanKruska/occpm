@@ -43,7 +43,7 @@ class LogVisualizationView(View):
 class VisualizeView(LogVisualizationView):
     def save_filtered_log(self, filtered_log, obj_df, filters, request):
         json_string = utils.apply_json(filtered_log, obj_df)
-        hash, attr_filtered_log = utils.event_log_by_hash(json_string.encode())
+        hash, attr_filtered_log = utils.event_log_by_hash(json_string)
         if attr_filtered_log is None:
             parent = models.FilteredLog.objects.get(id=request.POST.get("id"))
             attr_filtered_log = models.AttributeFilteredLog(

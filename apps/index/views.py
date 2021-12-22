@@ -113,7 +113,7 @@ class SelectFilterView(LogVisualizationView):
 class FilterView(View):
     def save_filtered_log(self, df, obj_df, column_filter, parent, request):
         json_string = utils.apply_json(df, obj_df)
-        hash, filtered_log = utils.event_log_by_hash(json_string.encode())
+        hash, filtered_log = utils.event_log_by_hash(json_string)
         if filtered_log is None:
             filtered_log = models.FilteredLog.objects.create(unfiltered_log=parent)
             filtered_log.name = request.POST.get("name")

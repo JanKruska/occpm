@@ -23,10 +23,10 @@ def get_event_log():
     if not os.path.exists(STANDARD_TEST_LOG):
         os.system(
             "curl ocel-standard.org/1.0/running-example.jsonocel.zip >> "
-            + STANDARD_TEST_LOG
+            + str(STANDARD_TEST_LOG)
             + ".zip"
         )
-        with zipfile.ZipFile(STANDARD_TEST_LOG + ".zip", "r") as zip_ref:
+        with zipfile.ZipFile(str(STANDARD_TEST_LOG) + ".zip", "r") as zip_ref:
             zip_ref.extractall(STANDARD_TEST_LOG.parent)
 
     tuple = ocel_importer.apply(str(STANDARD_TEST_LOG))
@@ -51,7 +51,7 @@ class AbstractTestCase(TestCase):
     @classmethod
     def save_event_log_to_db(cls):
         json_string = utils.apply_json(cls.df, cls.obj_df)
-        hash, log = utils.event_log_by_hash(json_string.encode())
+        hash, log = utils.event_log_by_hash(json_string)
         event_log = models.EventLog.objects.create()
         event_log.name = os.path.splitext(STANDARD_TEST_LOG.name)[0]
         event_log.file.save(
@@ -68,7 +68,7 @@ class ModelTestCase(AbstractTestCase):
     def test_no_duplicate_logs(self):
         event_log = self.save_event_log_to_db()
         hash_2, log_2 = utils.event_log_by_hash(
-            utils.apply_json(self.df, self.obj_df).encode()
+            utils.apply_json(self.df, self.obj_df)
         )
 
         self.assertEqual(event_log.hash, hash_2)
