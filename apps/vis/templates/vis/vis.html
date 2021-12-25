@@ -142,6 +142,9 @@
     role="tabpanel"
     aria-labelledby="nav-dfg"
   >
+  <form id="form-dfg" method="post" enctype="multipart/form-data" action="">
+    {% csrf_token %}
+    <input type="hidden" id="image-name" name="image-name" value="dfg.png">
     <div
       class="d-flex flex-row p-2 align-items-center"
       style="
@@ -233,6 +236,13 @@
         </button>
       </div>
       <div id="dfg" style="flex-basis: 100%"></div>
+      <input
+            style="float: right; margin-top: 10px"
+            type="submit"
+            class="btn btn-info btn-download"
+            name="download"
+            value="Download"/>
+  </form>
     </div>
     </div>
     <div
@@ -241,6 +251,9 @@
       role="tabpanel"
       aria-labelledby="nav-petri"
     >
+    <form id="form-petri" method="post" enctype="multipart/form-data" action="">
+      {% csrf_token %}
+    <input type="hidden" id="image-name" name="image-name" value="petri.svg">
     <div
       class="d-flex flex-row p-2 align-items-center"
       style="
@@ -315,7 +328,14 @@
         </button>
       </div>
     <div id="petri" style="flex-basis: 100%"></div>
-    </div>
+    <input
+    style="float: right; margin-top: 10px"
+    type="submit"
+    class="btn btn-info btn-download"
+    name="download"
+    value="Download"/>
+  </form>
+  </div>
   </div>
 </div>
 </div>

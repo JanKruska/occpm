@@ -187,3 +187,17 @@ class ComparativeView(View):
             "event_log": event_log,
         }
         return render(request, "index/comparative.html", context=context)
+
+
+class DownloadView(View):
+    def post(self, request, path):
+        path = "media/" + path
+        try:
+            wrapper = FileWrapper(open(path, "rb"))
+            response = HttpResponse(wrapper, content_type="application/force-download")
+            response["Content-Disposition"] = "inline; filename=" + os.path.basename(
+                path
+            )
+            return response
+        except Exception as e:
+            raise Http404()

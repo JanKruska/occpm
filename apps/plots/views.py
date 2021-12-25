@@ -66,7 +66,7 @@ class HistogramView(View):
 class DFGView(View):
     def get(self, request):
         event_log, df, obj_df = utils.get_event_log(request)
-
+        name = request.GET.get("name", "get")
         model = discovery.apply(df, parameters={"epsilon": 0, "noise_threshold": 0})
         gviz = dfg_visualizer.apply(
             model,
@@ -77,25 +77,25 @@ class DFGView(View):
             },
         )
 
-        dfg_visualizer.save(gviz, os.path.join(settings.MEDIA_ROOT, "dfg.png"))
+        dfg_visualizer.save(gviz, os.path.join(settings.MEDIA_ROOT, name))
         return render(
             request,
             "plots/image.html",
-            context={"image": settings.MEDIA_URL + "dfg.png"},
+            context={"image": settings.MEDIA_URL + name},
         )
 
 
 class PetriNetView(View):
     def get(self, request):
         event_log, df, obj_df = utils.get_event_log(request)
-
+        name = request.GET.get("name", "get")
         model = petri_disc_factory.apply(
             df, parameters={"min_node_freq": 100, "min_edge_freq": 100}
         )
         gviz = pn_vis_factory.apply(model, parameters={"format": "svg"})
-        mdfg_vis_factory.save(gviz, os.path.join(settings.MEDIA_ROOT, "petri.svg"))
+        mdfg_vis_factory.save(gviz, os.path.join(settings.MEDIA_ROOT, name))
         return render(
             request,
             "plots/image.html",
-            context={"image": settings.MEDIA_URL + "petri.svg"},
+            context={"image": settings.MEDIA_URL + name},
         )

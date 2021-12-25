@@ -32,7 +32,7 @@ function register_cell_table(context,id){
       });
 }
 
-function register_vis_buttons(context,id){
+function register_vis_buttons(context,id,name="dfg.png"){
     $(document).ready(function () {
         $(context + " #btn-dfg-freq").on("click", function () {
           event.preventDefault();
@@ -41,7 +41,8 @@ function register_vis_buttons(context,id){
             "/plots/dfg" + "?id="+id
             +"&act_freq="+$(context + " #div-dfg #range-act-freq").val()
             +"&edge_freq="+$(context + " #div-dfg #range-edge-freq").val()
-            +"&measure=frequency", function() {
+            +"&measure=frequency"
+            +"&name="+name, function() {
               loading_hide(context,"#btn-dfg-freq")
             });
         });
@@ -53,10 +54,23 @@ function register_vis_buttons(context,id){
             + "?id="+id
             +"&act_freq="+$(context + " #div-dfg #range-act-freq").val()
             +"&edge_freq="+$(context + " #div-dfg #range-edge-freq").val()
-            +"&measure=performance", function() {
+            +"&measure=performance",
+            +"&name="+name, function() {
               loading_hide(context,"#btn-dfg-perf")
             });
         });
+
+         $(context + " #div-dfg #image-name").attr("value", name);
+        // $(context + " #div-dfg .btn-download").on("click", function (event) {
+        //   event.preventDefault();
+        //   $.get(
+        //     "/download/"+name+".png", function() {
+        //     });
+        // });
+      });
+    }
+function register_petri_buttons(context,id,name="petri.svg"){
+  $(document).ready(function () {
         $(context + " #btn-petri").on("click", function () {
           event.preventDefault();
           loading_show(context,"#btn-petri")
@@ -64,10 +78,19 @@ function register_vis_buttons(context,id){
             "/plots/petri" 
             + "?id="+id
             +"&act_freq="+$(context + " #div-petri #range-act-freq").val()
-            +"&edge_freq="+$(context + " #div-petri #range-edge-freq").val(), function() {
+            +"&edge_freq="+$(context + " #div-petri #range-edge-freq").val()
+            +"&name="+name, function() {
               loading_hide(context,"#btn-petri")
             });
         });
+
+        $(context + " #div-petri #image-name").attr("value", name);
+        // $(context + " #div-petri .btn-download").on("click", function (event) {
+        //   event.preventDefault();
+        //   $.get(
+        //     "/download/"+name+".svg", function() {
+        //     });
+        // });
     });
 }
 

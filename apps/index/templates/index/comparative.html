@@ -63,8 +63,10 @@
     var id = content.find('[name="id"]').attr("value")
     $(target+"-visualization").html(content);
     $(".div-visualization").parent().collapse("show")
-    register_vis_buttons(target,id)
+    register_vis_buttons(target,id,target.substring(1)+"-dfg.png")
+    register_petri_buttons(target,id,target.substring(1)+"-petri.svg")
     register_histogram(target+"-visualization",id)
+    $(target+"-visualization form").attr("action","/visualize")
   }
 </script>
 <script>

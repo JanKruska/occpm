@@ -1,4 +1,7 @@
 import json
+import os
+from wsgiref.util import FileWrapper
+from django.http.response import Http404, HttpResponse
 
 from django.shortcuts import render, redirect
 from django.core.files.base import ContentFile
@@ -88,7 +91,7 @@ class VisualizeView(LogVisualizationView):
         }
         return render(request, "vis/vis.html", context=context)
 
-    def post(self, request):
+    def filter(self, request):
         event_log, df, obj_df = utils.get_event_log(request)
 
         row, column, filters = self.extract_filter(request)
@@ -98,3 +101,21 @@ class VisualizeView(LogVisualizationView):
             filtered_log, obj_filtered, filters, request
         )
         return redirect(f"/visualize?id={attr_filtered_log.id}")
+
+    def download(self, request):
+        path = "media/" + request.POST.get("image-name")
+        try:
+            wrapper = FileWrapper(open(path, "rb"))
+            response = HttpResponse(wrapper, content_type="application/force-download")
+            response["Content-Disposition"] = "inline; filename=" + os.path.basename(
+                path
+            )
+            return response
+        except Exception as e:
+            raise Http404()
+
+    def post(self, request):
+        if request.POST.get("download"):
+            return self.download(request)
+        else:
+            return self.filter(request)
