@@ -28,7 +28,7 @@
             success:function(response){
               load_row_filtering(response,target)
               loading_hide(target,"#btn-submit")
-              $(target+"-column-filtering").parent().collapse("hide")
+              $(".div-column-filtering").parent().collapse("hide")
             }
           });
         });
@@ -40,7 +40,7 @@
     var content = $('<div />').html(html).find('#content');
     var id = content.find('[name="id"]').attr("value");
     $(target+"-row-filtering").html(content);
-    $(target+"-row-filtering").parent().collapse("show")
+    $(".div-row-filtering").parent().collapse("show")
     register_cell_table(target,id)
     $(target).find('#cell-filter').submit(function(e){
       e.preventDefault();
@@ -52,7 +52,7 @@
         success:function(response){
           load_visualization(response,target)
           loading_hide(target,"#btn-create-cell")
-          $(target + "-row-filtering").parent().collapse("hide")
+          $(".div-row-filtering").parent().collapse("hide")
         }
       });
     });
@@ -62,7 +62,7 @@
     var content = $('<div />').html(html).find('#content');
     var id = content.find('[name="id"]').attr("value")
     $(target+"-visualization").html(content);
-    $(target+"-visualization").parent().collapse("show")
+    $(".div-visualization").parent().collapse("show")
     register_vis_buttons(target,id)
     register_histogram(target+"-visualization",id)
   }
@@ -88,7 +88,7 @@
         </button>
       </h2>
       <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
-        <div class="accordion-body" id="left-content-column-filtering">
+        <div class="accordion-body div-column-filtering" id="left-content-column-filtering">
         </div>
       </div>
     </div>
@@ -99,7 +99,7 @@
         </button>
       </h2>
       <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
-        <div class="accordion-body" id="left-content-row-filtering">
+        <div class="accordion-body div-row-filtering" id="left-content-row-filtering">
         </div>
       </div>
     </div>
@@ -110,7 +110,7 @@
         </button>
       </h2>
       <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
-        <div class="accordion-body" id="left-content-visualization">
+        <div class="accordion-body div-visualization" id="left-content-visualization">
         </div>
       </div>
     </div>
@@ -125,7 +125,7 @@
         </button>
       </h2>
       <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
-        <div class="accordion-body" id="right-content-column-filtering">
+        <div class="accordion-body div-column-filtering" id="right-content-column-filtering">
         </div>
       </div>
     </div>
@@ -136,7 +136,7 @@
         </button>
       </h2>
       <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
-        <div class="accordion-body" id="right-content-row-filtering">
+        <div class="accordion-body div-row-filtering" id="right-content-row-filtering">
         </div>
       </div>
     </div>
@@ -147,7 +147,7 @@
         </button>
       </h2>
       <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
-        <div class="accordion-body" id="right-content-visualization">
+        <div class="accordion-body div-visualization" id="right-content-visualization">
         </div>
       </div>
     </div>
