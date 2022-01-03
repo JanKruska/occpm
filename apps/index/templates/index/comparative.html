@@ -2,6 +2,9 @@
 {% load static %} 
 {% block head %}
 <script src="{% static 'index/interactive.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.0/jspdf.umd.min.js"></script>
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
+{% comment %} <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.0/html2canvas.min.js" integrity="sha512-UcDEnmFoMh0dYHu0wGsf5SKB7z7i5j3GuXHCnb3i4s44hfctoLihr896bxM0zL7jGkcHQXXrJsFIL62ehtd6yQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> {% endcomment %}
 <script>
   set_navbar_active("#nav-comparative")
 
@@ -75,6 +78,25 @@
     load_column_filtering("#left-content")
     load_column_filtering("#right-content")
 });
+</script>
+<script>
+  $( document ).ready(function() {
+    window.jsPDF = window.jspdf.jsPDF;
+    $("#btn-pdf").on('click',function () { 
+      html2canvas(document.getElementById('accordionPanelsStayOpenExample'),{height: document.body.clientHeight, width: document.body.clientWidth});
+      //var pdf = new jsPDF('p', 'pt', 'letter');
+		  //pdf.html(document.body, {
+      //  callback: function (pdf) {
+      //    var iframe = document.createElement('iframe');
+      //    iframe.setAttribute('style', 'position:absolute;right:0; top:0; bottom:0; height:100%; width:500px');
+      //    document.body.appendChild(iframe);
+      //    iframe.src = pdf.output('datauristring');
+			//}
+		//});
+      //doc.output("dataurlnewwindow");
+    });
+});
+  
 </script>
 {% endblock head %}
 
@@ -154,6 +176,19 @@
       </div>
     </div>
   </div>
+</div>
+</div>
+<div class="row">
+<div class="col d-flex justify-content-center">
+<button
+  style="float: right; margin-top: 10px"
+  type="button"
+  class="btn btn-info"
+  value="Download"
+  name="downloadButton"
+  id="btn-pdf">
+  Export page as PDF
+</button>
 </div>
 </div>
 </div>
