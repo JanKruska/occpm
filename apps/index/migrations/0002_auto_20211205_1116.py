@@ -6,28 +6,28 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('index', '0001_initial'),
+        ("index", "0001_initial"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='attributefilteredlog',
-            old_name='filter',
-            new_name='cell_filter',
+            model_name="attributefilteredlog",
+            old_name="filter",
+            new_name="cell_filter",
         ),
         migrations.RenameField(
-            model_name='attributefilteredlog',
-            old_name='parent',
-            new_name='column_filtered_log',
+            model_name="attributefilteredlog",
+            old_name="parent",
+            new_name="column_filtered_log",
         ),
         migrations.RenameField(
-            model_name='filteredlog',
-            old_name='filter',
-            new_name='column_filter',
+            model_name="filteredlog",
+            old_name="filter",
+            new_name="column_filter",
         ),
         migrations.RenameField(
-            model_name='filteredlog',
-            old_name='parent',
-            new_name='unfiltered_log',
+            model_name="filteredlog",
+            old_name="parent",
+            new_name="unfiltered_log",
         ),
     ]

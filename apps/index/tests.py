@@ -67,9 +67,7 @@ class AbstractTestCase(TestCase):
 class ModelTestCase(AbstractTestCase):
     def test_no_duplicate_logs(self):
         event_log = self.save_event_log_to_db()
-        hash_2, log_2 = utils.event_log_by_hash(
-            utils.apply_json(self.df, self.obj_df)
-        )
+        hash_2, log_2 = utils.event_log_by_hash(utils.apply_json(self.df, self.obj_df))
 
         self.assertEqual(event_log.hash, hash_2)
         self.assertEqual(event_log.id, log_2.id)

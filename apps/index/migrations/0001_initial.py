@@ -9,35 +9,82 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='EventLog',
+            name="EventLog",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=100)),
-                ('file', models.FileField(storage=django.core.files.storage.FileSystemStorage(), upload_to='')),
-                ('hash', models.CharField(max_length=128)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=100)),
+                (
+                    "file",
+                    models.FileField(
+                        storage=django.core.files.storage.FileSystemStorage(),
+                        upload_to="",
+                    ),
+                ),
+                ("hash", models.CharField(max_length=128)),
             ],
         ),
         migrations.CreateModel(
-            name='FilteredLog',
+            name="FilteredLog",
             fields=[
-                ('eventlog_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='index.eventlog')),
-                ('filter', models.TextField(default='')),
-                ('parent', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='filtered_child', to='index.eventlog')),
+                (
+                    "eventlog_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="index.eventlog",
+                    ),
+                ),
+                ("filter", models.TextField(default="")),
+                (
+                    "parent",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="filtered_child",
+                        to="index.eventlog",
+                    ),
+                ),
             ],
-            bases=('index.eventlog',),
+            bases=("index.eventlog",),
         ),
         migrations.CreateModel(
-            name='AttributeFilteredLog',
+            name="AttributeFilteredLog",
             fields=[
-                ('eventlog_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='index.eventlog')),
-                ('filter', models.TextField(default='')),
-                ('parent', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='attr_filtered_child', to='index.filteredlog')),
+                (
+                    "eventlog_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="index.eventlog",
+                    ),
+                ),
+                ("filter", models.TextField(default="")),
+                (
+                    "parent",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="attr_filtered_child",
+                        to="index.filteredlog",
+                    ),
+                ),
             ],
-            bases=('index.eventlog',),
+            bases=("index.eventlog",),
         ),
     ]

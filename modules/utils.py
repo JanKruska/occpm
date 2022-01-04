@@ -228,7 +228,7 @@ def event_log_by_hash(serialized_string):
     #     temp.write(serialized_string)
     #     sha512hasher = FileHash("sha512")
     #     hash = sha512hasher.hash_file(temp.name)
-    if isinstance(serialized_string,str):
+    if isinstance(serialized_string, str):
         serialized_string = serialized_string.encode()
     hash_object = hashlib.sha512(serialized_string)
     hash = hash_object.hexdigest()
