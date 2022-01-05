@@ -123,11 +123,32 @@ class PetriNetView(View):
     def get(self, request):
         event_log, df, obj_df = utils.get_event_log(request)
         name = request.GET.get("name", "get")
+        
+        df = succint_mdl_to_exploded_mdl.apply(df)
+        activ = dict(df.groupby("event_id").first()["event_activity"].value_counts())
+        activ_sorted = sorted(activ.keys(),key=lambda x:activ[x],reverse=True)
+        num_activities = max(
+            0,
+            min(
+                round(int(request.GET.get("act_freq", 100)) * len(activ) / 100),
+                len(activ) - 1,
+            ),
+        )
+
+        # num_edges = max(
+        #     0,
+        #     min(
+        #         round(
+        #             int(request.GET.get("edge_freq", 100)) * len(edge_keys_sorted) / 100
+        #         ),
+        #         len(edge_keys_sorted) - 1,
+        #     ),
+        # )
         model = petri_disc_factory.apply(
             df,
             parameters={
-                "min_node_freq": request.GET.get("act_freq", 100),
-                "min_edge_freq": request.GET.get("edge_freq", 100),
+                "min_node_freq": activ[activ_sorted[num_activities]],
+                "min_edge_freq": int(request.GET.get("edge_freq", 100)),
             },
         )
         gviz = pn_vis_factory.apply(model, parameters={"format": "svg"})
