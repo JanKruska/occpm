@@ -9,7 +9,7 @@ from django.conf import settings
 import plotly.graph_objects as go
 from plotly.offline import plot
 import plotly.express as px
-
+from plotly.subplots import make_subplots
 
 from pm4pymdl.objects.ocel.importer import importer as ocel_importer
 from pm4pymdl.algo.mvp.utils import (
@@ -22,11 +22,21 @@ from pm4pymdl.algo.mvp.get_logs_and_replay import algorithm as petri_disc_factor
 from pm4pymdl.visualization.mvp.gen_framework import visualizer as mdfg_vis_factory
 from pm4pymdl.visualization.petrinet import visualizer as pn_vis_factory
 
-
-import modules.plots as plots
 from apps.index import models
 import modules.utils as utils
 
+def histogram(df, column):
+    fig = px.histogram(df, x=column)
+    fig.update_layout(title_text=f"Distribution of column {column}")
+    return fig
+
+
+def histogram_boxplot(df, column):
+    fig = make_subplots(rows=2, cols=1, shared_xaxes=True)
+    fig.add_trace(go.Histogram(x=df[column]), row=1, col=1)
+    fig.add_trace(go.Box(x=df[column]), row=2, col=1)
+    fig.update_layout(title_text=f"Histogram and boxplot of column {column}")
+    return fig
 
 class HistogramView(View):
     def get(self, request, column=None):
@@ -41,9 +51,9 @@ class HistogramView(View):
                 context={"list": [*numerical, *categorical]},
             )
         if column in numerical or column in obj_numerical:
-            plotf = plots.histogram_boxplot
+            plotf = histogram_boxplot
         elif column in categorical or column in obj_categorical or column in objects:
-            plotf = plots.histogram
+            plotf = histogram
         else:
             raise Http404("No such column in event log")
 
