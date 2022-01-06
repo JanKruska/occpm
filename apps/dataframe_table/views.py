@@ -1,14 +1,11 @@
 from django.shortcuts import render
 from django.views import View
-import numpy as np
 from pm4pymdl.objects.ocel.importer import importer as ocel_importer
 from pm4pymdl.algo.mvp.utils import (
     succint_mdl_to_exploded_mdl,
 )
 
 from modules import utils
-
-EVENT_LOG_URL = "media/running-example.jsonocel"
 
 # Create your views here.
 class TableView(View):

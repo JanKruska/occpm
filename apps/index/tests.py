@@ -1,5 +1,4 @@
 import os
-import shutil
 import zipfile
 from pathlib import Path
 from django.core.files.base import ContentFile

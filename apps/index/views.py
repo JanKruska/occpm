@@ -1,7 +1,6 @@
 import os
 from django.http.response import Http404
 import json
-import tempfile
 
 from django.shortcuts import redirect, render
 from django.http import HttpResponse

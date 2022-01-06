@@ -1,5 +1,4 @@
 import os
-import tempfile
 
 from django.http.response import Http404, HttpResponse
 from django.shortcuts import render
@@ -25,6 +24,7 @@ from pm4pymdl.visualization.petrinet import visualizer as pn_vis_factory
 from apps.index import models
 import modules.utils as utils
 
+
 def histogram(df, column):
     fig = px.histogram(df, x=column)
     fig.update_layout(title_text=f"Distribution of column {column}")
@@ -37,6 +37,7 @@ def histogram_boxplot(df, column):
     fig.add_trace(go.Box(x=df[column]), row=2, col=1)
     fig.update_layout(title_text=f"Histogram and boxplot of column {column}")
     return fig
+
 
 class HistogramView(View):
     def get(self, request, column=None):
@@ -133,10 +134,10 @@ class PetriNetView(View):
     def get(self, request):
         event_log, df, obj_df = utils.get_event_log(request)
         name = request.GET.get("name", "get")
-        
+
         df = succint_mdl_to_exploded_mdl.apply(df)
         activ = dict(df.groupby("event_id").first()["event_activity"].value_counts())
-        activ_sorted = sorted(activ.keys(),key=lambda x:activ[x],reverse=True)
+        activ_sorted = sorted(activ.keys(), key=lambda x: activ[x], reverse=True)
         num_activities = max(
             0,
             min(
