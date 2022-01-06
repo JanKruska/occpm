@@ -9,7 +9,24 @@ from modules import utils
 
 # Create your views here.
 class TableView(View):
+    """View used to generate the cross-table with values of the selected 'row' and 'column' attribute
+    with checkboxes enabled for user selection in the second-level of filtering of the log. 
+
+    Args:
+        View ([type]): [description]
+    """
     def get(self, request, row=None, column=None):
+        """Takes in the HTTP request containing information about the log, with row and column parameters as default=None
+        and returns the cross-table of attribute values 
+
+        Args:
+            request (Django HttpRequest object): contains al information passed on as the webpage is requested. 
+            row ([type], optional): Refers to the row of the . Defaults to None.
+            column ([type], optional): . Defaults to None.
+
+        Returns:
+            [type]: [description]
+        """
         event_log, df, obj_df = utils.get_event_log(request)
         attribute_list = df.columns.tolist()
         ## returns 3 lists, 1st two are written and need to be merged to get event attributes. 3rd list is for object attributes.
