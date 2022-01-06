@@ -1,7 +1,7 @@
+import hashlib
 import json
 import tempfile
 from django.http.response import Http404
-from filehash.filehash import FileHash
 import numpy as np
 import pandas as pd
 from pm4pymdl.objects.ocel.exporter.exporter import json_serial, get_python_obj
@@ -223,11 +223,15 @@ def get_event_log(request):
 
 
 def event_log_by_hash(serialized_string):
-    with tempfile.NamedTemporaryFile() as temp:
-        # data = payload.get_payload(decode=True)
-        temp.write(serialized_string)
-        sha512hasher = FileHash("sha512")
-        hash = sha512hasher.hash_file(temp.name)
+    # with tempfile.NamedTemporaryFile() as temp:
+    #     # data = payload.get_payload(decode=True)
+    #     temp.write(serialized_string)
+    #     sha512hasher = FileHash("sha512")
+    #     hash = sha512hasher.hash_file(temp.name)
+    if isinstance(serialized_string, str):
+        serialized_string = serialized_string.encode()
+    hash_object = hashlib.sha512(serialized_string)
+    hash = hash_object.hexdigest()
     logs = [obj for obj in models.EventLog.objects.all() if obj.hash == hash]
     if logs:
         return hash, cast_event_log(logs[0])

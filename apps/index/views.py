@@ -1,6 +1,5 @@
 import os
 from django.http.response import Http404
-from filehash import FileHash
 import json
 import tempfile
 
@@ -197,7 +196,7 @@ class FilterView(View):
             filtered_log(): the pm4py standard OCEL filtered log file 
         """
         json_string = utils.apply_json(df, obj_df)
-        hash, filtered_log = utils.event_log_by_hash(json_string.encode())
+        hash, filtered_log = utils.event_log_by_hash(json_string)
         if filtered_log is None:
             filtered_log = models.FilteredLog.objects.create(unfiltered_log=parent)
             filtered_log.name = request.POST.get("name")
@@ -294,3 +293,17 @@ class ComparativeView(View):
             "event_log": event_log,
         }
         return render(request, "index/comparative.html", context=context)
+
+
+class DownloadView(View):
+    def post(self, request, path):
+        path = "media/" + path
+        try:
+            wrapper = FileWrapper(open(path, "rb"))
+            response = HttpResponse(wrapper, content_type="application/force-download")
+            response["Content-Disposition"] = "inline; filename=" + os.path.basename(
+                path
+            )
+            return response
+        except Exception as e:
+            raise Http404()

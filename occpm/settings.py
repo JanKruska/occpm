@@ -52,8 +52,8 @@ INSTALLED_APPS = [
     "apps.dataframe_table.apps.DataframeTableConfig",
     "apps.vis.apps.VisConfig",
     "apps.plots.apps.PlotsConfig",
-    #"apps.documentation.apps.DocumentationConfig",
-    'markdown_view',
+    # "apps.documentation.apps.DocumentationConfig",
+    "markdown_view",
     "django_cleanup.apps.CleanupConfig",
 ]
 
@@ -150,5 +150,5 @@ MEDIA_URL = "/media/"
 # Constant for event log name
 EVENT_LOG_URL = None
 
-# directory for markdown view 
+# directory for markdown view
 MARKDOWN_VIEW_TEMPLATE = "index/markdown.html"
