@@ -27,8 +27,8 @@ from markdown_view.views import MarkdownView
 urlpatterns = [
     path("admin/", admin.site.urls),
     # path("", include("apps.index.urls")),
-    path("filter", FilterView.as_view(), name="filter"),
-    path("filtering", SelectFilterView.as_view(), name="filtering"),
+    path("filter", FilterView.as_view(), name="filter"),                
+    path("filtering", SelectFilterView.as_view(), name="filtering"),    
     path("plots/", include("apps.plots.urls")),
     path("table/", include("apps.dataframe_table.urls")),
     path("", UploadView.as_view(), name="upload"),

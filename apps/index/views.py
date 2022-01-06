@@ -22,22 +22,60 @@ from . import models
 import modules.utils as utils
 
 
+###############################
+##      Upload View
+###############################
+
+
 class UploadView(View):
+    """Main class for the Upload page view of the application. Contains several functions pertaining to the functionalities 
+    (upload/set/delete/download log etc.) relating to the event log as described below. 
+
+    Args:
+        View ([type]): [description]
+    """
     def render(self, request, context={}):
         event_logs = models.EventLog.objects.exclude(name__exact="")
         context.update({"event_logs": event_logs})
         return render(request, "index/upload.html", context=context)
 
     def set(self, request):
+        """Responsible for setting the event log selected by the user to be further processed in the application.
+
+        Args:
+            request ([type]): [description]
+
+        Returns:
+            [type]: [description]
+        """
         event_log, _, _ = utils.get_event_log(request)
         context = {"event_log": event_log}
         return self.render(request, context)
 
     def delete(self, request):
+        """Used to delete an event log from the media storage of the application.
+
+        Args:
+            request ([type]): [description]
+
+        Returns:
+            [type]: [description]
+        """
         models.EventLog.objects.filter(id=request.POST.get("id")).delete()
         return self.render(request)
 
     def download(self, request):
+        """Used to download an event log from the list of stored event logs on the user's local machine.
+
+        Args:
+            request ([type]): [description]
+
+        Raises:
+            Http404: [description]
+
+        Returns:
+            [type]: [description]
+        """
         event_log, _, _ = utils.get_event_log(request)
 
         try:
@@ -51,6 +89,15 @@ class UploadView(View):
             raise Http404()
 
     def upload(self, request):
+        """A function that uploads the event log with its properties in the model of the database created in the Django application. 
+        This model is then used to access the event log and its properties throughout the application in various functionalities.
+
+        Args:
+            request ([type]): [description]
+
+        Returns:
+            [type]: [description]
+        """
         context = {}
         myfile = request.FILES["myfile"]
         hash, event_log = utils.event_log_by_hash(myfile.read())
@@ -82,7 +129,17 @@ class UploadView(View):
         return self.render(request, context)
 
 
+###############################
+##      Select Filter View
+###############################
+
 class SelectFilterView(LogVisualizationView):
+    """The view enables the user to select options for the first level of filtering on the event log. This refers to selecting the 
+    object types and event attributes that the user wants to filter the log on for creating a process cube.
+
+    Args:
+        LogVisualizationView ([type]): [description]
+    """
     def get(self, request):
         event_log, df, obj_df = utils.get_event_log(request)
         ## returns 3 lists, 1st two are written and need to be merged to get event attributes. 3rd list is for object attributes.
@@ -110,8 +167,35 @@ class SelectFilterView(LogVisualizationView):
         )
 
 
+###############################
+##      Filter View
+###############################
+
 class FilterView(View):
+    """ This view enables the user to further choose the Materialization scheme and higher level of specificity with respect to
+    filtering the created process cube by also selecting a 'row' and 'column' from the event and object attributes already selected 
+    in the first level of filtering. Then the user gets a detailed cross-tabular display of all unique values of the 'row' and 'column' 
+    attribute where every possible unique combination between these two can be selected to analyze behaviour in the form of a process cube cell.
+    Hence, this is also referred to as the second level of filtering for us.
+
+    Args:
+        View ([type]): [description]
+    """
     def save_filtered_log(self, df, obj_df, column_filter, parent, request):
+        """ Function provided to be able to save the filtered log in our model database of the project when the user generates one in the application. 
+        It receives all log related information from the HTTP request and is also passed the filter that is used on the parent log, the original log itself 
+        and its extracted dataframes (df, obj_df). 
+
+        Args:
+            df (pd.DataFrame): A pm4py-mdl object dataframe
+            obj_df (pd.DataFrame): A pm4py-mdl object dataframe            
+            column_filter (string): A python string containing the names of chosen filters for the parent log 
+            parent (): pm4py OCEL standard event log file
+            request ([type]): [description]
+
+        Returns:
+            filtered_log(): the pm4py standard OCEL filtered log file 
+        """
         json_string = utils.apply_json(df, obj_df)
         hash, filtered_log = utils.event_log_by_hash(json_string.encode())
         if filtered_log is None:
@@ -133,6 +217,17 @@ class FilterView(View):
         return filtered_log
 
     def extract_filter(self, df, request):
+        """Simply used to extract the list of attributes values that were selected by the user in the process of log filtering. 
+        the function takes in the OCEL log's extracted dataframe object and returns a list of strings that are the names of chosen 
+        attribute filters by the user.
+
+        Args:
+            df (pd.DataFrame): A pm4py-mdl object dataframe
+            request ([type]): [description]
+
+        Returns:
+            checked(python set object): a set of all values that the user chose as filters for the log
+        """
         _, _, object_types = utils.get_column_types(df)
         checked = list(utils.ESSENTIAL_LOG_ATTRIBUTES)
         for key in df.columns:
@@ -181,7 +276,18 @@ class FilterView(View):
         return redirect(f"/filter?id={filtered_log.id}")
 
 
+###############################
+##      Comparative View
+###############################
+
 class ComparativeView(View):
+    """ The view that enables side-by-side comparison of 2 different process cube cells with their process visualizations for enhanced analysis.
+    It incorporates all the application's views for creating a single process cube cell and brings it together to be able to see and create 2 cells
+    for comparison from an event log with different attribute values. 
+
+    Args:
+        View ([type]): [description]
+    """
     def get(self, request):
         event_log, _, _ = utils.get_event_log(request)
         context = {

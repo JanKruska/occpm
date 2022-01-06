@@ -29,6 +29,13 @@ import modules.utils as utils
 
 
 class HistogramView(View):
+    """View used to render the Histograms displayed on the webpages of the application. Allows for plots
+    of different object and event type attributes from the log that it extracts from the chosen log file 
+    stored in the database. 
+
+    Args:
+        View ([type]): [description]
+    """
     def get(self, request, column=None):
         event_log, df, obj_df = utils.get_event_log(request)
         numerical, categorical, objects = utils.get_column_types(df)
@@ -64,6 +71,12 @@ class HistogramView(View):
 
 
 class DFGView(View):
+    """Helps construct and display the directly-follows graphs for the discovered process model from the log. 
+    Also has options for frequency adjustments (minimum edge and activity frequency). 
+
+    Args:
+        View ([type]): [description]
+    """
     def get(self, request):
         event_log, df, obj_df = utils.get_event_log(request)
 
@@ -86,6 +99,12 @@ class DFGView(View):
 
 
 class PetriNetView(View):
+    """Used to create and display petri nets from the discovered process model. Contains adjustable parameters 
+    (minimum node and edge frequency)
+
+    Args:
+        View ([type]): [description]
+    """
     def get(self, request):
         event_log, df, obj_df = utils.get_event_log(request)
 
