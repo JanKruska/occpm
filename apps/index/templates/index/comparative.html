@@ -83,17 +83,7 @@
   $( document ).ready(function() {
     window.jsPDF = window.jspdf.jsPDF;
     $("#btn-pdf").on('click',function () { 
-      html2canvas(document.getElementById('accordionPanelsStayOpenExample'),{height: document.body.clientHeight, width: document.body.clientWidth});
-      //var pdf = new jsPDF('p', 'pt', 'letter');
-		  //pdf.html(document.body, {
-      //  callback: function (pdf) {
-      //    var iframe = document.createElement('iframe');
-      //    iframe.setAttribute('style', 'position:absolute;right:0; top:0; bottom:0; height:100%; width:500px');
-      //    document.body.appendChild(iframe);
-      //    iframe.src = pdf.output('datauristring');
-			//}
-		//});
-      //doc.output("dataurlnewwindow");
+      window.print()
     });
 });
   
