@@ -181,7 +181,7 @@ class PetriNetView(View):
                 "min_edge_freq": int(request.GET.get("edge_freq", 100)),
             },
         )
-        gviz = pn_vis_factory.apply(model, parameters={"format": "svg"})
+        gviz = pn_vis_factory.apply(model, parameters={"format": "png"})
         mdfg_vis_factory.save(gviz, os.path.join(settings.MEDIA_ROOT, name))
         return render(
             request,
